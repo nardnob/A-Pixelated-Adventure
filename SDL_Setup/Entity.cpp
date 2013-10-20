@@ -8,8 +8,8 @@ Entity::Entity()
 {
 
 }
-
+/*
 Entity::Entity(int textureNum_in)
 {
 	this->textureNum = textureNum_in;
-}
+}*/

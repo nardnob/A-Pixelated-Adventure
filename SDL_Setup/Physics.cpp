@@ -55,7 +55,7 @@ void Physics::doPhysics(vector<Player>& inVector)
 		inVector.at(i).posY += inVector.at(i).velY;
 	}
 
-	////calculate friction
+	////calculate friction //currently bugged and working on
 	//for(int i = 0; i < inVector.size(); i++)
 	//{
 	//	//calculating friction for the x axis

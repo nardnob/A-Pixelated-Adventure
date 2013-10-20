@@ -1,1 +1,12 @@
-﻿* Make a Gamestate ... stop declaring important things in main
+﻿* Friction in physics (fix the bug)
+	* static friction also
+
+* Limit velocity
+
+* Tweak the WALKING_FORCE, Player mass, and friction to get a nice feel
+
+* Change Entities to include more than one texture. i.e. facing left and facing right
+
+* Tidy up some code
+	* Use a vector to hold the terrain clips (in main)
+	* Make a Gamestate ... stop declaring important things in main

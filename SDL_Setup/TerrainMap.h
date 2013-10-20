@@ -16,7 +16,7 @@ public:
 	TerrainMap();
 	TerrainMap(string mapFileName_in);
 	bool loadMap();
-	int mapData[MAP_MAX_X][MAP_MAX_Y]; //screw dynamicism
+	int mapData[MAP_MAX_X][MAP_MAX_Y]; //really should store this in a vector or dynamic array. no need to waste space
 
 	string get_mapFileName() { return mapFileName; }
 	void set_mapFileName(string mapFileName_in) { this->mapFileName = mapFileName_in; }
