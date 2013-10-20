@@ -20,7 +20,8 @@ physics simulation, and a combat system.
 /*****************/
 
 The game is programmed in C++ using SDL (Simple DirectMedia Layer) for graphics. SDL needs to be set up in
-each new programming environment. To setup SDL you can follow the tutorials on LazyFoo.net. Specifically lessons 1 and 3:
+each new programming environment. Copy the provided "..\SDL_Setup\SDL-1.2.15" to "C:\" and you should be good to go. If not,
+try to follow the tutorials on LazyFoo.net. Specifically lessons 1 and 3:
 
 Lesson 1:
 http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php

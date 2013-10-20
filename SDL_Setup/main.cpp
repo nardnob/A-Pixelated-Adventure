@@ -78,7 +78,7 @@ bool init()
     }
 
     //Set the window caption
-    SDL_WM_SetCaption( "Testing Terrain Generation", NULL );
+    SDL_WM_SetCaption( "A Pixelated Adventure", NULL );
 
     //If everything initialized fine
     return true;
