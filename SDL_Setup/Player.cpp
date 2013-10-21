@@ -12,7 +12,7 @@ Player::Player (int clipX_in, int clipY_in)
 	//this->textureNum = textureNum_in;
 	this->active = true;
 
-	this->mass = 9;
+	this->mass = MASS_PLAYER;
 	this->forceX = 0;
 	this->forceY = 0;
 	this->velX = 0;

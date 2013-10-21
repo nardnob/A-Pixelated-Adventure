@@ -20,9 +20,12 @@ const int ENTITY_CLIP_H = 128;
 enum { CODE_TERRAIN, CODE_ENTITY };
 
 //constants for physics
-const double FRICTION = 10;
-const double STATIC_FRICTION = 1;
-const double WALKING_FORCE = 1;
+const double FRICTION = 1;
+const double STATIC_FRICTION = .1;
+const double WALKING_FORCE = 4;
+
+//constants for entities
+const double MASS_PLAYER = 20;
 
 //constants for keyboard shortcuts
 enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN };

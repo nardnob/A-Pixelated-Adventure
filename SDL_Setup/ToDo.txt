@@ -1,6 +1,10 @@
 ﻿* Friction in physics (fix the bug)
 	* static friction also
 
+* Creat maxX and maxY for entity positions
+	* Will need to keep the screen size dynamic
+		* Make sure the screen size is already fully dynamic (based on the input from the map file)
+
 * Limit velocity
 
 * Tweak the WALKING_FORCE, Player mass, and friction to get a nice feel
@@ -10,3 +14,12 @@
 * Tidy up some code
 	* Use a vector to hold the terrain clips (in main)
 	* Make a Gamestate ... stop declaring important things in main
+	* Remove the mess (the commented-out code) from Physics.cpp. Choose either component-based or vector-based math for the static friction calculation
+
+* True-Type fonts!
+	* Let's get a HUD going (at the top or bottom?)
+	* Velocity / position / force display
+	... health? Dun dun dun.
+
+* Limit frame rate
+	* Display frame rate i the HUD

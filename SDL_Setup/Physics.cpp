@@ -15,13 +15,13 @@ void Physics::doPhysics(vector<Player>& inVector)
 			switch(i)
 			{
 			case KEY_LEFT:
-				inVector.at(0).forceX -= WALKING_FORCE;
+				inVector.at(0).forceX = inVector.at(0).forceY - WALKING_FORCE;
 				break;
 			case KEY_RIGHT:
 				inVector.at(0).forceX += WALKING_FORCE;
 				break;
 			case KEY_UP:
-				inVector.at(0).forceY -= WALKING_FORCE;
+				inVector.at(0).forceY = inVector.at(0).forceY - WALKING_FORCE;
 				break;
 			case KEY_DOWN:
 				inVector.at(0).forceY += WALKING_FORCE;
@@ -55,41 +55,44 @@ void Physics::doPhysics(vector<Player>& inVector)
 		inVector.at(i).posY += inVector.at(i).velY;
 	}
 
-	////calculate friction //currently bugged and working on
-	//for(int i = 0; i < inVector.size(); i++)
-	//{
-	//	//calculating friction for the x axis
-	//	if((inVector.at(i).velX < 1 && inVector.at(i).velX > 0) || (inVector.at(i).velX > -1 && inVector.at(i).velX < 0)) //if it's going too slow to beat static friction (to avoid oscillation)
-	//	{
-	//		inVector.at(i).velX = 0;
-	//	}
-	//	else
-	//	{
-	//		if(inVector.at(i).velX > 0)
-	//		{
-	//			inVector.at(i).forceX -= FRICTION;
-	//		} else
-	//			if(inVector.at(i).velX < 0)
-	//			{
-	//				inVector.at(i).forceX += FRICTION;
-	//			}
-	//	}
+	//calculate friction //currently bugged and working on
+	for(int i = 0; i < inVector.size(); i++)
+	{
+		//calculating friction for the x axis
+		if(abs(inVector.at(i).velX) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)
+		//if(sqrt(pow(inVector.at(i).velX, 2) + pow(inVector.at(i).velY, 2)) < STATIC_FRICTION) 
+		{
+			inVector.at(i).velX = 0;
+			//inVector.at(i).velY = 0;//for the vector math
+		}
+		else
+		{
+			if(inVector.at(i).velX > 0)
+			{
+				inVector.at(i).forceX = inVector.at(i).forceX - FRICTION;
+			} else
+				if(inVector.at(i).velX < 0)
+				{
+					inVector.at(i).forceX += FRICTION;
+				}
+		}
 
-	//	//calculating friction for the y axis
-	//	if(abs(inVector.at(i).velY) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)
-	//	{
-	//		inVector.at(i).velY = 0;
-	//	}
-	//	else
-	//	{
-	//		if(inVector.at(i).velY > 0)
-	//		{
-	//			inVector.at(i).forceY -= FRICTION;
-	//		} else
-	//			if(inVector.at(i).velY < 0)
-	//			{
-	//				inVector.at(i).forceY += FRICTION;
-	//			}
-	//	}
-	//}
+		//calculating friction for the y axis
+		if(abs(inVector.at(i).velY) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)		
+		//if(sqrt(pow(inVector.at(i).velX, 2) + pow(inVector.at(i).velY, 2)) < STATIC_FRICTION) //vector math instead of component-based
+		{
+			inVector.at(i).velY = 0;
+		}
+		else
+		{
+			if(inVector.at(i).velY > 0)
+			{
+				inVector.at(i).forceY = inVector.at(i).forceY - FRICTION;
+			} else
+				if(inVector.at(i).velY < 0)
+				{
+					inVector.at(i).forceY += FRICTION;
+				}
+		}
+	}
 }
