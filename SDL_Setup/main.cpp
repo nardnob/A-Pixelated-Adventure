@@ -60,7 +60,7 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
     SDL_BlitSurface( source, clip, destination, &offset );
 }
 
-bool init()
+bool init(int screenWidth, int screenHeight)
 {
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
@@ -69,7 +69,7 @@ bool init()
     }
 
     //Set up the screen
-    surface_screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE );
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -101,6 +101,7 @@ bool load_files()
 void clean_up()
 {
 	//The screen surface unallocates automatically
+
 
     //Free the sprite map
     SDL_FreeSurface( surface_terrain );
@@ -168,10 +169,18 @@ void defineClip(int code_in)
 }
 
 int main( int argc, char* args[] )
-{
+{		
+	//initialize the currentMap object with the mapFileName text file
+	string mapFileName = "map_001.txt";
+	TerrainMap currentMap = TerrainMap(mapFileName);	
+
+	//define the clips (clip up the texture files)
+	defineClip(CODE_TERRAIN);
+	defineClip(CODE_ENTITY);
+
     bool quit = false;
 
-    if( init() == false )
+	if( init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H) == false)
     {
         return 1;
     }
@@ -181,15 +190,8 @@ int main( int argc, char* args[] )
         return 1;
     }
 
+	//fill with black
     SDL_FillRect( surface_screen, &surface_screen->clip_rect, SDL_MapRGB( surface_screen->format, 0xFF, 0xFF, 0xFF ) );
-
-	//initialize the currentMap object with the mapFileName text file
-	string mapFileName = "map_001.txt";
-	TerrainMap currentMap = TerrainMap(mapFileName);
-	
-	//define the clips (clip up the texture files)
-	defineClip(CODE_TERRAIN);
-	defineClip(CODE_ENTITY);
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************

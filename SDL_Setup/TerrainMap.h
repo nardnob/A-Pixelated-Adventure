@@ -15,6 +15,7 @@ private:
 public:
 	TerrainMap();
 	TerrainMap(string mapFileName_in);
+
 	bool loadMap();
 	int mapData[MAP_MAX_X][MAP_MAX_Y]; //really should store this in a vector or dynamic array. no need to waste space
 

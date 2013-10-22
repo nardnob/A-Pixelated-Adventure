@@ -23,7 +23,7 @@ enum { TEXTURE_RIGHT, TEXTURE_LEFT };
 
 //constants for physics
 const double FRICTION = 3;
-const double STATIC_FRICTION = 3;
+const double STATIC_FRICTION = 2;
 const double WALKING_FORCE = 4;
 
 //constants for entities

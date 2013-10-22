@@ -50,6 +50,21 @@ void Physics::doPhysics(vector<Player>& inVector)
 		inVector.at(i).forceY = 0;
 	}
 
+	//limit velocity
+	for(int i = 0; i < inVector.size(); i++)
+	{
+		if(inVector.at(i).velX > inVector.at(i).maxVelX)
+			inVector.at(i).velX = inVector.at(i).maxVelX;
+		else
+			if(inVector.at(i).velX < -inVector.at(i).maxVelX)
+				inVector.at(i).velX = -inVector.at(i).maxVelX;
+		if(inVector.at(i).velY > inVector.at(i).maxVelY)
+			inVector.at(i).velY = inVector.at(i).maxVelY;
+		else
+			if(inVector.at(i).velY < -inVector.at(i).maxVelY)
+				inVector.at(i).velY = -inVector.at(i).maxVelY;
+	}
+
 	//calculate movement (need to limit position to bounds of window)
 	for(int i = 0; i < inVector.size(); i++)
 	{

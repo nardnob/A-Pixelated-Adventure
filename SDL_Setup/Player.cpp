@@ -17,8 +17,11 @@ Player::Player (int clipX_in, int clipY_in)
 	this->forceY = 0;
 	this->velX = 0;
 	this->velY = 0;
+	this->maxVelX = 5;
+	this->maxVelY = 5;
 	this->posX = 100;
 	this->posY = 100;
+
 	this->currentTexture = TEXTURE_RIGHT;
 	this->rect[TEXTURE_RIGHT].x = clipX_in;
 	this->rect[TEXTURE_RIGHT].y = clipY_in;

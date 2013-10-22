@@ -13,7 +13,9 @@ public:
 		velY,
 		forceX,
 		forceY,
-		mass;
+		mass,
+		maxVelX,
+		maxVelY;
 
 	void pressKey(int toPress);
 	void releaseKey(int toRelease);
