@@ -19,10 +19,15 @@ Player::Player (int clipX_in, int clipY_in)
 	this->velY = 0;
 	this->posX = 100;
 	this->posY = 100;
-	this->rect.x = clipX_in;
-	this->rect.y = clipY_in;
-	this->rect.w = ENTITY_CLIP_W;
-	this->rect.h = ENTITY_CLIP_H;
+	this->currentTexture = TEXTURE_RIGHT;
+	this->rect[TEXTURE_RIGHT].x = clipX_in;
+	this->rect[TEXTURE_RIGHT].y = clipY_in;
+	this->rect[TEXTURE_RIGHT].w = ENTITY_CLIP_W;
+	this->rect[TEXTURE_RIGHT].h = ENTITY_CLIP_H;
+	this->rect[TEXTURE_LEFT].x = clipX_in + ENTITY_CLIP_W;
+	this->rect[TEXTURE_LEFT].y = clipY_in;
+	this->rect[TEXTURE_LEFT].w = ENTITY_CLIP_W;
+	this->rect[TEXTURE_LEFT].h = ENTITY_CLIP_H;
 
 	for(int i = 0; i < 4; i++)
 	{
@@ -43,4 +48,10 @@ void Player::releaseKey(int toRelease)
 bool Player::keyIsDown(int i)
 {
 	return keyDown[i];
+}
+
+//should only accept a constant, i.e. TEXTURE_RIGHT, TEXTURE_LEFT. Must not overreach the bounds of the rect[] (currentTexture will be used as rect[currentTexture] in display)
+void Player::toggleTexture(int toChoose)
+{
+	this->currentTexture = toChoose;
 }

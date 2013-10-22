@@ -15,10 +15,12 @@ void Physics::doPhysics(vector<Player>& inVector)
 			switch(i)
 			{
 			case KEY_LEFT:
-				inVector.at(0).forceX = inVector.at(0).forceY - WALKING_FORCE;
+				inVector.at(0).forceX = inVector.at(0).forceX - WALKING_FORCE;
+				inVector.at(0).toggleTexture(TEXTURE_LEFT);
 				break;
 			case KEY_RIGHT:
 				inVector.at(0).forceX += WALKING_FORCE;
+				inVector.at(0).toggleTexture(TEXTURE_RIGHT);
 				break;
 			case KEY_UP:
 				inVector.at(0).forceY = inVector.at(0).forceY - WALKING_FORCE;

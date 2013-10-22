@@ -134,7 +134,7 @@ void display(int code_in, TerrainMap currentMap)
 				vector_entities.at(i)->posX, 
 				vector_entities.at(i)->posY, 
 				surface_entities, surface_screen, 
-				&vector_entities.at(i)->rect );
+				&vector_entities.at(i)->rect[vector_entities.at(i)->get_currentTexture()] );
 		}
 		break;
 	}
@@ -157,8 +157,8 @@ void defineClip(int code_in)
 	case CODE_ENTITY:	
 		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 		vector_players.push_back(Player(
-			( (1 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //the x value of the entity clip (in the entity texture file)
-			( ((1 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ) //the y value of the entity to clip (in the entity texture file)
+			( (0 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //the x value of the entity clip (in the entity texture file)
+			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ) //the y value of the entity to clip (in the entity texture file)
 			));
 
 		vector_entities.push_back(&vector_players[0]);
