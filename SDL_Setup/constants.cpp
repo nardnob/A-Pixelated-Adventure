@@ -4,6 +4,9 @@ const int SCREEN_HEIGHT = 960;
 const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 100;
 
+//HUD attributes
+const int HUD_H = 160;
+
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;
 const int TERRAIN_FILE_H = 512;
@@ -18,7 +21,7 @@ const int ENTITY_CLIP_W = 64;
 const int ENTITY_CLIP_H = 64;
 
 // constants for function parameters
-enum { CODE_TERRAIN, CODE_ENTITY };
+enum { CODE_TERRAIN, CODE_ENTITY, CODE_HUD };
 
 enum { TEXTURE_FRONT, TEXTURE_BACK, TEXTURE_LEFT, TEXTURE_RIGHT };
 

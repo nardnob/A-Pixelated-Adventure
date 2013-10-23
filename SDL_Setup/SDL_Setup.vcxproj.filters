@@ -69,5 +69,8 @@
     <Text Include="ToDo.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="DoneThisBatch.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

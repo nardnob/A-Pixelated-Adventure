@@ -1,14 +1,12 @@
-﻿* Limit frame rate
-	* Display frame rate in the HUD
-	
-* True-Type fonts!
+﻿* True-Type fonts!
 	* Let's get a HUD going (at the top or bottom?)
 	* Velocity / position / force display
 	* ... health? Dun dun dun.
-	
-* Limit velocity
 
-* Tweak the WALKING_FORCE, Player mass, and friction to get a nice feel
+* Add Entity objects (like a tree?)
+	* Will need to overlay the terrain
+	* Will need to A) display over the player, or B) display under the player
+	* Might need separate parts, like the leaves of a tree could display over the player, but a player couldn't walk through the trunk
 
 * Create maxX and maxY for entity positions
 	* Will need to keep the screen size dynamic

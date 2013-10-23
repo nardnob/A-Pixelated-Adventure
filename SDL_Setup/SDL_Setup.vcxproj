@@ -89,6 +89,7 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="DoneThisBatch.txt" />
     <Text Include="map_001.txt" />
     <Text Include="ToDo.txt" />
   </ItemGroup>
