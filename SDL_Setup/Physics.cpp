@@ -24,9 +24,11 @@ void Physics::doPhysics(vector<Player>& inVector)
 				break;
 			case KEY_UP:
 				inVector.at(0).forceY = inVector.at(0).forceY - WALKING_FORCE;
+				inVector.at(0).toggleTexture(TEXTURE_BACK);
 				break;
 			case KEY_DOWN:
 				inVector.at(0).forceY += WALKING_FORCE;
+				inVector.at(0).toggleTexture(TEXTURE_FRONT);
 				break;
 			}
 		}

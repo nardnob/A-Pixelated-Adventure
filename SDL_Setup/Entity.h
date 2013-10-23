@@ -16,7 +16,7 @@ public:
 	int	posX, //the x to display this Entity's texture at if the Entity is active
 		posY; //the y to display this Entity's texture at if the Entity is active
 
-	SDL_Rect rect[2]; //to hold the clip(s) (of the textures)
+	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
 
 	Entity();
 

@@ -7,6 +7,7 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "SDL_image.h"
 #include "constants.cpp"
 #include "Physics.h"
+#include "Timer.h"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -170,6 +171,8 @@ void defineClip(int code_in)
 
 int main( int argc, char* args[] )
 {		
+	Timer fpsTimer;
+
 	//initialize the currentMap object with the mapFileName text file
 	string mapFileName = "map_001.txt";
 	TerrainMap currentMap = TerrainMap(mapFileName);	
@@ -177,6 +180,8 @@ int main( int argc, char* args[] )
 	//define the clips (clip up the texture files)
 	defineClip(CODE_TERRAIN);
 	defineClip(CODE_ENTITY);
+
+	int counter = 0;
 
     bool quit = false;
 
@@ -198,6 +203,8 @@ int main( int argc, char* args[] )
 	//***********************************************************************************
     while( !quit )
     {
+		fpsTimer.start();
+
         //While there's events to handle
         while( SDL_PollEvent( &event ) )
         {
@@ -243,10 +250,15 @@ int main( int argc, char* args[] )
 			}
         }		
 		
-		Physics::doPhysics(vector_players);
+			Physics::doPhysics(vector_players);
 		
+	
+		//if(++counter == 5)
+		//{
 		//apply the terrain 
 		display(CODE_TERRAIN, currentMap);
+		//counter = 0;
+		//}
 		//apply the entities
 		display(CODE_ENTITY, currentMap);
 
@@ -255,6 +267,13 @@ int main( int argc, char* args[] )
 		{
 			return 1;
 		}
+
+		//If we want to cap the frame rate
+        if(fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+        {
+            //Sleep the remaining frame time
+            SDL_Delay((1000 / FRAMES_PER_SECOND) - fpsTimer.get_ticks());
+        }
     }
     //***********************************************************************************
 	//*********** End of the game loop **************************************************
