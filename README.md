@@ -29,5 +29,14 @@ http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php
 Lesson 3:
 http://lazyfoo.net/SDL_tutorials/lesson03/windows/msvsnet2010e/index.php
 
+Lesson 7:
+http://lazyfoo.net/SDL_tutorials/lesson07/windows/msvsnet2010e/index.php
+
 Lesson 3 can be followed for a few different libraries. As of v1.0.0 (on October 20, 2013), it is only
 necessary to follow lesson 3 for SDL_image (and not SDL_ttf or SDL_mixer).
+
+Lesson 7 must now be followed to set up SDL_ttf, meaning lesson 3 must be done again for SDL_ttf (which is said 
+in lesson 7)
+
+* Make sure when downloading the SDL binaries that you are downloading them for SDL 1.2.15 and not SDL 2.
+* Also, make sure to link to the x86 lib files and not the x64 ones
