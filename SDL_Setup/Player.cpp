@@ -23,22 +23,15 @@ Player::Player (int clipX_in, int clipY_in)
 	this->posY = 100;
 
 	this->currentTexture = TEXTURE_FRONT;
-	this->rect[TEXTURE_FRONT].x = clipX_in;
-	this->rect[TEXTURE_FRONT].y = clipY_in;
-	this->rect[TEXTURE_FRONT].w = ENTITY_CLIP_W;
-	this->rect[TEXTURE_FRONT].h = ENTITY_CLIP_H;
-	this->rect[TEXTURE_BACK].x = clipX_in + ENTITY_CLIP_W * 1;
-	this->rect[TEXTURE_BACK].y = clipY_in;
-	this->rect[TEXTURE_BACK].w = ENTITY_CLIP_W;
-	this->rect[TEXTURE_BACK].h = ENTITY_CLIP_H;
-	this->rect[TEXTURE_LEFT].x = clipX_in + ENTITY_CLIP_W * 2;
-	this->rect[TEXTURE_LEFT].y = clipY_in;
-	this->rect[TEXTURE_LEFT].w = ENTITY_CLIP_W;
-	this->rect[TEXTURE_LEFT].h = ENTITY_CLIP_H;
-	this->rect[TEXTURE_RIGHT].x = clipX_in + ENTITY_CLIP_W * 3;
-	this->rect[TEXTURE_RIGHT].y = clipY_in;
-	this->rect[TEXTURE_RIGHT].w = ENTITY_CLIP_W;
-	this->rect[TEXTURE_RIGHT].h = ENTITY_CLIP_H;
+
+	//define TEXTURE_UP, DOWN, LEFT, and RIGHT clips
+	for(int i = 0; i < 4; i++)
+	{
+		this->rect[i].x = clipX_in + ENTITY_CLIP_W * i;
+		this->rect[i].y = clipY_in;
+		this->rect[i].w = ENTITY_CLIP_W;
+		this->rect[i].h = ENTITY_CLIP_H;
+	}
 
 	for(int i = 0; i < 4; i++)
 	{

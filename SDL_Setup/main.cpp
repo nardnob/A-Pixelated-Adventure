@@ -5,29 +5,32 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 //The headers
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
+
 #include "constants.cpp"
+#include "Entity.h"
+#include "HUD.h"
 #include "Physics.h"
+#include "Player.h"
+#include "TerrainMap.h"
 #include "Timer.h"
+
 #include <string>
 #include <fstream>
 #include <vector>
-
-#include "TerrainMap.h"
-#include "Entity.h"
-#include "Player.h"
 using namespace std;
 
 //The surfaces
-SDL_Surface *surface_terrain = NULL;
-SDL_Surface *surface_entities = NULL;
-SDL_Surface *surface_screen = NULL;
-
+SDL_Surface* surface_terrain = NULL;
+SDL_Surface* surface_entities = NULL;
+SDL_Surface* surface_screen = NULL;
+SDL_Surface* surface_messager = NULL;
 //The event structure
 SDL_Event event;
 
 //The portions of the sprite map to be blitted
 SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
-SDL_Rect HUD_rect;
+
 //SDL_Rect entityClip[ ENTITY_CLIP_COUNT ]; //used a vector to hold Player objects and stored the clips in Player instead
 vector<Entity*> vector_entities; //this will hold a vector of all entities (for polymorphism to output all entities in one loop, regardless of specific types)
 vector<Player> vector_players; //vector to hold the Player object(s)
@@ -86,8 +89,9 @@ bool init(int screenWidth, int screenHeight)
 	//set the window icon 32x32 bmp. 0 255 0: colorkey for transparency
 	setWindowIcon( "icon2.bmp" );
 
-    //Set up the screen
-    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN );
+    //Set up the screen (only enable one)
+    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
+    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //for testing
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -117,16 +121,50 @@ bool load_files()
     return true;
 }
 
-void clean_up()
+void clean_up(HUD& hud)
 {
 	//The screen surface unallocates automatically
 	
     //Free the sprite map
     SDL_FreeSurface( surface_terrain );
 	SDL_FreeSurface( surface_entities );
+    
+    //Close the font that was used
+    TTF_CloseFont( hud.font_HUD_1 );
+    
+    //Quit SDL_ttf
+    TTF_Quit();
 
     //Quit SDL
     SDL_Quit();
+}
+
+void display(int code_in, TerrainMap& currentMap, HUD& hud)
+{
+	switch(code_in)
+	{
+	case CODE_HUD:
+		//fill in the background of the HUD with gray (86, 86, 86 RGB)
+		SDL_FillRect( surface_screen, &hud.HUD_rect, SDL_MapRGB( surface_screen->format, 86, 86, 86 ) );
+
+		//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
+		for(int i = 0; i < hud.advancedMessages.size(); i++)
+		{
+			if(i >= 0 && i < NUM_ADVANCED_SETTINGS && hud.get_advanced()) //the first 0 to NUM_ADVANCED_SETTINGS are all advanced settings. They are only outputted if we are showing advanced settings. Need to store these in their own vector
+			{
+				surface_messager = TTF_RenderText_Solid( hud.advancedMessages.at(i).get_font(), hud.advancedMessages.at(i).get_message(), FONT_COLOR_BLACK );
+
+				apply_surface(
+					hud.advancedMessages.at(i).get_posX(),
+					hud.advancedMessages.at(i).get_posY(),
+					surface_messager,
+					surface_screen);
+
+				SDL_FreeSurface(surface_messager);
+			}
+		}
+		break;
+	}
 }
 
 void display(int code_in, TerrainMap& currentMap)
@@ -158,13 +196,10 @@ void display(int code_in, TerrainMap& currentMap)
 				&vector_entities.at(i)->rect[vector_entities.at(i)->get_currentTexture()] );
 		}
 		break;
-	case CODE_HUD:
-		SDL_FillRect( surface_screen, &HUD_rect, SDL_MapRGB( surface_screen->format, 86, 86, 86 ) );
-		break;
 	}
 }
 
-void defineClip(int code_in, int screen_w = 0, int screen_h = 0)
+void defineClip(int code_in)
 {
 	switch(code_in)
 	{
@@ -187,95 +222,149 @@ void defineClip(int code_in, int screen_w = 0, int screen_h = 0)
 
 		vector_entities.push_back(&vector_players[0]);
 		break;
-	case CODE_HUD:
-		HUD_rect.w = screen_w;
-		HUD_rect.h = HUD_H;
-		HUD_rect.x = 0;
-		HUD_rect.y = screen_h;
-		break;
 	}
 }
 
-void eventHandler(bool& quit)
+void defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
 {
-	    //While there's events to handle
-        while( SDL_PollEvent( &event ) )
-        {
-			switch(event.type)
+	//open the HUD font
+	hud.font_HUD_1 = TTF_OpenFont(FONT_HUD_1_FILENAME, FONT_HUD_1_SIZE);
+
+	hud.HUD_rect.w = screen_w;
+	hud.HUD_rect.h = HUD_HEIGHT;
+	hud.HUD_rect.x = 0;
+	hud.HUD_rect.y = screen_h;
+
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 1,
+		hud.font_HUD_1,
+		"Vel X: ",
+		true) );	
+	
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 2,
+		hud.font_HUD_1,
+		"Vel Y: ",
+		true) );	
+
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 3,
+		hud.font_HUD_1,
+		"Pos X: ",
+		true) );	
+
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 4,
+		hud.font_HUD_1,
+		"Pos Y: ",
+		true) );
+		
+
+}
+
+void eventHandler(bool& quit, HUD& hud)
+{
+	//While there's events to handle
+    while( SDL_PollEvent( &event ) )
+    {
+		switch(event.type)
+		{
+		case SDL_KEYDOWN:
+			switch(event.key.keysym.sym)
 			{
-			case SDL_KEYDOWN:
-				switch(event.key.keysym.sym)
-				{
-				case SDLK_LEFT:
-				case SDLK_a:
-					vector_players.at(0).pressKey(KEY_LEFT);
-					break;
-				case SDLK_RIGHT:
-				case SDLK_d:
-					vector_players.at(0).pressKey(KEY_RIGHT);
-					break;
-				case SDLK_UP:
-				case SDLK_w:
-					vector_players.at(0).pressKey(KEY_UP);
-					break;
-				case SDLK_DOWN:
-				case SDLK_s:
-					vector_players.at(0).pressKey(KEY_DOWN);
-					break;
-				case SDLK_ESCAPE:
-					quit = true;
-					break;
-				}
+			case SDLK_LEFT:
+			case SDLK_a:
+				vector_players.at(0).pressKey(KEY_LEFT);
 				break;
-			case SDL_KEYUP:
-				switch(event.key.keysym.sym)
-				{
-				case SDLK_LEFT:
-				case SDLK_a:
-					vector_players.at(0).releaseKey(KEY_LEFT);
-					break;
-				case SDLK_RIGHT:
-				case SDLK_d:
-					vector_players.at(0).releaseKey(KEY_RIGHT);
-					break;
-				case SDLK_UP:
-				case SDLK_w:
-					vector_players.at(0).releaseKey(KEY_UP);
-					break;
-				case SDLK_DOWN:
-				case SDLK_s:
-					vector_players.at(0).releaseKey(KEY_DOWN);
-					break;
-				}
+			case SDLK_RIGHT:
+			case SDLK_d:
+				vector_players.at(0).pressKey(KEY_RIGHT);
 				break;
-			case SDL_QUIT:
+			case SDLK_UP:
+			case SDLK_w:
+				vector_players.at(0).pressKey(KEY_UP);
+				break;
+			case SDLK_DOWN:
+			case SDLK_s:
+				vector_players.at(0).pressKey(KEY_DOWN);
+				break;
+			case SDLK_F3:
+				hud.toggleAdvanced();
+				break;
+			case SDLK_ESCAPE:
 				quit = true;
 				break;
 			}
-        }	
+			break;
+		case SDL_KEYUP:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_LEFT:
+			case SDLK_a:
+				vector_players.at(0).releaseKey(KEY_LEFT);
+				break;
+			case SDLK_RIGHT:
+			case SDLK_d:
+				vector_players.at(0).releaseKey(KEY_RIGHT);
+				break;
+			case SDLK_UP:
+			case SDLK_w:
+				vector_players.at(0).releaseKey(KEY_UP);
+				break;
+			case SDLK_DOWN:
+			case SDLK_s:
+				vector_players.at(0).releaseKey(KEY_DOWN);
+				break;
+			}
+			break;
+		case SDL_QUIT:
+			quit = true;
+			break;
+		}
+    }	
+}
+
+void frameRate(Timer& fpsTimer)
+{
+	//If we want to cap the frame rate
+    if(fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+    {
+        //Sleep the remaining frame time
+        SDL_Delay((1000 / FRAMES_PER_SECOND) - fpsTimer.get_ticks());
+    }
 }
 
 int main( int argc, char* args[] )
-{		
-	Timer fpsTimer;
-
+{	
 	//initialize the currentMap object with the mapFileName text file
-	string mapFileName = "map_001.txt";
-	TerrainMap currentMap = TerrainMap(mapFileName);	
+	TerrainMap currentMap = TerrainMap("map_001.txt");
+	Timer fpsTimer;
+	HUD hud = HUD();	
 
 	//define the clips (clip up the texture files)
 	defineClip(CODE_TERRAIN);
 	defineClip(CODE_ENTITY);
-	defineClip(CODE_HUD, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H);
 
 	int counter = 0;
 
     bool quit = false;
 
-	if( init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_H) == false)
+	if( init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT) == false)
     {
         return 1;
+    }	
+	
+	//Initialize SDL_ttf
+    if( TTF_Init() == -1 )
+    {
+        return false;    
     }
+
+	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
 
     if( load_files() == false )
 	{
@@ -293,17 +382,17 @@ int main( int argc, char* args[] )
 		fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		eventHandler(quit); 
+		eventHandler(quit, hud); 
 		
-		Physics::doPhysics(vector_players);
-		
+		//do some physics
+		Physics::doPhysics(vector_players, hud);
 	
 		//apply the terrain 
 		display(CODE_TERRAIN, currentMap);
 		//apply the entities
 		display(CODE_ENTITY, currentMap);
 		//display the HUD
-		display(CODE_HUD, currentMap);
+		display(CODE_HUD, currentMap, hud);
 		
 		//Update the screen
 		if( SDL_Flip( surface_screen ) == -1 )
@@ -311,19 +400,14 @@ int main( int argc, char* args[] )
 			return 1;
 		}
 
-		//If we want to cap the frame rate
-        if(fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
-        {
-            //Sleep the remaining frame time
-            SDL_Delay((1000 / FRAMES_PER_SECOND) - fpsTimer.get_ticks());
-        }
+		frameRate(fpsTimer);
     }
     //***********************************************************************************
 	//*********** End of the game loop **************************************************
 	//***********************************************************************************
 
     //Free the images and quit SDL
-    clean_up();
+    clean_up(hud);
 
     return 0;
 }

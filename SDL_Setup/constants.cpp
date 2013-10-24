@@ -1,3 +1,8 @@
+#include <string>
+#include "SDL.h"
+#include "SDL_ttf.h"
+using namespace std;
+
 //Screen attributes
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
@@ -5,7 +10,11 @@ const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 100;
 
 //HUD attributes
-const int HUD_H = 160;
+const int HUD_HEIGHT = 160;
+const SDL_Color FONT_COLOR_BLACK = { 255,255,255 };
+const int FONT_HUD_1_SIZE = 24;
+const char FONT_HUD_1_FILENAME[] = "font_HUD_3.ttf";
+const int NUM_ADVANCED_SETTINGS = 4;
 
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;

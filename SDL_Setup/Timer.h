@@ -1,3 +1,7 @@
+/*
+This class was created by following the tutorials on Lazyfoo.net
+*/
+
 #ifndef TIMER_H
 #define TIMER_H
 

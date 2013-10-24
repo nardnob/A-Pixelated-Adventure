@@ -1,5 +1,4 @@
-* Added W, A, S, and D keys to act as UP, LEFT, DOWN, RIGHT keys (respectively). Did this for later when mouse will also be used.
-* Edited the Player entity: added a belt to help with coordination. Also raised the sides of the beard on the front texture
-* Added a 32x32 (8-bit) window icon. Made a function to load this icon from a bmp file.
-* Made the game full screen
-* Added an event key: ESC, to quit SDL. Useful for full screen when no pause menu has been created
+* Finished setting up SDL_ttf
+* Created a HUD class to hold the HUD (head-up display).
+* Created a Message class to hold messages for the HUD and a few attributes (like x, y, etc)
+* Created an advancedMessages vector (STL data structure) in HUD to hold the advanced messages. Press f3 in-game to show the advanced messages

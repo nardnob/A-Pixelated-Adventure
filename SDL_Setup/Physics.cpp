@@ -1,11 +1,12 @@
 #include "Physics.h"
 #include "Player.h"
 #include "constants.cpp"
+#include "HUD.h"
 #include <vector>
 #include <cmath>
 using namespace std;
 
-void Physics::doPhysics(vector<Player>& inVector)
+void Physics::doPhysics(vector<Player>& inVector, HUD& hud)
 {	
 	//consider keyboard events for the player
 	for(int i = 0; i < 4; i++)
@@ -47,6 +48,19 @@ void Physics::doPhysics(vector<Player>& inVector)
 		{
 			inVector.at(i).velX = inVector.at(i).velX + inVector.at(i).forceX / inVector.at(i).mass; //Vf = Vi + F/m (Vf = Vi + at => Vf = Vi + F/m*1)
 			inVector.at(i).velY = inVector.at(i).velY + inVector.at(i).forceY / inVector.at(i).mass;
+
+			if(i == 0) //only want to update the HUD for the player
+			{
+				if(inVector.at(i).velX >= 0) //the if is just to keep the velocity's from jumping over one when it's negative.. for looks. Unnecessary performance hit here
+					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X:  " + to_string(int(inVector.at(i).velX)));
+				else
+					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X: " + to_string(int(inVector.at(i).velX)));
+
+				if(inVector.at(i).velY >= 0)
+					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y:  " + to_string(int(inVector.at(i).velY)));
+				else
+					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y: " + to_string(int(inVector.at(i).velY)));
+			}
 		}
 		inVector.at(i).forceX = 0;
 		inVector.at(i).forceY = 0;
@@ -72,6 +86,19 @@ void Physics::doPhysics(vector<Player>& inVector)
 	{
 		inVector.at(i).posX += inVector.at(i).velX;
 		inVector.at(i).posY += inVector.at(i).velY;
+		
+		if(i == 0) //only want to update the HUD for the player
+		{
+			if(inVector.at(i).posX >= 0)
+				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X:  " + to_string(int(inVector.at(i).posX)));
+			else			
+				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X: " + to_string(int(inVector.at(i).posX)));
+
+			if(inVector.at(i).posY >= 0)
+				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y:  " + to_string(int(inVector.at(i).posY)));
+			else			
+				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y: " + to_string(int(inVector.at(i).posY)));
+		}
 	}
 
 	//calculate friction //currently bugged and working on

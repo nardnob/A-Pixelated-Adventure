@@ -1,3 +1,7 @@
+/*
+This class was created by following the tutorials on Lazyfoo.net
+*/
+
 #include "Timer.h"
 #include "SDL.h"
 using namespace std;
