@@ -1,4 +1,1 @@
-* Finished setting up SDL_ttf
-* Created a HUD class to hold the HUD (head-up display).
-* Created a Message class to hold messages for the HUD and a few attributes (like x, y, etc)
-* Created an advancedMessages vector (STL data structure) in HUD to hold the advanced messages. Press f3 in-game to show the advanced messages
+* Added screenshots.. lol. Pretty crazy!!

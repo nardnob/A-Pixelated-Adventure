@@ -18,6 +18,7 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include <string>
 #include <fstream>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 //The surfaces
@@ -273,6 +274,38 @@ void defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
 
 }
 
+void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight)
+{
+	if(fullscreen)
+	{
+		surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+		fullscreen = false;
+	} 
+	else
+	{
+		surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
+		fullscreen = true;
+	}
+}
+
+void screenShot()
+{
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+
+	string fileName = "screenshot " + to_string(timePtr->tm_mon) + "_" + to_string(timePtr->tm_mday) + "_" + to_string(timePtr->tm_year + 1900) + "_";
+	int attempt = 0;
+
+	//while the filename already exists, add another number to the file name
+	for(; std::ifstream(fileName + to_string(attempt) + ".bmp"); attempt++)
+	{		
+	}
+
+	fileName = fileName + to_string(attempt) + ".bmp";
+	const char* temp = fileName.c_str();
+	SDL_SaveBMP( surface_screen,temp); 
+}
+
 void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight)
 {
 	//While there's events to handle
@@ -303,16 +336,10 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 				hud.toggleAdvanced();
 				break;
 			case SDLK_F11:
-				if(fullscreen)
-				{
-					surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
-					fullscreen = false;
-				} 
-				else
-				{
-					surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
-					fullscreen = true;
-				}
+				toggleFullscreen(fullscreen, screenWidth, screenHeight);
+				break;
+			case SDLK_F12:
+				screenShot();
 				break;
 			case SDLK_ESCAPE:
 				quit = true;
@@ -353,14 +380,14 @@ void frameRate(Timer& fpsTimer, HUD& hud)
 	int temp = fpsTimer.get_totalTicks();
 
 	//count the frame rate every 10 frames
-	if(fpsTimer.frameCount == 100)
+	if(fpsTimer.frameCount == 10)
 	{
 		fpsTimer.currentFrameRate = fpsTimer.frameCount / ((fpsTimer.get_totalTicks() - fpsTimer.firstStartTicks) / 1000);
 		fpsTimer.frameCount = 0;
 		fpsTimer.firstStartTicks = fpsTimer.get_totalTicks();
+		hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(fpsTimer.currentFrameRate));
 	}
 
-	hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(fpsTimer.currentFrameRate));
 
 	//If we want to cap the frame rate
     if(fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
