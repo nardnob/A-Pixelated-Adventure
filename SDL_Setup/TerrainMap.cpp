@@ -41,4 +41,6 @@ bool TerrainMap::loadMap()
 
 		}
 	}
+
+	return true;
 }

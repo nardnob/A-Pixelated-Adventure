@@ -90,8 +90,8 @@ bool init(int screenWidth, int screenHeight)
 	setWindowIcon( "icon2.bmp" );
 
     //Set up the screen (only enable one)
-    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
-    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //for testing
+    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
+    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -150,9 +150,9 @@ void display(int code_in, TerrainMap& currentMap, HUD& hud)
 		//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
 		for(int i = 0; i < hud.advancedMessages.size(); i++)
 		{
-			if(i >= 0 && i < NUM_ADVANCED_SETTINGS && hud.get_advanced()) //the first 0 to NUM_ADVANCED_SETTINGS are all advanced settings. They are only outputted if we are showing advanced settings. Need to store these in their own vector
+			if(i >= 0 && i < hud.advancedMessages.size() && hud.get_advanced()) //the first 0 to NUM_ADVANCED_SETTINGS are all advanced settings. They are only outputted if we are showing advanced settings. Need to store these in their own vector
 			{
-				surface_messager = TTF_RenderText_Solid( hud.advancedMessages.at(i).get_font(), hud.advancedMessages.at(i).get_message(), FONT_COLOR_BLACK );
+				surface_messager = TTF_RenderText_Solid( hud.advancedMessages.at(i).get_font(), hud.advancedMessages.at(i).get_message(), FONT_COLOR_WHITE );
 
 				apply_surface(
 					hud.advancedMessages.at(i).get_posX(),
@@ -262,11 +262,18 @@ void defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
 		hud.font_HUD_1,
 		"Pos Y: ",
 		true) );
+
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 5,
+		hud.font_HUD_1,
+		"FPS:  ",
+		true) );
 		
 
 }
 
-void eventHandler(bool& quit, HUD& hud)
+void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight)
 {
 	//While there's events to handle
     while( SDL_PollEvent( &event ) )
@@ -294,6 +301,18 @@ void eventHandler(bool& quit, HUD& hud)
 				break;
 			case SDLK_F3:
 				hud.toggleAdvanced();
+				break;
+			case SDLK_F11:
+				if(fullscreen)
+				{
+					surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+					fullscreen = false;
+				} 
+				else
+				{
+					surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
+					fullscreen = true;
+				}
 				break;
 			case SDLK_ESCAPE:
 				quit = true;
@@ -328,8 +347,21 @@ void eventHandler(bool& quit, HUD& hud)
     }	
 }
 
-void frameRate(Timer& fpsTimer)
+void frameRate(Timer& fpsTimer, HUD& hud)
 {
+	fpsTimer.frameCount++;
+	int temp = fpsTimer.get_totalTicks();
+
+	//count the frame rate every 10 frames
+	if(fpsTimer.frameCount == 100)
+	{
+		fpsTimer.currentFrameRate = fpsTimer.frameCount / ((fpsTimer.get_totalTicks() - fpsTimer.firstStartTicks) / 1000);
+		fpsTimer.frameCount = 0;
+		fpsTimer.firstStartTicks = fpsTimer.get_totalTicks();
+	}
+
+	hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(fpsTimer.currentFrameRate));
+
 	//If we want to cap the frame rate
     if(fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
     {
@@ -343,36 +375,32 @@ int main( int argc, char* args[] )
 	//initialize the currentMap object with the mapFileName text file
 	TerrainMap currentMap = TerrainMap("map_001.txt");
 	Timer fpsTimer;
-	HUD hud = HUD();	
+	HUD hud = HUD();
 
 	//define the clips (clip up the texture files)
 	defineClip(CODE_TERRAIN);
 	defineClip(CODE_ENTITY);
 
-	int counter = 0;
-
+	//to quit the main game loop
     bool quit = false;
 
-	if( init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT) == false)
-    {
+	//just playing around. alrighty, guess it worked. Hopefully no memory leaks created from it
+	bool fullscreen = false;
+
+	//SDL's init()
+	if( !init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT) )
         return 1;
-    }	
 	
 	//Initialize SDL_ttf
     if( TTF_Init() == -1 )
-    {
         return false;    
-    }
 
+	//to define the HUD and its messages
 	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
 
-    if( load_files() == false )
-	{
+	//SDL load_files to load images
+    if( !load_files() )
         return 1;
-    }
-
-	//fill with black
-    SDL_FillRect( surface_screen, &surface_screen->clip_rect, SDL_MapRGB( surface_screen->format, 0xFF, 0xFF, 0xFF ) );
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************
@@ -382,8 +410,8 @@ int main( int argc, char* args[] )
 		fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		eventHandler(quit, hud); 
-		
+		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT); 
+
 		//do some physics
 		Physics::doPhysics(vector_players, hud);
 	
@@ -396,11 +424,10 @@ int main( int argc, char* args[] )
 		
 		//Update the screen
 		if( SDL_Flip( surface_screen ) == -1 )
-		{
 			return 1;
-		}
 
-		frameRate(fpsTimer);
+		//regulate the frame rate, and update the currentFrameRate
+		frameRate(fpsTimer, hud);
     }
     //***********************************************************************************
 	//*********** End of the game loop **************************************************

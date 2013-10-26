@@ -17,8 +17,8 @@ Player::Player (int clipX_in, int clipY_in)
 	this->forceY = 0;
 	this->velX = 0;
 	this->velY = 0;
-	this->maxVelX = 5;
-	this->maxVelY = 5;
+	this->maxVelX = 3;
+	this->maxVelY = 3;
 	this->posX = 100;
 	this->posY = 100;
 

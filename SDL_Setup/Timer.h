@@ -8,7 +8,7 @@ This class was created by following the tutorials on Lazyfoo.net
 class Timer
 {
 private:
-	//The clock time when the timer started
+	//The clock time when the timer started (resets each frame)
 	int startTicks;
     
 	//The ticks stored when the timer was paused
@@ -27,9 +27,16 @@ public:
 	void stop();
 	void pause();
 	void unpause();
+	int currentFrameRate, frameCount;
     
+	//The clock time when the FPS counter started (lasts until currentFrameRate is calculated)
+	double firstStartTicks;
+
 	//Gets the timer's time
 	int get_ticks();
+
+	//Gets the total time of the entire game
+	double get_totalTicks();
     
 	//Checks the status of the timer
 	bool is_started();

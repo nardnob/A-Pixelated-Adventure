@@ -10,7 +10,10 @@ Timer::Timer()
 {
 	//Initialize the variables
 	startTicks = 0;
+	firstStartTicks = 0;
 	pausedTicks = 0;
+	currentFrameRate = 0;
+	frameCount = 0;
 	paused = false;
 	started = false;    
 }
@@ -58,6 +61,12 @@ int Timer::get_ticks()
 	return 0;    
 }
 
+double Timer::get_totalTicks()
+{
+	//Return the current time minus the start time
+	return SDL_GetTicks();
+}
+
 void Timer::pause()
 {
 	//If the timer is running and isn't already paused
@@ -94,5 +103,5 @@ bool Timer::is_started()
 
 bool Timer::is_paused()
 {
-	    return paused;
+	return paused;
 }

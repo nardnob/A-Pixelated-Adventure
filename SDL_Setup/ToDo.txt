@@ -1,11 +1,6 @@
-﻿* True-Type fonts!
-	* Let's get a HUD going (at the top or bottom?)
-	* Velocity / position / force display
-	* ... health? Dun dun dun.
-
-* Add Entity objects (like a tree?)
+﻿* Add Entity objects (like a tree?)
 	* Will need to overlay the terrain
-	* Will need to A) display over the player, or B) display under the player
+	* Will need to A) display over the player, or B) display under the player (walk-through-able or not)
 	* Might need separate parts, like the leaves of a tree could display over the player, but a player couldn't walk through the trunk
 
 * Create maxX and maxY for entity positions
@@ -13,6 +8,17 @@
 		* Make sure the screen size is already fully dynamic (based on the input from the map file)
 
 * Walking animation? This could get complicated.
+	* Could have a parent Animation class
+		* Could have a loop of animation textures
+		* PosX, PosY (Where the animation occurs, can always update this to follow a position)
+		** For pro-physics animations (animations that move):
+		* VelX, VelY (for animations that move at a constant velocity in one direction).
+		* forceX, forceY (to apply each physics loop, acceleration)
+		* mass (need this for physics acceleration). Yes, moving animations will have mass
+		
+		* Interval of frames before switching to the next in the loop
+		* Two types of animation: one loop through the entire list of textures, or continuous loop through textures until stopped.
+			* When an animation with only one loop finishes, need to delete the animation object to save memory
 
 * Tidy up some code
 	* Use a vector to hold the terrain clips (in main)

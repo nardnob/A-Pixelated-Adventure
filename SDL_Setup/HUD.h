@@ -16,7 +16,7 @@ public:
 	TTF_Font* font_HUD_1;
 	vector<Message> advancedMessages; //all of the advanced messages of the HUD. only displayed if advanced (if f3)
 	
-	enum { MESSAGE_VELX, MESSAGE_VELY, MESSAGE_POSX, MESSAGE_POSY };
+	enum { MESSAGE_VELX, MESSAGE_VELY, MESSAGE_POSX, MESSAGE_POSY, MESSAGE_FPS };
 	
 	void toggleAdvanced();
 	bool get_advanced() { return this->advanced; }
