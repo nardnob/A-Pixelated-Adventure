@@ -38,9 +38,9 @@ http://lazyfoo.net/SDL_tutorials/lesson07/windows/msvsnet2010e/index.php
 
 To run the program, compile it and then go to the Debug folder that contains the exe. You must copy a few things
 to this directory:
-1) All of the DLL's from the x86 lib file
-2) entities.png
-3) font_HUD_3.ttf
-4) icon2.bmp
-5) map_001.txt
-6) terrain.png
+* All of the DLL's from the x86 lib file
+* entities.png
+* font_HUD_3.ttf
+* icon2.bmp
+* map_001.txt
+* terrain.png
