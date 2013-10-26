@@ -1,6 +1,3 @@
-SDL_Setup
-=========
-
 Senior Project — A Pixelated Adventure
 
 Students:
@@ -18,10 +15,13 @@ The game is intended to be a 2D top-down action RPG, with dynamic level generati
 physics simulation, and a combat system.
 
 /*****************/
+/**** Set up *****/
+/*****************/
 
 The game is programmed in C++ using SDL (Simple DirectMedia Layer) for graphics. SDL needs to be set up in
-each new programming environment. Copy the provided "..\SDL_Setup\SDL-1.2.15" to "C:\" and you should be good to go. If not,
-try to follow the tutorials on LazyFoo.net. Specifically lessons 1 and 3:
+each new programming environment. Copy the provided "..\SDL_Setup\SDL-1.2.15" to "C:\" and you should be good to go
+for compiling (I think the linking settings will still be in the solution, but I'm not 100% sure yet).
+If this doesn't work, follow the tutorials on LazyFoo.net. Specifically lessons 1, 3, and 7:
 
 Lesson 1:
 http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php
@@ -32,11 +32,15 @@ http://lazyfoo.net/SDL_tutorials/lesson03/windows/msvsnet2010e/index.php
 Lesson 7:
 http://lazyfoo.net/SDL_tutorials/lesson07/windows/msvsnet2010e/index.php
 
-Lesson 3 can be followed for a few different libraries. As of v1.0.0 (on October 20, 2013), it is only
-necessary to follow lesson 3 for SDL_image (and not SDL_ttf or SDL_mixer).
-
-Lesson 7 must now be followed to set up SDL_ttf, meaning lesson 3 must be done again for SDL_ttf (which is said 
-in lesson 7)
-
 * Make sure when downloading the SDL binaries that you are downloading them for SDL 1.2.15 and not SDL 2.
-* Also, make sure to link to the x86 lib files and not the x64 ones
+  (as of now I have included the SDL-1.2.15 folder in the repo. Not sure if this is okay)
+* Also, make sure to link to the x86 lib files and not the x64 ones.
+
+To run the program, compile it and then go to the Debug folder that contains the exe. You must copy a few things
+to this directory:
+1) All of the DLL's from the x86 lib file
+2) entities.png
+3) font_HUD_3.ttf
+4) icon2.bmp
+5) map_001.txt
+6) terrain.png
