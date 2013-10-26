@@ -14,9 +14,7 @@ and learning experience.
 The game is intended to be a 2D top-down action RPG, with dynamic level generation, level transitioning, 
 physics simulation, and a combat system.
 
-/*****************/ 
 /**** Set up *****/ 
-/*****************/
 
 The game is programmed in C++ using SDL (Simple DirectMedia Layer) for graphics. SDL needs to be set up in
 each new programming environment. Copy the provided "..\SDL_Setup\SDL-1.2.15" to "C:\" and you should be good to go
