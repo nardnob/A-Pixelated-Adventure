@@ -8,6 +8,7 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
 const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 100;
+const string ICON_FILE = "icon2.bmp";
 
 //HUD attributes
 const int HUD_HEIGHT = 160;

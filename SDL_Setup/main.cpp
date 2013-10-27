@@ -15,6 +15,7 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "TerrainMap.h"
 #include "Timer.h"
 
+#include <Windows.h>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -26,6 +27,7 @@ SDL_Surface* surface_terrain = NULL;
 SDL_Surface* surface_entities = NULL;
 SDL_Surface* surface_screen = NULL;
 SDL_Surface* surface_messager = NULL;
+
 //The event structure
 SDL_Event event;
 
@@ -36,6 +38,7 @@ SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
 vector<Entity*> vector_entities; //this will hold a vector of all entities (for polymorphism to output all entities in one loop, regardless of specific types)
 vector<Player> vector_players; //vector to hold the Player object(s)
 
+int monitorWidth, monitorHeight;
 
 SDL_Surface *load_image( std::string filename )
 {
@@ -67,12 +70,12 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
     SDL_BlitSurface( source, clip, destination, &offset );
 }
 
-void setWindowIcon(char in_file[])
+void setWindowIcon()
 {
 	Uint32 colorKey;
 	SDL_Surface *image;
 
-	image = SDL_LoadBMP(in_file);
+	image = SDL_LoadBMP(ICON_FILE.c_str());
 	colorKey = SDL_MapRGB(image->format, 0, 255, 0);
 	SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorKey);
 	SDL_WM_SetIcon(image, NULL);
@@ -86,13 +89,17 @@ bool init(int screenWidth, int screenHeight)
     {
         return false;
     }
-	
+
+	const SDL_VideoInfo* info = SDL_GetVideoInfo();   //<-- calls SDL_GetVideoInfo();   
+	monitorWidth = info->current_w;
+	monitorHeight = info->current_h;
+
 	//set the window icon 32x32 bmp. 0 255 0: colorkey for transparency
-	setWindowIcon( "icon2.bmp" );
+	setWindowIcon();
 
     //Set up the screen (only enable one)
-    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
-    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+    surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
+    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -276,16 +283,29 @@ void defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
 
 void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight)
 {
+	Uint32 flags; /* Start with whatever flags you prefer */
+
+	flags = surface_screen->flags; /* Save the current flags in case toggling fails */
+
 	if(fullscreen)
 	{
-		surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+		surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //windowed mode
 		fullscreen = false;
+		setWindowIcon(); //re-set the windows icon
 	} 
 	else
 	{
-		surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN ); //full screen
+		surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 		fullscreen = true;
 	}
+
+	/* If toggle FullScreen failed, then switch back */
+	if(surface_screen == NULL) 
+		surface_screen = SDL_SetVideoMode(screenWidth, screenHeight, SCREEN_BPP, flags); 
+
+	 /* If you can't switch back for some reason */
+	if(surface_screen == NULL) 
+		exit(1);
 }
 
 void screenShot()
@@ -293,6 +313,7 @@ void screenShot()
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
 
+	//"screenshot 6_18_1992_" (if it is june 18, 1992)
 	string fileName = "screenshot " + to_string(timePtr->tm_mon) + "_" + to_string(timePtr->tm_mday) + "_" + to_string(timePtr->tm_year + 1900) + "_";
 	int attempt = 0;
 
@@ -301,9 +322,12 @@ void screenShot()
 	{		
 	}
 
+	//"screenshot 6_18_1992_0.bmp" (if attempt is 0)
 	fileName = fileName + to_string(attempt) + ".bmp";
+
+	//convert the string to a const char* for the function call
 	const char* temp = fileName.c_str();
-	SDL_SaveBMP( surface_screen,temp); 
+	SDL_SaveBMP(surface_screen, temp);
 }
 
 void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight)
@@ -334,12 +358,15 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 				break;
 			case SDLK_F3:
 				hud.toggleAdvanced();
+				OutputDebugString("hud.toggleAdvanced() finished\n");
 				break;
 			case SDLK_F11:
 				toggleFullscreen(fullscreen, screenWidth, screenHeight);
+				OutputDebugString("toggleFullscreen() finished\n");
 				break;
 			case SDLK_F12:
 				screenShot();
+				OutputDebugString("screenShot() finished\n");
 				break;
 			case SDLK_ESCAPE:
 				quit = true;
@@ -412,22 +439,27 @@ int main( int argc, char* args[] )
     bool quit = false;
 
 	//just playing around. alrighty, guess it worked. Hopefully no memory leaks created from it
-	bool fullscreen = false;
+	bool fullscreen = true;
+	putenv("SDL_VIDEO_CENTERED=1");
 
 	//SDL's init()
 	if( !init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT) )
         return 1;
+	OutputDebugString("init() finished\n");
 	
 	//Initialize SDL_ttf
     if( TTF_Init() == -1 )
         return false;    
+	OutputDebugString("TTF_Init() finished\n");
 
 	//to define the HUD and its messages
 	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
+	OutputDebugString("defineHUD() finished\n");
 
 	//SDL load_files to load images
     if( !load_files() )
         return 1;
+	OutputDebugString("load_files() finished\n");
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************

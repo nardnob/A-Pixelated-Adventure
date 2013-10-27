@@ -50,6 +50,9 @@
     <Image Include="terrain.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icon2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerrainMap.h">
@@ -84,5 +87,10 @@
     <Text Include="DoneThisBatch.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="font_HUD_3.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

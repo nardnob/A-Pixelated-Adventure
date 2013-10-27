@@ -25,3 +25,8 @@
 	* Make a Gamestate ... stop declaring important things in main
 	* Remove the mess (the commented-out code) from Physics.cpp. Choose either component-based or vector-based math for the static friction calculation
 
+* How can I include the resource files into the final exe?
+
+* Is it bad to output the terrain in clips every single frame? 
+Should I attempt to combine them into a single bmp stored in memory and then output that bmp? 
+Would that significantly improve performance?
