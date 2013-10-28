@@ -6,6 +6,7 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 
 #include "constants.cpp"
 #include "Entity.h"
@@ -14,8 +15,9 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "Player.h"
 #include "TerrainMap.h"
 #include "Timer.h"
+#include "resource.h"
 
-#include <Windows.h>
+#include <Windows.h> //for OutputDebugString()
 #include <string>
 #include <fstream>
 #include <vector>
@@ -75,6 +77,7 @@ void setWindowIcon()
 	Uint32 colorKey;
 	SDL_Surface *image;
 
+	//image = SDL_LoadBMP(ICON_FILE.c_str());
 	image = SDL_LoadBMP(ICON_FILE.c_str());
 	colorKey = SDL_MapRGB(image->format, 0, 255, 0);
 	SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorKey);
@@ -82,7 +85,7 @@ void setWindowIcon()
 	SDL_FreeSurface(image);
 }
 
-bool init(int screenWidth, int screenHeight)
+bool init(int screenWidth, int screenHeight, bool& fullscreen)
 {
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
@@ -100,6 +103,7 @@ bool init(int screenWidth, int screenHeight)
     //Set up the screen (only enable one)
     surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
     //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+	fullscreen = true;
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -224,8 +228,13 @@ void defineClip(int code_in)
 	case CODE_ENTITY:	
 		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 		vector_players.push_back(Player(
-			( (0 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //the x value of the entity clip (in the entity texture file)
-			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ) //the y value of the entity to clip (in the entity texture file)
+			( (0 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
+			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
+			100, //posX
+			100, //posY
+			0, //base_posX
+			0, //base_posY
+			0  //base_radius
 			));
 
 		vector_entities.push_back(&vector_players[0]);
@@ -424,42 +433,52 @@ void frameRate(Timer& fpsTimer, HUD& hud)
     }
 }
 
+void displayAll(TerrainMap& currentMap, HUD& hud)
+{
+	//apply the terrain 
+	display(CODE_TERRAIN, currentMap);
+	//apply the entities
+	display(CODE_ENTITY, currentMap);
+	//display the HUD
+	display(CODE_HUD, currentMap, hud);
+}
+
 int main( int argc, char* args[] )
 {	
 	//initialize the currentMap object with the mapFileName text file
 	TerrainMap currentMap = TerrainMap("map_001.txt");
-	Timer fpsTimer;
-	HUD hud = HUD();
+
+	Timer fpsTimer; //timer to regulate and monitor the frames per second
+	HUD hud = HUD(); //the HUD (holds the hud surface(s) and messages
+
+	bool fullscreen = true;	//the window state (full screen or windowed)
 
 	//define the clips (clip up the texture files)
 	defineClip(CODE_TERRAIN);
 	defineClip(CODE_ENTITY);
 
-	//to quit the main game loop
-    bool quit = false;
+    bool quit = false; //to quit the main game loop
 
-	//just playing around. alrighty, guess it worked. Hopefully no memory leaks created from it
-	bool fullscreen = true;
+	//center the window; does not center the fullscreen window
 	putenv("SDL_VIDEO_CENTERED=1");
 
 	//SDL's init()
-	if( !init(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT) )
+	if( !init(
+		currentMap.get_sizeX() * TERRAIN_CLIP_W, 
+		currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, 
+		fullscreen) )
         return 1;
-	OutputDebugString("init() finished\n");
 	
 	//Initialize SDL_ttf
     if( TTF_Init() == -1 )
         return false;    
-	OutputDebugString("TTF_Init() finished\n");
 
 	//to define the HUD and its messages
 	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
-	OutputDebugString("defineHUD() finished\n");
 
 	//SDL load_files to load images
     if( !load_files() )
         return 1;
-	OutputDebugString("load_files() finished\n");
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************
@@ -472,16 +491,12 @@ int main( int argc, char* args[] )
 		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT); 
 
 		//do some physics
-		Physics::doPhysics(vector_players, hud);
+		Physics::doPhysics(vector_players, hud, currentMap.boundaries);
 	
-		//apply the terrain 
-		display(CODE_TERRAIN, currentMap);
-		//apply the entities
-		display(CODE_ENTITY, currentMap);
-		//display the HUD
-		display(CODE_HUD, currentMap, hud);
+		//apply all of the surfaces to surface_screen
+		displayAll(currentMap, hud);
 		
-		//Update the screen
+		//Update the screen by flipping surface_screen
 		if( SDL_Flip( surface_screen ) == -1 )
 			return 1;
 

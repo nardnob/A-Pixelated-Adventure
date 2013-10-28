@@ -23,7 +23,7 @@ public:
 	void toggleTexture(int toChoose);
 
 	Player();
-	Player(int clipX_in, int clipY_in);
+	Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_radius);
 };
 
 #endif

@@ -7,28 +7,32 @@ Player::Player()
 
 }
 
-Player::Player (int clipX_in, int clipY_in)
+Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_radius)
 {
 	//this->textureNum = textureNum_in;
 	this->active = true;
 
-	this->mass = MASS_PLAYER;
 	this->forceX = 0;
 	this->forceY = 0;
 	this->velX = 0;
 	this->velY = 0;
+
+	this->mass = MASS_PLAYER;
 	this->maxVelX = 3;
 	this->maxVelY = 3;
-	this->posX = 100;
-	this->posY = 100;
+	this->posX = in_posX;
+	this->posY = in_posY;
+	this->base_posX = in_base_posX;
+	this->base_posY = in_base_posY;
+	this->base_radius = in_base_radius;
 
 	this->currentTexture = TEXTURE_FRONT;
 
 	//define TEXTURE_UP, DOWN, LEFT, and RIGHT clips
 	for(int i = 0; i < 4; i++)
 	{
-		this->rect[i].x = clipX_in + ENTITY_CLIP_W * i;
-		this->rect[i].y = clipY_in;
+		this->rect[i].x = in_clipX + ENTITY_CLIP_W * i;
+		this->rect[i].y = in_clipY;
 		this->rect[i].w = ENTITY_CLIP_W;
 		this->rect[i].h = ENTITY_CLIP_H;
 	}

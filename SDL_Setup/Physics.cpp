@@ -1,12 +1,37 @@
 #include "Physics.h"
 #include "Player.h"
-#include "constants.cpp"
 #include "HUD.h"
+#include "Boundary.h"
+#include "constants.cpp"
+
 #include <vector>
 #include <cmath>
 using namespace std;
 
-void Physics::doPhysics(vector<Player>& inVector, HUD& hud)
+bool goodNextPosition(double nextX, double nextY, vector<Boundary>& boundaries)
+{
+	bool
+		badX = false,
+		badY = false;
+
+	for(int i = 0; i < boundaries.size(); i++)
+	{
+		if(	nextX >= boundaries.at(i).x	&& nextX < (boundaries.at(i).x + boundaries.at(i).w) )
+			badX = true;
+		if( nextY >= boundaries.at(i).y && nextY < (boundaries.at(i).y + boundaries.at(i).h) )
+			badY = true;
+
+		if(badX && badY)
+			return false;
+
+		badX = false;
+		badY = false;
+	}
+
+	return true;
+}
+
+void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries)
 {	
 	//consider keyboard events for the player
 	for(int i = 0; i < 4; i++)
@@ -34,12 +59,6 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud)
 			}
 		}
 	}
-
-	//calculate collisions
-
-
-	//resolve collisions
-
 	
 	//convert force to velocity
 	for(int i = 0; i < inVector.size(); i++)
@@ -81,11 +100,23 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud)
 				inVector.at(i).velY = -inVector.at(i).maxVelY;
 	}
 
+	//calculate collisions
+
+	//resolve collisions
+
 	//calculate movement (need to limit position to bounds of window)
 	for(int i = 0; i < inVector.size(); i++)
 	{
-		inVector.at(i).posX += inVector.at(i).velX;
-		inVector.at(i).posY += inVector.at(i).velY;
+		//test for boundary collisions; only update position if no boundary collision with said update
+		double
+			nextX = inVector.at(i).posX + inVector.at(i).velX,
+			nextY = inVector.at(i).posY + inVector.at(i).velY;
+
+		if( goodNextPosition(nextX, nextY, boundaries) )
+		{
+			inVector.at(i).posX = nextX;
+			inVector.at(i).posY = nextY;
+		}
 		
 		if(i == 0) //only want to update the HUD for the player
 		{

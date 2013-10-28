@@ -1,7 +1,10 @@
 #ifndef TERRAINMAP_H
 #define TERRAINMAP_H
 
+#include "Boundary.h"
+
 #include <string>
+#include <vector>
 using namespace std;
 
 const int MAP_MAX_X = 60;
@@ -18,6 +21,8 @@ public:
 
 	bool loadMap();
 	int mapData[MAP_MAX_X][MAP_MAX_Y]; //really should store this in a vector or dynamic array. no need to waste space
+
+	vector<Boundary> boundaries;
 
 	string get_mapFileName() { return mapFileName; }
 	void set_mapFileName(string mapFileName_in) { this->mapFileName = mapFileName_in; }
