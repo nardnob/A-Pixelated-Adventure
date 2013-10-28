@@ -1,9 +1,9 @@
 Senior Project — A Pixelated Adventure
 
 Students:
-Brandon Dixson
-Brooks Wright
-David Loveless
+* Brandon Dixson
+* Brooks Wright
+* David Loveless
 
 A Pixelated Adventure is the game that we are creating for our senior project. As of October 20, 2013, we have 
 turned in a product description and an SRS (software requirements specification).
@@ -19,16 +19,19 @@ physics simulation, and a combat system.
 The game is programmed in C++ using SDL (Simple DirectMedia Layer) for graphics. SDL needs to be set up in
 each new programming environment. Copy the provided "..\SDL_Setup\SDL-1.2.15" to "C:\" and you should be good to go
 for compiling (I think the linking settings will still be in the solution, but I'm not 100% sure yet).
-If this doesn't work, follow the tutorials on LazyFoo.net. Specifically lessons 1, 3, and 7:
+If this doesn't work, follow the tutorials on LazyFoo.net. Specifically lessons 1, 3, 7 and 11:
 
 Lesson 1:
-http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php
+http://lazyfoo.net/SDL_tutorials/lesson01/index.php
 
 Lesson 3:
-http://lazyfoo.net/SDL_tutorials/lesson03/windows/msvsnet2010e/index.php
+http://lazyfoo.net/SDL_tutorials/lesson03/index.php
 
 Lesson 7:
-http://lazyfoo.net/SDL_tutorials/lesson07/windows/msvsnet2010e/index.php
+http://lazyfoo.net/SDL_tutorials/lesson07/index.php
+
+Lesson 11:
+http://lazyfoo.net/SDL_tutorials/lesson11/index.php
 
 * Make sure when downloading the SDL binaries that you are downloading them for SDL 1.2.15 and not SDL 2.
   (as of now I have included the SDL-1.2.15 folder in the repo. Not sure if this is okay)
@@ -42,3 +45,10 @@ to this directory:
 * icon2.bmp
 * map_001.txt
 * terrain.png
+
+/**** Keys ****/
+
+* Arrow keys for movement (can also use W, A, S, D)
+* F2 to take a screenshot
+* F3 to toggle advanced messages (displaying FPS, position, etc)
+* F11 to toggle full screen
