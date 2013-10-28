@@ -365,6 +365,10 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 			case SDLK_s:
 				vector_players.at(0).pressKey(KEY_DOWN);
 				break;
+			case SDLK_F2:
+				screenShot();
+				OutputDebugString("screenShot() finished\n");
+				break;
 			case SDLK_F3:
 				hud.toggleAdvanced();
 				OutputDebugString("hud.toggleAdvanced() finished\n");
@@ -372,10 +376,6 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 			case SDLK_F11:
 				toggleFullscreen(fullscreen, screenWidth, screenHeight);
 				OutputDebugString("toggleFullscreen() finished\n");
-				break;
-			case SDLK_F12:
-				screenShot();
-				OutputDebugString("screenShot() finished\n");
 				break;
 			case SDLK_ESCAPE:
 				quit = true;
