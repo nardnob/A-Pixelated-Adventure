@@ -8,27 +8,44 @@
 #include <cmath>
 using namespace std;
 
-bool goodNextPosition(double nextX, double nextY, vector<Boundary>& boundaries)
+bool badPosition(double inX, double inY, vector<Boundary>& boundaries)
 {
-	bool
-		badX = false,
-		badY = false;
+    bool
+        badX = false,
+        badY = false;
 
-	for(int i = 0; i < boundaries.size(); i++)
-	{
-		if(	nextX >= boundaries.at(i).x	&& nextX < (boundaries.at(i).x + boundaries.at(i).w) )
+    for(int i = 0; i < boundaries.size(); i++)
+    {
+		if( inX >= boundaries.at(i).x && inX < (boundaries.at(i).x + boundaries.at(i).w) )
 			badX = true;
-		if( nextY >= boundaries.at(i).y && nextY < (boundaries.at(i).y + boundaries.at(i).h) )
+
+		if( inY >= boundaries.at(i).y && inY < (boundaries.at(i).y + boundaries.at(i).h) )
 			badY = true;
 
 		if(badX && badY)
-			return false;
+			return true;
 
 		badX = false;
 		badY = false;
 	}
 
-	return true;
+	return false;
+}
+
+vector<bool> goodNextPosition(double posX, double posY, double nextX, double nextY, vector<Boundary>& boundaries)
+{
+	vector<bool> bad;
+	bad.push_back(false);
+	bad.push_back(false);
+	enum { x, y };
+
+	if( badPosition(nextX, posY, boundaries) )
+		bad.at(x) = true;
+
+	if( badPosition(posX, nextY, boundaries) )
+		bad.at(y) = true;
+
+	return bad;
 }
 
 void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries)
@@ -112,9 +129,15 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& bo
 			nextX = inVector.at(i).posX + inVector.at(i).velX,
 			nextY = inVector.at(i).posY + inVector.at(i).velY;
 
-		if( goodNextPosition(nextX, nextY, boundaries) )
+		vector<bool> bad = goodNextPosition(inVector.at(i).posX, inVector.at(i).posY, nextX, nextY, boundaries);
+		enum { x, y };
+
+		if( !bad.at(x) )
 		{
 			inVector.at(i).posX = nextX;
+		}
+		if( !bad.at(y) )
+		{
 			inVector.at(i).posY = nextY;
 		}
 		
