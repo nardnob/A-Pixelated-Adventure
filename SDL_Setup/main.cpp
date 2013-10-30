@@ -10,6 +10,8 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 
 #include "constants.cpp"
 #include "Entity.h"
+#include "Gamestate.h"
+#include "GUI.h"
 #include "HUD.h"
 #include "Physics.h"
 #include "Player.h"
@@ -37,7 +39,6 @@ SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
 
 //SDL_Rect entityClip[ ENTITY_CLIP_COUNT ]; //used a vector to hold Player objects and stored the clips in Player instead
 vector<Entity*> vector_entities; //this will hold a vector of all entities (for polymorphism to output all entities in one loop, regardless of specific types)
-vector<Player> vector_players; //vector to hold the Player object(s)
 
 int monitorWidth, monitorHeight;
 
@@ -210,7 +211,7 @@ void display(int code_in, TerrainMap& currentMap)
 	}
 }
 
-void defineClip(int code_in)
+void defineClip(int code_in, Gamestate& gamestate)
 {
 	switch(code_in)
 	{
@@ -226,7 +227,7 @@ void defineClip(int code_in)
 		break;
 	case CODE_ENTITY:	
 		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
-		vector_players.push_back(Player(
+		gamestate.vector_players.push_back(Player(
 			( (0 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
 			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
 			100, //posX
@@ -236,7 +237,7 @@ void defineClip(int code_in)
 			0  //base_radius
 			));
 
-		vector_entities.push_back(&vector_players[0]);
+		vector_entities.push_back(&gamestate.vector_players.at(0));
 		break;
 	}
 }
@@ -343,45 +344,20 @@ void screenShot()
 	SDL_SaveBMP(surface_screen, temp);
 }
 
-//teleports player 0 to position (x, y) and faces them in the in_direction if specified
-void teleport(double in_x, double in_y, int in_direction = -1)
-{
-	vector_players.at(0).posX = in_x;
-	vector_players.at(0).posY = in_y;
-	if(in_direction >= 0)
-		vector_players.at(0).set_currentTexture(in_direction);
-}
-
-void switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap& currentMap, HUD& hud)
-{
-	currentMap = TerrainMap(in_mapFileName);
-	string temp = "MAP: " + currentMap.get_mapFileName();
-	teleport(in_x, in_y);
-
-	//defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
-	hud.HUD_rect.w = currentMap.get_sizeX() * TERRAIN_CLIP_W;
-	hud.HUD_rect.h = HUD_HEIGHT;
-	hud.HUD_rect.x = 0;
-	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;
-	temp = "MAP: " + currentMap.get_mapFileName();
-
-	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
-}
-
 //just used for testing. Alternates between map_001.txt and map_002.txt
-void toggleMap(TerrainMap& currentMap, HUD& hud)
+void toggleMap(TerrainMap& currentMap, HUD& hud, GUI& gui)
 {	
 	if(currentMap.get_mapFileName() == "map_001.txt")
 	{
-		switchMap("map_002.txt", 512, 0, currentMap, hud);
+		gui.switchMap("map_002.txt", 512, 0, currentMap, hud);
 	}
 	else
 	{
-		switchMap("map_001.txt", 512, 768, currentMap, hud);
+		gui.switchMap("map_001.txt", 512, 768, currentMap, hud);
 	}
 }
 
-void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight, TerrainMap& currentMap)
+void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight, TerrainMap& currentMap, GUI& gui, Gamestate& gamestate)
 {
 	//While there's events to handle
     while( SDL_PollEvent( &event ) )
@@ -393,19 +369,19 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 			{
 			case SDLK_LEFT:
 			case SDLK_a:
-				vector_players.at(0).pressKey(KEY_LEFT);
+				gamestate.vector_players.at(0).pressKey(KEY_LEFT);
 				break;
 			case SDLK_RIGHT:
 			case SDLK_d:
-				vector_players.at(0).pressKey(KEY_RIGHT);
+				gamestate.vector_players.at(0).pressKey(KEY_RIGHT);
 				break;
 			case SDLK_UP:
 			case SDLK_w:
-				vector_players.at(0).pressKey(KEY_UP);
+				gamestate.vector_players.at(0).pressKey(KEY_UP);
 				break;
 			case SDLK_DOWN:
 			case SDLK_s:
-				vector_players.at(0).pressKey(KEY_DOWN);
+				gamestate.vector_players.at(0).pressKey(KEY_DOWN);
 				break;
 			case SDLK_F2:
 				screenShot();
@@ -420,7 +396,7 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 				OutputDebugString("toggleFullscreen() finished\n");
 				break;
 			case SDLK_F12:
-				toggleMap(currentMap, hud);
+				toggleMap(currentMap, hud, gui);
 				OutputDebugString("switchMap() finished\n");
 				break;
 			case SDLK_ESCAPE:
@@ -433,19 +409,19 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 			{
 			case SDLK_LEFT:
 			case SDLK_a:
-				vector_players.at(0).releaseKey(KEY_LEFT);
+				gamestate.vector_players.at(0).releaseKey(KEY_LEFT);
 				break;
 			case SDLK_RIGHT:
 			case SDLK_d:
-				vector_players.at(0).releaseKey(KEY_RIGHT);
+				gamestate.vector_players.at(0).releaseKey(KEY_RIGHT);
 				break;
 			case SDLK_UP:
 			case SDLK_w:
-				vector_players.at(0).releaseKey(KEY_UP);
+				gamestate.vector_players.at(0).releaseKey(KEY_UP);
 				break;
 			case SDLK_DOWN:
 			case SDLK_s:
-				vector_players.at(0).releaseKey(KEY_DOWN);
+				gamestate.vector_players.at(0).releaseKey(KEY_DOWN);
 				break;
 			}
 			break;
@@ -496,14 +472,18 @@ int main( int argc, char* args[] )
 	//initialize the currentMap object with the mapFileName text file
 	TerrainMap currentMap = TerrainMap("map_001.txt");
 
+	Gamestate gamestate = Gamestate();
+
+	GUI gui = GUI(&gamestate);
+
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	HUD hud = HUD(); //the HUD (holds the hud surface(s) and messages
 
 	bool fullscreen = true;	//the window state (full screen or windowed)
 
 	//define the clips (clip up the texture files)
-	defineClip(CODE_TERRAIN);
-	defineClip(CODE_ENTITY);
+	defineClip(CODE_TERRAIN, gamestate);
+	defineClip(CODE_ENTITY, gamestate);
 
     bool quit = false; //to quit the main game loop
 
@@ -538,10 +518,10 @@ int main( int argc, char* args[] )
 		fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap); 
+		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap, gui, gamestate); 
 
 		//do some physics
-		Physics::doPhysics(vector_players, hud, currentMap.boundaries);
+		Physics::doPhysics(gamestate.vector_players, hud, currentMap.boundaries);
 	
 		//apply all of the surfaces to surface_screen
 		displayAll(currentMap, hud);
