@@ -4,10 +4,12 @@
 #include "Boundary.h"
 #include "constants.cpp"
 
+#include <Windows.h>
 #include <vector>
 #include <cmath>
 using namespace std;
 
+/*
 bool badPosition(double inX, double inY, vector<Boundary>& boundaries)
 {
     bool
@@ -31,18 +33,57 @@ bool badPosition(double inX, double inY, vector<Boundary>& boundaries)
 
 	return false;
 }
+*/
 
-vector<bool> goodNextPosition(double posX, double posY, double nextX, double nextY, vector<Boundary>& boundaries)
+bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Player& player)
+{
+    double
+		pX1 = inX + player.base_posX, //player box left side
+		pX2 = inX + player.base_posX + player.base_w, //player box right side
+		pY1 = inY + player.base_posY, //player box top
+		pY2 = inY + player.base_posY + player.base_h, //player box bottom
+		bX1 = 0, //bound box left side
+		bX2 = 0, //bound box right side
+		bY1 = 0, //bound box top
+		bY2 = 0; //bound box bottom
+
+	bool badX, badY;
+
+	for(int i = 0; i < boundaries.size(); i++)
+	{
+		badX = true;
+		badY = true;
+
+		bX1 = boundaries.at(i).x;
+		bX2 = boundaries.at(i).x + boundaries.at(i).w;
+		bY1 = boundaries.at(i).y;
+		bY2 = boundaries.at(i).y + boundaries.at(i).h;
+
+		if( (pX1 > bX2)	|| (pX2 < bX1) )
+			badX = false;
+
+		if(	(pY1 > bY2)	|| (pY2 < bY1) )
+			badY = false;
+
+		if(badX && badY)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+vector<bool> goodNextPosition(Player& player, double nextX, double nextY, vector<Boundary>& boundaries)
 {
 	vector<bool> bad;
 	bad.push_back(false);
 	bad.push_back(false);
 	enum { x, y };
 
-	if( badPosition(nextX, posY, boundaries) )
+	if( badPosition(nextX, player.posY, boundaries, player) )
 		bad.at(x) = true;
 
-	if( badPosition(posX, nextY, boundaries) )
+	if( badPosition(player.posX, nextY, boundaries, player) )
 		bad.at(y) = true;
 
 	return bad;
@@ -129,7 +170,7 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& bo
 			nextX = inVector.at(i).posX + inVector.at(i).velX,
 			nextY = inVector.at(i).posY + inVector.at(i).velY;
 
-		vector<bool> bad = goodNextPosition(inVector.at(i).posX, inVector.at(i).posY, nextX, nextY, boundaries);
+		vector<bool> bad = goodNextPosition(inVector.at(i), nextX, nextY, boundaries);
 		enum { x, y };
 
 		if( !bad.at(x) )

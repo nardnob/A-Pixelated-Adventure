@@ -22,7 +22,7 @@ const int TERRAIN_FILE_W = 512;
 const int TERRAIN_FILE_H = 512;
 const int TERRAIN_CLIP_W = 32;
 const int TERRAIN_CLIP_H = 32;
-const int TERRAIN_CLIP_COUNT = 7;
+const int TERRAIN_CLIP_COUNT = 8;
 
 //entity file attributes
 const int ENTITY_FILE_W = 512;

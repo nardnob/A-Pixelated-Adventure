@@ -34,6 +34,7 @@ void GUI::teleport(double in_x, double in_y, int in_direction)
 {
 	gamestatePtr->vector_players.at(0).posX = in_x;
 	gamestatePtr->vector_players.at(0).posY = in_y;
+
 	if(in_direction >= 0)
 		gamestatePtr->vector_players.at(0).set_currentTexture(in_direction);
 }

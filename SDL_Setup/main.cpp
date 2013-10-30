@@ -232,9 +232,10 @@ void defineClip(int code_in, Gamestate& gamestate)
 			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
 			100, //posX
 			100, //posY
-			0, //base_posX
-			0, //base_posY
-			0  //base_radius
+			17, //base_posX
+			41, //base_posY
+			30, //base_w
+			23  //base_h
 			));
 
 		vector_entities.push_back(&gamestate.vector_players.at(0));

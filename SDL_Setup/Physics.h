@@ -1,6 +1,7 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 #include "Boundary.h"
+#include "Gamestate.h"
 #include "HUD.h"
 #include "Player.h"
 #include <vector>

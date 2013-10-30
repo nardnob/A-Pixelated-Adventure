@@ -16,9 +16,10 @@ public:
 	double
 		posX, //the x to display this Entity's texture at if the Entity is active
 		posY, //the y to display this Entity's texture at if the Entity is active
-		base_posX, //the entity's base x position used for collision calculations
-		base_posY, //the entity's base y position used for collision calculations
-		base_radius; //the entity's base radius used for collision calculations
+		base_posX, //the entity's base x position (offset from posX) used for collision calculations
+		base_posY, //the entity's base y position (offset from posY) used for collision calculations
+		base_w, //the width of the entity's base
+		base_h; //the height of the entity's base
 
 	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
 
