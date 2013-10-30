@@ -143,7 +143,7 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& bo
 		
 		if(i == 0) //only want to update the HUD for the player
 		{
-			if(inVector.at(i).posX >= 0)
+			if(inVector.at(i).posX >= 0) //only for appearance.. can remove this and the next if
 				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X:  " + to_string(int(inVector.at(i).posX)));
 			else			
 				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X: " + to_string(int(inVector.at(i).posX)));

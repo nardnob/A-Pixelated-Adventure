@@ -79,10 +79,10 @@
     <ClInclude Include="Message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="Boundary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Boundary.h">
+    <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -94,6 +94,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="DoneThisBatch.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="map_002.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

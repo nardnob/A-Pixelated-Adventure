@@ -25,6 +25,7 @@ public:
 	Entity();
 
 	int get_currentTexture() { return this->currentTexture; }
+	void set_currentTexture(int in_currentTexture) { this->currentTexture = in_currentTexture; }
 
 	/*int get_posX() { return this->posX; } // made posX and posY public for testing purposes. Will change back to private
 	void set_posX(int posX_in) { this->posX = posX_in; }

@@ -15,7 +15,6 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "Player.h"
 #include "TerrainMap.h"
 #include "Timer.h"
-#include "resource.h"
 
 #include <Windows.h> //for OutputDebugString()
 #include <string>
@@ -286,8 +285,13 @@ void defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
 		hud.font_HUD_1,
 		"FPS:  ",
 		true) );
-		
 
+	hud.advancedMessages.push_back( Message(
+		20, 
+		20 * 6,
+		hud.font_HUD_1,
+		"MAP:  ",
+		true) );
 }
 
 void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight)
@@ -339,7 +343,45 @@ void screenShot()
 	SDL_SaveBMP(surface_screen, temp);
 }
 
-void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight)
+//teleports player 0 to position (x, y) and faces them in the in_direction if specified
+void teleport(double in_x, double in_y, int in_direction = -1)
+{
+	vector_players.at(0).posX = in_x;
+	vector_players.at(0).posY = in_y;
+	if(in_direction >= 0)
+		vector_players.at(0).set_currentTexture(in_direction);
+}
+
+void switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap& currentMap, HUD& hud)
+{
+	currentMap = TerrainMap(in_mapFileName);
+	string temp = "MAP: " + currentMap.get_mapFileName();
+	teleport(in_x, in_y);
+
+	//defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
+	hud.HUD_rect.w = currentMap.get_sizeX() * TERRAIN_CLIP_W;
+	hud.HUD_rect.h = HUD_HEIGHT;
+	hud.HUD_rect.x = 0;
+	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;
+	temp = "MAP: " + currentMap.get_mapFileName();
+
+	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
+}
+
+//just used for testing. Alternates between map_001.txt and map_002.txt
+void toggleMap(TerrainMap& currentMap, HUD& hud)
+{	
+	if(currentMap.get_mapFileName() == "map_001.txt")
+	{
+		switchMap("map_002.txt", 512, 0, currentMap, hud);
+	}
+	else
+	{
+		switchMap("map_001.txt", 512, 768, currentMap, hud);
+	}
+}
+
+void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int screenHeight, TerrainMap& currentMap)
 {
 	//While there's events to handle
     while( SDL_PollEvent( &event ) )
@@ -376,6 +418,10 @@ void eventHandler(bool& quit, HUD& hud, bool& fullscreen, int screenWidth, int s
 			case SDLK_F11:
 				toggleFullscreen(fullscreen, screenWidth, screenHeight);
 				OutputDebugString("toggleFullscreen() finished\n");
+				break;
+			case SDLK_F12:
+				toggleMap(currentMap, hud);
+				OutputDebugString("switchMap() finished\n");
 				break;
 			case SDLK_ESCAPE:
 				quit = true;
@@ -435,6 +481,8 @@ void frameRate(Timer& fpsTimer, HUD& hud)
 
 void displayAll(TerrainMap& currentMap, HUD& hud)
 {
+	SDL_FillRect(surface_screen , NULL , 0);
+
 	//apply the terrain 
 	display(CODE_TERRAIN, currentMap);
 	//apply the entities
@@ -475,6 +523,8 @@ int main( int argc, char* args[] )
 
 	//to define the HUD and its messages
 	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
+	string temp = "MAP: " + currentMap.get_mapFileName();
+	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
 
 	//SDL load_files to load images
     if( !load_files() )
@@ -488,7 +538,7 @@ int main( int argc, char* args[] )
 		fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT); 
+		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap); 
 
 		//do some physics
 		Physics::doPhysics(vector_players, hud, currentMap.boundaries);
