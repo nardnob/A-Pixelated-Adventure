@@ -92,7 +92,6 @@ bool init(int screenWidth, int screenHeight, bool& fullscreen)
     {
         return false;
     }
-
 	const SDL_VideoInfo* info = SDL_GetVideoInfo();   //<-- calls SDL_GetVideoInfo();   
 	monitorWidth = info->current_w;
 	monitorHeight = info->current_h;
@@ -497,19 +496,23 @@ int main( int argc, char* args[] )
 		currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, 
 		fullscreen) )
         return 1;
-	
+
 	//Initialize SDL_ttf
     if( TTF_Init() == -1 )
         return false;    
 
 	//to define the HUD and its messages
 	defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
+
 	string temp = "MAP: " + currentMap.get_mapFileName();
+
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
 
 	//SDL load_files to load images
     if( !load_files() )
         return 1;
+
+
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************
@@ -520,13 +523,13 @@ int main( int argc, char* args[] )
 
 		//call the eventHandler (send quit as a reference)
 		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap, gui, gamestate); 
-
+		
 		//do some physics
 		Physics::doPhysics(gamestate.vector_players, hud, currentMap.boundaries);
-	
+
 		//apply all of the surfaces to surface_screen
 		displayAll(currentMap, hud);
-		
+
 		//Update the screen by flipping surface_screen
 		if( SDL_Flip( surface_screen ) == -1 )
 			return 1;
@@ -537,6 +540,7 @@ int main( int argc, char* args[] )
     //***********************************************************************************
 	//*********** End of the game loop **************************************************
 	//***********************************************************************************
+
 
     //Free the images and quit SDL
     clean_up(hud);
