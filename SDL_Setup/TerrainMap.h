@@ -2,6 +2,7 @@
 #define TERRAINMAP_H
 
 #include "Boundary.h"
+#include "MapDoor_Boundary.h"
 
 #include <string>
 #include <vector>
@@ -23,6 +24,7 @@ public:
 	int mapData[MAP_MAX_X][MAP_MAX_Y]; //really should store this in a vector or dynamic array. no need to waste space
 
 	vector<Boundary> boundaries;
+	vector<MapDoor_Boundary> mapDoor_boundaries;
 
 	string get_mapFileName() { return mapFileName; }
 	void set_mapFileName(string mapFileName_in) { this->mapFileName = mapFileName_in; }

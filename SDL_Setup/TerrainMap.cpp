@@ -24,7 +24,12 @@ bool TerrainMap::loadMap()
 		boundaryX = 0,
 		boundaryY = 0,
 		boundaryW = 0,
-		boundaryH = 0;
+		boundaryH = 0,
+		numMapDoor_boundaries = -1,
+		toX = 0,
+		toY = 0;
+
+	string toMap;
 
 	ifstream fin;
 	fin.open(this->mapFileName);
@@ -34,7 +39,7 @@ bool TerrainMap::loadMap()
 	
 	fin >> numX >> numY;
 
-	if(!numX || !numY || (numX > MAP_MAX_X) || (numY > MAP_MAX_Y))
+	if(!numX || !numY || (numX > MAP_MAX_X) || (numY > MAP_MAX_Y)) //check for incorrect map file format
 	{
 		fin.close();
 		return false;
@@ -53,7 +58,7 @@ bool TerrainMap::loadMap()
 
 	fin >> numBoundaries;
 
-	if(numBoundaries < 0)
+	if(numBoundaries < 0) //check for incorrect map file format
 	{
 		fin.close();
 		return false;
@@ -68,6 +73,38 @@ bool TerrainMap::loadMap()
 			boundaryW * TERRAIN_CLIP_W, 
 			boundaryH * TERRAIN_CLIP_H, 
 			true) );
+	}
+
+	fin >> numMapDoor_boundaries;
+
+	if(numMapDoor_boundaries < 0) //check for incorrect map file format
+	{
+		fin.close();
+		return false;
+	}
+
+	for(int i = 0; i < numMapDoor_boundaries; i++)
+	{
+		int toVertical;
+
+		fin 
+			>> boundaryX
+			>> boundaryY
+			>> boundaryW
+			>> boundaryH
+			>> toMap
+			>> toX
+			>> toY;
+
+		this->mapDoor_boundaries.push_back( MapDoor_Boundary(
+			boundaryX * TERRAIN_CLIP_W, 
+			boundaryY * TERRAIN_CLIP_H, 
+			boundaryW * TERRAIN_CLIP_W, 
+			boundaryH * TERRAIN_CLIP_H,
+			true,
+			toMap,
+			toX * TERRAIN_CLIP_W,
+			toY * TERRAIN_CLIP_H) );
 	}
 
 	fin.close();

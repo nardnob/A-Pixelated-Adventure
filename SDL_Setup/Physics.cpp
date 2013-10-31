@@ -89,7 +89,58 @@ vector<bool> goodNextPosition(Player& player, double nextX, double nextY, vector
 	return bad;
 }
 
-void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries)
+void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap, HUD& hud)
+{    
+	double
+		pX1 = player.posX + player.base_posX, //player box left side
+		pX2 = player.posX + player.base_posX + player.base_w, //player box right side
+		pY1 = player.posY + player.base_posY, //player box top
+		pY2 = player.posY + player.base_posY + player.base_h, //player box bottom
+		bX1 = 0, //bound box left side
+		bX2 = 0, //bound box right side
+		bY1 = 0, //bound box top
+		bY2 = 0; //bound box bottom
+
+	bool inX, inY, done = false;
+
+	for(int i = 0; i < mapDoor_boundaries.size() && !done; i++)
+	{
+		inX = true;
+		inY = true;
+
+		bX1 = mapDoor_boundaries.at(i).x;
+		bX2 = mapDoor_boundaries.at(i).x + mapDoor_boundaries.at(i).w;
+		bY1 = mapDoor_boundaries.at(i).y;
+		bY2 = mapDoor_boundaries.at(i).y + mapDoor_boundaries.at(i).h;
+
+		if( (pX1 > bX2)	|| (pX2 < bX1) )
+			inX = false;
+
+		if(	(pY1 > bY2)	|| (pY2 < bY1) )
+			inY = false;
+
+		if(inX && inY)
+		{
+			if(mapDoor_boundaries.at(i).inTheDoorway)
+			{
+			}
+			else
+			{
+				gui.switchMap(mapDoor_boundaries.at(i).toMap, mapDoor_boundaries.at(i).toX, mapDoor_boundaries.at(i).toY, currentMap, hud);
+				mapDoor_boundaries.at(i).inTheDoorway = true;
+			}
+
+			done = true;
+		}
+		else
+		{
+			mapDoor_boundaries.at(i).inTheDoorway = false;
+		}
+	}
+	
+}
+
+void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap)
 {	
 	//consider keyboard events for the player
 	for(int i = 0; i < 4; i++)
@@ -195,6 +246,9 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& bo
 				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y: " + to_string(int(inVector.at(i).posY)));
 		}
 	}
+
+	//check if MapDoor_Boundary was entered, if so load a new map
+	resolveDoorCollisions(inVector.at(0), mapDoor_boundaries, gui, currentMap, hud);
 
 	//calculate friction //currently bugged and working on
 	for(int i = 0; i < inVector.size(); i++)

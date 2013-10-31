@@ -76,6 +76,7 @@
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapDoor_Boundary.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Gamestate.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="MapDoor_Boundary.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />

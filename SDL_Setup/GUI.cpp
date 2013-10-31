@@ -1,5 +1,6 @@
 #include "constants.cpp"
 #include "GUI.h"
+#include "MapDoor_Boundary.h"
 #include <string>
 using namespace std;
 
@@ -27,6 +28,8 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap&
 	temp = "MAP: " + currentMap.get_mapFileName();
 
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
+
+	//need to set new boundary at this x and y to not 
 }
 
 //teleports player 0 to position (x, y) and faces them in the in_direction if specified

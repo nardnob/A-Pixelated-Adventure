@@ -526,7 +526,7 @@ int main( int argc, char* args[] )
 		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap, gui, gamestate); 
 		
 		//do some physics
-		Physics::doPhysics(gamestate.vector_players, hud, currentMap.boundaries);
+		Physics::doPhysics(gamestate.vector_players, hud, currentMap.boundaries, currentMap.mapDoor_boundaries, gui, currentMap);
 
 		//apply all of the surfaces to surface_screen
 		displayAll(currentMap, hud);
