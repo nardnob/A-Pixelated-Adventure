@@ -103,7 +103,7 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 
 	bool inX, inY, done = false;
 
-	for(int i = 0; i < mapDoor_boundaries.size() && !done; i++)
+	for(int i = 0; (i < mapDoor_boundaries.size()) && !done; i++)
 	{
 		inX = true;
 		inY = true;
@@ -127,7 +127,8 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 			else
 			{
 				gui.switchMap(mapDoor_boundaries.at(i).toMap, mapDoor_boundaries.at(i).toX, mapDoor_boundaries.at(i).toY, currentMap, hud);
-				mapDoor_boundaries.at(i).inTheDoorway = true;
+				//if(mapDoor_boundaries.size() > 0)
+				//	mapDoor_boundaries.at(i).inTheDoorway = true;
 			}
 
 			done = true;

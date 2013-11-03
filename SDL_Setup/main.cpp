@@ -100,10 +100,10 @@ bool init(int screenWidth, int screenHeight, bool& fullscreen)
 	setWindowIcon();
 
     //Set up the screen (only enable one)
-    surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
-	fullscreen = true;
-    //surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
-	//fullscreen = false;
+	//surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
+	//fullscreen = true;
+    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+	fullscreen = false;
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )

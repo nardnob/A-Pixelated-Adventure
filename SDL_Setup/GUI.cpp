@@ -17,14 +17,15 @@ GUI::GUI(Gamestate* in_gamestate)
 void GUI::switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap& currentMap, HUD& hud)
 {
 	currentMap = TerrainMap(in_mapFileName);
+
 	string temp = "MAP: " + currentMap.get_mapFileName();
 	teleport(in_x, in_y);
-
+	/*
 	//defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
 	hud.HUD_rect.w = currentMap.get_sizeX() * TERRAIN_CLIP_W;
 	hud.HUD_rect.h = HUD_HEIGHT;
 	hud.HUD_rect.x = 0;
-	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;
+	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;*/
 	temp = "MAP: " + currentMap.get_mapFileName();
 
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());

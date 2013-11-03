@@ -85,8 +85,6 @@ bool TerrainMap::loadMap()
 
 	for(int i = 0; i < numMapDoor_boundaries; i++)
 	{
-		int toVertical;
-
 		fin 
 			>> boundaryX
 			>> boundaryY

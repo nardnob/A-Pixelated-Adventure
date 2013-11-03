@@ -104,6 +104,7 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TerrainMap.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -114,6 +115,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </Text>
     <Text Include="map_002.txt" />
+    <Text Include="map_003.txt" />
+    <Text Include="map_004.txt" />
     <Text Include="ToDo.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
