@@ -16,7 +16,7 @@ GUI::GUI(Gamestate* in_gamestate)
 
 void GUI::switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap& currentMap, HUD& hud)
 {
-	currentMap = TerrainMap(in_mapFileName);
+	currentMap = TerrainMap(in_mapFileName, *gamestatePtr);
 
 	string temp = "MAP: " + currentMap.get_mapFileName();
 	teleport(in_x, in_y);

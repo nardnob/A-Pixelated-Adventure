@@ -1,3 +1,6 @@
+#include "Gamestate.h"
+#include "NPC.h"
+#include "Player.h"
 #include "TerrainMap.h"
 #include "constants.cpp"
 #include <string>
@@ -9,25 +12,35 @@ TerrainMap::TerrainMap()
 
 }
 
-TerrainMap::TerrainMap(string mapFileName_in)
+TerrainMap::TerrainMap(string mapFileName_in, Gamestate& gamestate)
 {
 	this->mapFileName = mapFileName_in;
-	loadMap();
+	loadMap(gamestate);
 }
 
-bool TerrainMap::loadMap()
+bool TerrainMap::loadMap(Gamestate& gamestate)
 {
 	int 
 		numX = 0,
 		numY = 0,
 		numBoundaries = -1,
+		numMapDoor_boundaries = -1,
+		numNPCs = -1,
+		NPCClipNum = 0;
+
+	double
 		boundaryX = 0,
 		boundaryY = 0,
 		boundaryW = 0,
 		boundaryH = 0,
-		numMapDoor_boundaries = -1,
 		toX = 0,
-		toY = 0;
+		toY = 0,
+		NPCPosX = 0,
+		NPCPosY = 0,
+		NPCBasePosX = 0,
+		NPCBasePosY = 0,
+		NPCBaseW = 0,
+		NPCBaseH = 0;
 
 	string toMap;
 
@@ -103,6 +116,47 @@ bool TerrainMap::loadMap()
 			toMap,
 			toX * TERRAIN_CLIP_W,
 			toY * TERRAIN_CLIP_H) );
+	}
+
+	//clear the NPC vector
+	//clear the entities pointer vector (while keeping the player pointer in position 0)
+	//fill the NPC vector while filling pointers to the entities vector
+	Entity* player = gamestate.vector_entities.at(0);
+	gamestate.vector_entities.clear();
+	gamestate.vector_NPCs.clear();
+	gamestate.vector_entities.push_back(player);
+	
+	fin >> numNPCs;
+	if(numNPCs < 0) //check for incorrect map file format
+	{
+		fin.close();
+		return false;
+	}
+
+	for(int i = 1; i <= numNPCs; i++)
+	{
+		fin
+			>> NPCClipNum
+			>> NPCPosX
+			>> NPCPosY
+			>> NPCBasePosX
+			>> NPCBasePosY
+			>> NPCBaseW
+			>> NPCBaseH;
+
+		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
+		gamestate.vector_NPCs.push_back(NPC(
+			( (NPCClipNum * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
+			( ((NPCClipNum * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
+			NPCPosX, //posX
+			NPCPosY, //posY
+			NPCBasePosX, //base_posX
+			NPCBasePosY, //base_posY
+			NPCBaseW, //base_w
+			NPCBaseH  //base_h
+			));
+
+		gamestate.vector_entities.push_back(&gamestate.vector_NPCs.back());
 	}
 
 	fin.close();

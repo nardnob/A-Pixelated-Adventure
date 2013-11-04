@@ -42,6 +42,12 @@ const double WALKING_FORCE = 4;
 
 //constants for entities
 const double MASS_PLAYER = 1;
+const double MASS_NPC = 1;
+const double BASE_POSX = 17; //for the player
+const double BASE_POSY = 41; //for the player
+const double BASE_W = 30; //for the player
+const double BASE_H = 23; //For the player
+
 
 //constants for keyboard shortcuts
 enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN };

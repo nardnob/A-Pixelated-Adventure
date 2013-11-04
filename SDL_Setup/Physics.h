@@ -14,7 +14,7 @@ class Physics
 private:
 
 public:
-	static void doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap);
+	static void doPhysics(Gamestate& gamestate, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap);
 };
 
 #endif

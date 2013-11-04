@@ -141,73 +141,73 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 	
 }
 
-void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap)
+void Physics::doPhysics(Gamestate& gamestate, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap)
 {	
 	//consider keyboard events for the player
 	for(int i = 0; i < 4; i++)
 	{
-		if(inVector.at(0).keyIsDown(i))
+		if(gamestate.vector_players.at(0).keyIsDown(i))
 		{
 			switch(i)
 			{
 			case KEY_LEFT:
-				inVector.at(0).forceX = inVector.at(0).forceX - WALKING_FORCE;
-				inVector.at(0).toggleTexture(TEXTURE_LEFT);
+				gamestate.vector_players.at(0).forceX = gamestate.vector_players.at(0).forceX - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_LEFT);
 				break;
 			case KEY_RIGHT:
-				inVector.at(0).forceX += WALKING_FORCE;
-				inVector.at(0).toggleTexture(TEXTURE_RIGHT);
+				gamestate.vector_players.at(0).forceX += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_RIGHT);
 				break;
 			case KEY_UP:
-				inVector.at(0).forceY = inVector.at(0).forceY - WALKING_FORCE;
-				inVector.at(0).toggleTexture(TEXTURE_BACK);
+				gamestate.vector_players.at(0).forceY = gamestate.vector_players.at(0).forceY - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_BACK);
 				break;
 			case KEY_DOWN:
-				inVector.at(0).forceY += WALKING_FORCE;
-				inVector.at(0).toggleTexture(TEXTURE_FRONT);
+				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
 				break;
 			}
 		}
 	}
 	
 	//convert force to velocity
-	for(int i = 0; i < inVector.size(); i++)
+	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
-		if(inVector.at(i).mass != 0)
+		if(gamestate.vector_players.at(i).mass != 0)
 		{
-			inVector.at(i).velX = inVector.at(i).velX + inVector.at(i).forceX / inVector.at(i).mass; //Vf = Vi + F/m (Vf = Vi + at => Vf = Vi + F/m*1)
-			inVector.at(i).velY = inVector.at(i).velY + inVector.at(i).forceY / inVector.at(i).mass;
+			gamestate.vector_players.at(i).velX = gamestate.vector_players.at(i).velX + gamestate.vector_players.at(i).forceX / gamestate.vector_players.at(i).mass; //Vf = Vi + F/m (Vf = Vi + at => Vf = Vi + F/m*1)
+			gamestate.vector_players.at(i).velY = gamestate.vector_players.at(i).velY + gamestate.vector_players.at(i).forceY / gamestate.vector_players.at(i).mass;
 
 			if(i == 0) //only want to update the HUD for the player
 			{
-				if(inVector.at(i).velX >= 0) //the if is just to keep the velocity's from jumping over one when it's negative.. for looks. Unnecessary performance hit here
-					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X:  " + to_string(int(inVector.at(i).velX)));
+				if(gamestate.vector_players.at(i).velX >= 0) //the if is just to keep the velocity's from jumping over one when it's negative.. for looks. Unnecessary performance hit here
+					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X:  " + to_string(int(gamestate.vector_players.at(i).velX)));
 				else
-					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X: " + to_string(int(inVector.at(i).velX)));
+					hud.advancedMessages.at(hud.MESSAGE_VELX).set_message("Vel X: " + to_string(int(gamestate.vector_players.at(i).velX)));
 
-				if(inVector.at(i).velY >= 0)
-					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y:  " + to_string(int(inVector.at(i).velY)));
+				if(gamestate.vector_players.at(i).velY >= 0)
+					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y:  " + to_string(int(gamestate.vector_players.at(i).velY)));
 				else
-					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y: " + to_string(int(inVector.at(i).velY)));
+					hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y: " + to_string(int(gamestate.vector_players.at(i).velY)));
 			}
 		}
-		inVector.at(i).forceX = 0;
-		inVector.at(i).forceY = 0;
+		gamestate.vector_players.at(i).forceX = 0;
+		gamestate.vector_players.at(i).forceY = 0;
 	}
 
 	//limit velocity
-	for(int i = 0; i < inVector.size(); i++)
+	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
-		if(inVector.at(i).velX > inVector.at(i).maxVelX)
-			inVector.at(i).velX = inVector.at(i).maxVelX;
+		if(gamestate.vector_players.at(i).velX > gamestate.vector_players.at(i).maxVelX)
+			gamestate.vector_players.at(i).velX = gamestate.vector_players.at(i).maxVelX;
 		else
-			if(inVector.at(i).velX < -inVector.at(i).maxVelX)
-				inVector.at(i).velX = -inVector.at(i).maxVelX;
-		if(inVector.at(i).velY > inVector.at(i).maxVelY)
-			inVector.at(i).velY = inVector.at(i).maxVelY;
+			if(gamestate.vector_players.at(i).velX < -gamestate.vector_players.at(i).maxVelX)
+				gamestate.vector_players.at(i).velX = -gamestate.vector_players.at(i).maxVelX;
+		if(gamestate.vector_players.at(i).velY > gamestate.vector_players.at(i).maxVelY)
+			gamestate.vector_players.at(i).velY = gamestate.vector_players.at(i).maxVelY;
 		else
-			if(inVector.at(i).velY < -inVector.at(i).maxVelY)
-				inVector.at(i).velY = -inVector.at(i).maxVelY;
+			if(gamestate.vector_players.at(i).velY < -gamestate.vector_players.at(i).maxVelY)
+				gamestate.vector_players.at(i).velY = -gamestate.vector_players.at(i).maxVelY;
 	}
 
 	//calculate collisions
@@ -215,79 +215,79 @@ void Physics::doPhysics(vector<Player>& inVector, HUD& hud, vector<Boundary>& bo
 	//resolve collisions
 
 	//calculate movement (need to limit position to bounds of window)
-	for(int i = 0; i < inVector.size(); i++)
+	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
 		//test for boundary collisions; only update position if no boundary collision with said update
 		double
-			nextX = inVector.at(i).posX + inVector.at(i).velX,
-			nextY = inVector.at(i).posY + inVector.at(i).velY;
+			nextX = gamestate.vector_players.at(i).posX + gamestate.vector_players.at(i).velX,
+			nextY = gamestate.vector_players.at(i).posY + gamestate.vector_players.at(i).velY;
 
-		vector<bool> bad = goodNextPosition(inVector.at(i), nextX, nextY, boundaries);
+		vector<bool> bad = goodNextPosition(gamestate.vector_players.at(i), nextX, nextY, boundaries);
 		enum { x, y };
 
 		if( !bad.at(x) )
 		{
-			inVector.at(i).posX = nextX;
+			gamestate.vector_players.at(i).posX = nextX;
 		}
 		if( !bad.at(y) )
 		{
-			inVector.at(i).posY = nextY;
+			gamestate.vector_players.at(i).posY = nextY;
 		}
 		
 		if(i == 0) //only want to update the HUD for the player
 		{
-			if(inVector.at(i).posX >= 0) //only for appearance.. can remove this and the next if
-				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X:  " + to_string(int(inVector.at(i).posX)));
+			if(gamestate.vector_players.at(i).posX >= 0) //only for appearance.. can remove this and the next if
+				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X:  " + to_string(int(gamestate.vector_players.at(i).posX)));
 			else			
-				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X: " + to_string(int(inVector.at(i).posX)));
+				hud.advancedMessages.at(hud.MESSAGE_POSX).set_message("Pos X: " + to_string(int(gamestate.vector_players.at(i).posX)));
 
-			if(inVector.at(i).posY >= 0)
-				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y:  " + to_string(int(inVector.at(i).posY)));
+			if(gamestate.vector_players.at(i).posY >= 0)
+				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y:  " + to_string(int(gamestate.vector_players.at(i).posY)));
 			else			
-				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y: " + to_string(int(inVector.at(i).posY)));
+				hud.advancedMessages.at(hud.MESSAGE_POSY).set_message("Pos Y: " + to_string(int(gamestate.vector_players.at(i).posY)));
 		}
 	}
 
 	//check if MapDoor_Boundary was entered, if so load a new map
-	resolveDoorCollisions(inVector.at(0), mapDoor_boundaries, gui, currentMap, hud);
+	resolveDoorCollisions(gamestate.vector_players.at(0), mapDoor_boundaries, gui, currentMap, hud);
 
 	//calculate friction //currently bugged and working on
-	for(int i = 0; i < inVector.size(); i++)
+	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
 		//calculating friction for the x axis
-		if(abs(inVector.at(i).velX) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)
-		//if(sqrt(pow(inVector.at(i).velX, 2) + pow(inVector.at(i).velY, 2)) < STATIC_FRICTION) 
+		if(abs(gamestate.vector_players.at(i).velX) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)
+		//if(sqrt(pow(gamestate.vector_players.at(i).velX, 2) + pow(gamestate.vector_players.at(i).velY, 2)) < STATIC_FRICTION) 
 		{
-			inVector.at(i).velX = 0;
-			//inVector.at(i).velY = 0;//for the vector math
+			gamestate.vector_players.at(i).velX = 0;
+			//gamestate.vector_players.at(i).velY = 0;//for the vector math
 		}
 		else
 		{
-			if(inVector.at(i).velX > 0)
+			if(gamestate.vector_players.at(i).velX > 0)
 			{
-				inVector.at(i).forceX = inVector.at(i).forceX - FRICTION;
+				gamestate.vector_players.at(i).forceX = gamestate.vector_players.at(i).forceX - FRICTION;
 			} else
-				if(inVector.at(i).velX < 0)
+				if(gamestate.vector_players.at(i).velX < 0)
 				{
-					inVector.at(i).forceX += FRICTION;
+					gamestate.vector_players.at(i).forceX += FRICTION;
 				}
 		}
 
 		//calculating friction for the y axis
-		if(abs(inVector.at(i).velY) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)		
-		//if(sqrt(pow(inVector.at(i).velX, 2) + pow(inVector.at(i).velY, 2)) < STATIC_FRICTION) //vector math instead of component-based
+		if(abs(gamestate.vector_players.at(i).velY) < STATIC_FRICTION) //if it's going too slow to beat static friction (to avoid oscillation)		
+		//if(sqrt(pow(gamestate.vector_players.at(i).velX, 2) + pow(gamestate.vector_players.at(i).velY, 2)) < STATIC_FRICTION) //vector math instead of component-based
 		{
-			inVector.at(i).velY = 0;
+			gamestate.vector_players.at(i).velY = 0;
 		}
 		else
 		{
-			if(inVector.at(i).velY > 0)
+			if(gamestate.vector_players.at(i).velY > 0)
 			{
-				inVector.at(i).forceY = inVector.at(i).forceY - FRICTION;
+				gamestate.vector_players.at(i).forceY = gamestate.vector_players.at(i).forceY - FRICTION;
 			} else
-				if(inVector.at(i).velY < 0)
+				if(gamestate.vector_players.at(i).velY < 0)
 				{
-					inVector.at(i).forceY += FRICTION;
+					gamestate.vector_players.at(i).forceY += FRICTION;
 				}
 		}
 	}

@@ -2,6 +2,7 @@
 #define TERRAINMAP_H
 
 #include "Boundary.h"
+#include "Gamestate.h"
 #include "MapDoor_Boundary.h"
 
 #include <string>
@@ -18,9 +19,9 @@ private:
 	int sizeX, sizeY;
 public:
 	TerrainMap();
-	TerrainMap(string mapFileName_in);
+	TerrainMap(string mapFileName_in, Gamestate& gamestate);
 
-	bool loadMap();
+	bool loadMap(Gamestate& gamestate);
 	int mapData[MAP_MAX_X][MAP_MAX_Y]; //really should store this in a vector or dynamic array. no need to waste space
 
 	vector<Boundary> boundaries;

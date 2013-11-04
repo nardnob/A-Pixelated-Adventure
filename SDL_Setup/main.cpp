@@ -38,7 +38,6 @@ SDL_Event event;
 SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
 
 //SDL_Rect entityClip[ ENTITY_CLIP_COUNT ]; //used a vector to hold Player objects and stored the clips in Player instead
-vector<Entity*> vector_entities; //this will hold a vector of all entities (for polymorphism to output all entities in one loop, regardless of specific types)
 
 int monitorWidth, monitorHeight;
 
@@ -179,7 +178,7 @@ void display(int code_in, TerrainMap& currentMap, HUD& hud)
 	}
 }
 
-void display(int code_in, TerrainMap& currentMap)
+void display(int code_in, TerrainMap& currentMap, Gamestate& gamestate)
 {
 	switch(code_in)
 	{
@@ -198,14 +197,14 @@ void display(int code_in, TerrainMap& currentMap)
 		}
 		break;
 	case CODE_ENTITY:
-		for(int i = 0; i < vector_entities.size(); i++)
+		for(int i = gamestate.vector_entities.size() - 1; i >= 0; i--)
 		{
 			apply_surface( 
-				vector_entities.at(i)->posX, 
-				vector_entities.at(i)->posY, 
+				gamestate.vector_entities.at(i)->posX, 
+				gamestate.vector_entities.at(i)->posY, 
 				surface_entities, 
 				surface_screen, 
-				&vector_entities.at(i)->rect[vector_entities.at(i)->get_currentTexture()] );
+				&gamestate.vector_entities.at(i)->rect[gamestate.vector_entities.at(i)->get_currentTexture()] );
 		}
 		break;
 	}
@@ -232,13 +231,13 @@ void defineClip(int code_in, Gamestate& gamestate)
 			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
 			100, //posX
 			100, //posY
-			17, //base_posX
-			41, //base_posY
-			30, //base_w
-			23  //base_h
+			BASE_POSX, //base_posX
+			BASE_POSY, //base_posY
+			BASE_W, //base_w
+			BASE_H  //base_h
 			));
 
-		vector_entities.push_back(&gamestate.vector_players.at(0));
+		gamestate.vector_entities.push_back(&gamestate.vector_players.at(0));
 		break;
 	}
 }
@@ -456,24 +455,25 @@ void frameRate(Timer& fpsTimer, HUD& hud)
     }
 }
 
-void displayAll(TerrainMap& currentMap, HUD& hud)
+void displayAll(TerrainMap& currentMap, HUD& hud, Gamestate& gamestate)
 {
 	SDL_FillRect(surface_screen , NULL , 0);
 
 	//apply the terrain 
-	display(CODE_TERRAIN, currentMap);
+	display(CODE_TERRAIN, currentMap, gamestate);
 	//apply the entities
-	display(CODE_ENTITY, currentMap);
+	display(CODE_ENTITY, currentMap, gamestate);
 	//display the HUD
 	display(CODE_HUD, currentMap, hud);
 }
 
 int main( int argc, char* args[] )
 {	
-	//initialize the currentMap object with the mapFileName text file
-	TerrainMap currentMap = TerrainMap("map_001.txt");
+	Gamestate gamestate = Gamestate();	
+	defineClip(CODE_ENTITY, gamestate);
 
-	Gamestate gamestate = Gamestate();
+	//initialize the currentMap object with the mapFileName text file
+	TerrainMap currentMap = TerrainMap("map_001.txt", gamestate);
 
 	GUI gui = GUI(&gamestate);
 
@@ -484,7 +484,6 @@ int main( int argc, char* args[] )
 
 	//define the clips (clip up the texture files)
 	defineClip(CODE_TERRAIN, gamestate);
-	defineClip(CODE_ENTITY, gamestate);
 
     bool quit = false; //to quit the main game loop
 
@@ -513,8 +512,6 @@ int main( int argc, char* args[] )
     if( !load_files() )
         return 1;
 
-
-
     //***********************************************************************************
 	//*********** The game loop *********************************************************
 	//***********************************************************************************
@@ -526,10 +523,10 @@ int main( int argc, char* args[] )
 		eventHandler(quit, hud, fullscreen, currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, currentMap, gui, gamestate); 
 		
 		//do some physics
-		Physics::doPhysics(gamestate.vector_players, hud, currentMap.boundaries, currentMap.mapDoor_boundaries, gui, currentMap);
+		Physics::doPhysics(gamestate, hud, currentMap.boundaries, currentMap.mapDoor_boundaries, gui, currentMap);
 
 		//apply all of the surfaces to surface_screen
-		displayAll(currentMap, hud);
+		displayAll(currentMap, hud, gamestate);
 
 		//Update the screen by flipping surface_screen
 		if( SDL_Flip( surface_screen ) == -1 )

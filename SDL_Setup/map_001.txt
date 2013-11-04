@@ -41,3 +41,18 @@
 1
 16 25 2 1 map_002.txt 16 -1.7
 
+1
+0 300 300 17 41 30 23
+
+			fin
+				>> NPCClipNum
+				>> NPCPosX
+				>> NPCPosY
+				>> NPCBasePosX
+				>> NPCBasePosY
+				>> NPCBaseW
+				>> NPCBaseH;
+const double BASE_POSX = 17; //for the player
+const double BASE_POSY = 41; //for the player
+const double BASE_W = 30; //for the player
+const double BASE_H = 23; //For the player
