@@ -1,6 +1,6 @@
-40
-25
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+40 //numX
+25 //numY
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 //tile ID's from 0..39 x and 0..24 y
 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 1 1
 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7 0 0 0 3 1
 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 1
@@ -27,19 +27,19 @@
 1 1 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 1 1
 
 
-5
-1 2 1 22
+5 //num boundaries
+1 2 1 22 //x, y, w, h (in tiles) for boundary 1
 
-38 2 1 22
+38 2 1 22 //x, y, w, h (in tiles) for boundary 2
 
-2 1 36 1
+2 1 36 1 //x, y, w, h (in tiles) for boundary 3
 
-2 24 14 1
-18 24 20 1
+2 24 14 1 //x, y, w, h (in tiles) for boundary 4
+18 24 20 1 //x, y, w, h (in tiles) for boundary 5
 
 
-1
-16 25 2 1 map_002.txt 16 0
+1 //num mapDoor_boundaries
+16 25 2 1 map_002.txt 16 -1.7 //x, y, w, h, to_map_name.txt, toX, toY (in tiles) for door 1
 
-1
-4 300 300 17 41 30 23
+1 //num NPCs
+4 300 300 17 41 30 23 //entity texture num, posX, posY, basePosX, basePosY, baseW, baseH for NPC 1

@@ -119,6 +119,7 @@
     <Text Include="map_002.txt" />
     <Text Include="map_003.txt" />
     <Text Include="map_004.txt" />
+    <Text Include="map_example.txt" />
     <Text Include="ToDo.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

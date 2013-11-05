@@ -129,6 +129,9 @@
     <Text Include="map_004.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="map_example.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font_HUD_3.ttf">

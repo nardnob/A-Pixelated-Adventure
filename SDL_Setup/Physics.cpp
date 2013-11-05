@@ -89,13 +89,13 @@ vector<bool> goodNextPosition(Player& player, double nextX, double nextY, vector
 	return bad;
 }
 
-void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap, HUD& hud)
+void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 {    
 	double
-		pX1 = player.posX + player.base_posX, //player box left side
-		pX2 = player.posX + player.base_posX + player.base_w, //player box right side
-		pY1 = player.posY + player.base_posY, //player box top
-		pY2 = player.posY + player.base_posY + player.base_h, //player box bottom
+		pX1 = gamestate.vector_players.at(0).posX + gamestate.vector_players.at(0).base_posX, //gamestate.vector_players.at(0) box left side
+		pX2 = gamestate.vector_players.at(0).posX + gamestate.vector_players.at(0).base_posX + gamestate.vector_players.at(0).base_w, //gamestate.vector_players.at(0) box right side
+		pY1 = gamestate.vector_players.at(0).posY + gamestate.vector_players.at(0).base_posY, //gamestate.vector_players.at(0) box top
+		pY2 = gamestate.vector_players.at(0).posY + gamestate.vector_players.at(0).base_posY + gamestate.vector_players.at(0).base_h, //player box bottom
 		bX1 = 0, //bound box left side
 		bX2 = 0, //bound box right side
 		bY1 = 0, //bound box top
@@ -103,15 +103,15 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 
 	bool inX, inY, done = false;
 
-	for(int i = 0; (i < mapDoor_boundaries.size()) && !done; i++)
+	for(int i = 0; (i < gamestate.currentMap.mapDoor_boundaries.size()) && !done; i++)
 	{
 		inX = true;
 		inY = true;
 
-		bX1 = mapDoor_boundaries.at(i).x;
-		bX2 = mapDoor_boundaries.at(i).x + mapDoor_boundaries.at(i).w;
-		bY1 = mapDoor_boundaries.at(i).y;
-		bY2 = mapDoor_boundaries.at(i).y + mapDoor_boundaries.at(i).h;
+		bX1 = gamestate.currentMap.mapDoor_boundaries.at(i).x;
+		bX2 = gamestate.currentMap.mapDoor_boundaries.at(i).x + gamestate.currentMap.mapDoor_boundaries.at(i).w;
+		bY1 = gamestate.currentMap.mapDoor_boundaries.at(i).y;
+		bY2 = gamestate.currentMap.mapDoor_boundaries.at(i).y + gamestate.currentMap.mapDoor_boundaries.at(i).h;
 
 		if( (pX1 > bX2)	|| (pX2 < bX1) )
 			inX = false;
@@ -121,12 +121,12 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 
 		if(inX && inY)
 		{
-			if(mapDoor_boundaries.at(i).inTheDoorway)
+			if(gamestate.currentMap.mapDoor_boundaries.at(i).inTheDoorway)
 			{
 			}
 			else
 			{
-				gui.switchMap(mapDoor_boundaries.at(i).toMap, mapDoor_boundaries.at(i).toX, mapDoor_boundaries.at(i).toY, currentMap, hud);
+				gui.switchMap(gamestate.currentMap.mapDoor_boundaries.at(i).toMap, gamestate.currentMap.mapDoor_boundaries.at(i).toX, gamestate.currentMap.mapDoor_boundaries.at(i).toY, gamestate.currentMap, hud);
 				//if(mapDoor_boundaries.size() > 0)
 				//	mapDoor_boundaries.at(i).inTheDoorway = true;
 			}
@@ -135,13 +135,13 @@ void resolveDoorCollisions(Player& player, vector<MapDoor_Boundary>& mapDoor_bou
 		}
 		else
 		{
-			mapDoor_boundaries.at(i).inTheDoorway = false;
+			gamestate.currentMap.mapDoor_boundaries.at(i).inTheDoorway = false;
 		}
 	}
 	
 }
 
-void Physics::doPhysics(Gamestate& gamestate, HUD& hud, vector<Boundary>& boundaries, vector<MapDoor_Boundary>& mapDoor_boundaries, GUI& gui, TerrainMap& currentMap)
+void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 {	
 	//consider keyboard events for the player
 	for(int i = 0; i < 4; i++)
@@ -222,7 +222,7 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, vector<Boundary>& bounda
 			nextX = gamestate.vector_players.at(i).posX + gamestate.vector_players.at(i).velX,
 			nextY = gamestate.vector_players.at(i).posY + gamestate.vector_players.at(i).velY;
 
-		vector<bool> bad = goodNextPosition(gamestate.vector_players.at(i), nextX, nextY, boundaries);
+		vector<bool> bad = goodNextPosition(gamestate.vector_players.at(i), nextX, nextY, gamestate.currentMap.boundaries);
 		enum { x, y };
 
 		if( !bad.at(x) )
@@ -249,7 +249,7 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, vector<Boundary>& bounda
 	}
 
 	//check if MapDoor_Boundary was entered, if so load a new map
-	resolveDoorCollisions(gamestate.vector_players.at(0), mapDoor_boundaries, gui, currentMap, hud);
+	resolveDoorCollisions(gamestate, gui, hud);
 
 	//calculate friction //currently bugged and working on
 	for(int i = 0; i < gamestate.vector_players.size(); i++)

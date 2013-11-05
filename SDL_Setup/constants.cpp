@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_CPP
+#define CONSTANTS_CPP
+
 #include <string>
 #include "SDL.h"
 #include "SDL_ttf.h"
@@ -51,3 +54,5 @@ const double BASE_H = 23; //For the player
 
 //constants for keyboard shortcuts
 enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN };
+
+#endif

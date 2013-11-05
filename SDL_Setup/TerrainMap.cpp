@@ -12,13 +12,13 @@ TerrainMap::TerrainMap()
 
 }
 
-TerrainMap::TerrainMap(string mapFileName_in, Gamestate& gamestate)
+TerrainMap::TerrainMap(string mapFileName_in, Gamestate* gamestate)
 {
 	this->mapFileName = mapFileName_in;
 	loadMap(gamestate);
 }
 
-bool TerrainMap::loadMap(Gamestate& gamestate)
+bool TerrainMap::loadMap(Gamestate* gamestate)
 {
 	int 
 		numX = 0,
@@ -121,10 +121,10 @@ bool TerrainMap::loadMap(Gamestate& gamestate)
 	//clear the NPC vector
 	//clear the entities pointer vector (while keeping the player pointer in position 0)
 	//fill the NPC vector while filling pointers to the entities vector
-	Entity* player = gamestate.vector_entities.at(0);
-	gamestate.vector_entities.clear();
-	gamestate.vector_NPCs.clear();
-	gamestate.vector_entities.push_back(player);
+	Entity* player = gamestate->vector_entities.at(0);
+	gamestate->vector_entities.clear();
+	gamestate->vector_NPCs.clear();
+	gamestate->vector_entities.push_back(player);
 	
 	fin >> numNPCs;
 	if(numNPCs < 0) //check for incorrect map file format
@@ -145,7 +145,7 @@ bool TerrainMap::loadMap(Gamestate& gamestate)
 			>> NPCBaseH;
 
 		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
-		gamestate.vector_NPCs.push_back(NPC(
+		gamestate->vector_NPCs.push_back(NPC(
 			( (NPCClipNum * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
 			( ((NPCClipNum * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
 			NPCPosX, //posX
@@ -156,7 +156,7 @@ bool TerrainMap::loadMap(Gamestate& gamestate)
 			NPCBaseH  //base_h
 			));
 
-		gamestate.vector_entities.push_back(&gamestate.vector_NPCs.back());
+		gamestate->vector_entities.push_back(&gamestate->vector_NPCs.back());
 	}
 
 	fin.close();
