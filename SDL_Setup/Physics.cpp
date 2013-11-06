@@ -89,6 +89,35 @@ vector<bool> goodNextPosition(Player& player, double nextX, double nextY, vector
 	return bad;
 }
 
+void keyboardInput(Gamestate& gamestate)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		if(gamestate.vector_players.at(0).keyIsDown(i))
+		{
+			switch(i)
+			{
+			case KEY_LEFT:
+				gamestate.vector_players.at(0).forceX = gamestate.vector_players.at(0).forceX - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_LEFT);
+				break;
+			case KEY_RIGHT:
+				gamestate.vector_players.at(0).forceX += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_RIGHT);
+				break;
+			case KEY_UP:
+				gamestate.vector_players.at(0).forceY = gamestate.vector_players.at(0).forceY - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_BACK);
+				break;
+			case KEY_DOWN:
+				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
+				break;
+			}
+		}
+	}
+}
+
 void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 {    
 	double
@@ -126,9 +155,7 @@ void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 			}
 			else
 			{
-				gui.switchMap(gamestate.currentMap.mapDoor_boundaries.at(i).toMap, gamestate.currentMap.mapDoor_boundaries.at(i).toX, gamestate.currentMap.mapDoor_boundaries.at(i).toY, gamestate.currentMap, hud);
-				//if(mapDoor_boundaries.size() > 0)
-				//	mapDoor_boundaries.at(i).inTheDoorway = true;
+				gui.switchMap(gamestate.currentMap.mapDoor_boundaries.at(i).toMap, gamestate.currentMap.mapDoor_boundaries.at(i).toX, gamestate.currentMap.mapDoor_boundaries.at(i).toY, hud);
 			}
 
 			done = true;
@@ -144,31 +171,7 @@ void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 {	
 	//consider keyboard events for the player
-	for(int i = 0; i < 4; i++)
-	{
-		if(gamestate.vector_players.at(0).keyIsDown(i))
-		{
-			switch(i)
-			{
-			case KEY_LEFT:
-				gamestate.vector_players.at(0).forceX = gamestate.vector_players.at(0).forceX - WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_LEFT);
-				break;
-			case KEY_RIGHT:
-				gamestate.vector_players.at(0).forceX += WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_RIGHT);
-				break;
-			case KEY_UP:
-				gamestate.vector_players.at(0).forceY = gamestate.vector_players.at(0).forceY - WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_BACK);
-				break;
-			case KEY_DOWN:
-				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
-				break;
-			}
-		}
-	}
+	keyboardInput(gamestate);
 	
 	//convert force to velocity
 	for(int i = 0; i < gamestate.vector_players.size(); i++)

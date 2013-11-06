@@ -29,6 +29,10 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_messager = NULL;
 
 	fullscreen = true;
+	quit = false;
+
+	//center the window; does not center the fullscreen window
+	putenv("SDL_VIDEO_CENTERED=1");
 }
 
 void GUI::apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip )
@@ -59,7 +63,7 @@ void GUI::clean_up(HUD& hud)
     SDL_Quit();
 }
 
-void GUI::defineClip(int code_in, Gamestate& gamestate)
+void GUI::defineClip(int code_in)
 {
 	switch(code_in)
 	{
@@ -73,9 +77,9 @@ void GUI::defineClip(int code_in, Gamestate& gamestate)
 			terrainClip[ i ].h = TERRAIN_CLIP_H;
 		}
 		break;
-	case CODE_ENTITY:	
+	case CODE_PLAYER:	
 		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
-		gamestate.vector_players.push_back(Player(
+		gamestatePtr->vector_players.push_back(Player(
 			( (0 * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
 			( ((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
 			100, //posX
@@ -86,20 +90,20 @@ void GUI::defineClip(int code_in, Gamestate& gamestate)
 			BASE_H  //base_h
 			));
 
-		gamestate.vector_entities.push_back(&gamestate.vector_players.at(0));
+		gamestatePtr->vector_entities.push_back(&gamestatePtr->vector_players.at(0));
 		break;
 	}
 }
 
-void GUI::defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud)
+void GUI::defineHUD(HUD& hud)
 {
 	//open the HUD font
 	hud.font_HUD_1 = TTF_OpenFont(FONT_HUD_1_FILENAME, FONT_HUD_1_SIZE);
 
-	hud.HUD_rect.w = screen_w;
+	hud.HUD_rect.w = gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W;
 	hud.HUD_rect.h = HUD_HEIGHT;
 	hud.HUD_rect.x = 0;
-	hud.HUD_rect.y = screen_h;
+	hud.HUD_rect.y = gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H;
 
 	hud.advancedMessages.push_back( Message(
 		20, 
@@ -147,7 +151,7 @@ void GUI::defineHUD(int screen_w, int screen_h, TerrainMap& currentMap, HUD& hud
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
 }
 
-void GUI::display(int code_in, TerrainMap& currentMap, HUD& hud)
+void GUI::display(int code_in, HUD& hud)
 {
 	switch(code_in)
 	{
@@ -175,51 +179,51 @@ void GUI::display(int code_in, TerrainMap& currentMap, HUD& hud)
 	}
 }
 
-void GUI::display(int code_in, TerrainMap& currentMap, Gamestate& gamestate)
+void GUI::display(int code_in)
 {
 	switch(code_in)
 	{
 	case CODE_TERRAIN:
-		for(int numX = 0; numX < currentMap.get_sizeX(); numX++)
+		for(int numX = 0; numX < gamestatePtr->currentMap.get_sizeX(); numX++)
 		{
-			for(int numY = 0; numY < currentMap.get_sizeY(); numY++)
+			for(int numY = 0; numY < gamestatePtr->currentMap.get_sizeY(); numY++)
 			{
 				apply_surface( 
 					numX * 32, 
 					numY * 32, 
 					surface_terrain, 
 					surface_screen, 
-					&terrainClip[currentMap.mapData[numX][numY]] );
+					&terrainClip[gamestatePtr->currentMap.mapData[numX][numY]] );
 			}
 		}
 		break;
 	case CODE_ENTITY:
-		for(int i = gamestate.vector_entities.size() - 1; i >= 0; i--)
+		for(int i = gamestatePtr->vector_entities.size() - 1; i >= 0; i--)
 		{
 			apply_surface( 
-				gamestate.vector_entities.at(i)->posX, 
-				gamestate.vector_entities.at(i)->posY, 
+				gamestatePtr->vector_entities.at(i)->posX, 
+				gamestatePtr->vector_entities.at(i)->posY, 
 				surface_entities, 
 				surface_screen, 
-				&gamestate.vector_entities.at(i)->rect[gamestate.vector_entities.at(i)->get_currentTexture()] );
+				&gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()] );
 		}
 		break;
 	}
 }
 
-void GUI::displayAll(TerrainMap& currentMap, HUD& hud, Gamestate& gamestate)
+void GUI::displayAll(HUD& hud)
 {
 	SDL_FillRect(surface_screen , NULL , 0);
 
 	//apply the terrain 
-	display(CODE_TERRAIN, currentMap, gamestate);
+	display(CODE_TERRAIN);
 	//apply the entities
-	display(CODE_ENTITY, currentMap, gamestate);
+	display(CODE_ENTITY);
 	//display the HUD
-	display(CODE_HUD, currentMap, hud);
+	display(CODE_HUD, hud);
 }
 
-void GUI::eventHandler(bool& quit, HUD& hud, int screenWidth, int screenHeight, TerrainMap& currentMap, Gamestate& gamestate)
+void GUI::eventHandler(HUD& hud)
 {
 	//While there's events to handle
     while( SDL_PollEvent( &event ) )
@@ -231,19 +235,19 @@ void GUI::eventHandler(bool& quit, HUD& hud, int screenWidth, int screenHeight, 
 			{
 			case SDLK_LEFT:
 			case SDLK_a:
-				gamestate.vector_players.at(0).pressKey(KEY_LEFT);
+				gamestatePtr->vector_players.at(0).pressKey(KEY_LEFT);
 				break;
 			case SDLK_RIGHT:
 			case SDLK_d:
-				gamestate.vector_players.at(0).pressKey(KEY_RIGHT);
+				gamestatePtr->vector_players.at(0).pressKey(KEY_RIGHT);
 				break;
 			case SDLK_UP:
 			case SDLK_w:
-				gamestate.vector_players.at(0).pressKey(KEY_UP);
+				gamestatePtr->vector_players.at(0).pressKey(KEY_UP);
 				break;
 			case SDLK_DOWN:
 			case SDLK_s:
-				gamestate.vector_players.at(0).pressKey(KEY_DOWN);
+				gamestatePtr->vector_players.at(0).pressKey(KEY_DOWN);
 				break;
 			case SDLK_F2:
 				screenShot();
@@ -280,11 +284,14 @@ void GUI::eventHandler(bool& quit, HUD& hud, int screenWidth, int screenHeight, 
 				break;
 				*/
 			case SDLK_F11:
-				toggleFullscreen(fullscreen, screenWidth, screenHeight);
+				toggleFullscreen(
+					fullscreen, 
+					gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W, 
+					gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT );
 				OutputDebugString("toggleFullscreen() finished\n");
 				break;
 			case SDLK_F12:
-				toggleMap(currentMap, hud);
+				toggleMap(hud);
 				OutputDebugString("switchMap() finished\n");
 				break;
 			case SDLK_ESCAPE:
@@ -297,19 +304,19 @@ void GUI::eventHandler(bool& quit, HUD& hud, int screenWidth, int screenHeight, 
 			{
 			case SDLK_LEFT:
 			case SDLK_a:
-				gamestate.vector_players.at(0).releaseKey(KEY_LEFT);
+				gamestatePtr->vector_players.at(0).releaseKey(KEY_LEFT);
 				break;
 			case SDLK_RIGHT:
 			case SDLK_d:
-				gamestate.vector_players.at(0).releaseKey(KEY_RIGHT);
+				gamestatePtr->vector_players.at(0).releaseKey(KEY_RIGHT);
 				break;
 			case SDLK_UP:
 			case SDLK_w:
-				gamestate.vector_players.at(0).releaseKey(KEY_UP);
+				gamestatePtr->vector_players.at(0).releaseKey(KEY_UP);
 				break;
 			case SDLK_DOWN:
 			case SDLK_s:
-				gamestate.vector_players.at(0).releaseKey(KEY_DOWN);
+				gamestatePtr->vector_players.at(0).releaseKey(KEY_DOWN);
 				break;
 			}
 			break;
@@ -350,7 +357,7 @@ void GUI::frameRate(HUD& hud)
     }
 }
 
-bool GUI::init(int screenWidth, int screenHeight)
+bool GUI::init()
 {
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
@@ -367,7 +374,7 @@ bool GUI::init(int screenWidth, int screenHeight)
     //Set up the screen (only enable one)
 	//surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 	//this->fullscreen = true;
-    surface_screen = SDL_SetVideoMode( screenWidth, screenHeight, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
+    surface_screen = SDL_SetVideoMode( this->gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W, this->gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
 	this->fullscreen = false;
 
     //If there was an error in setting up the screen
@@ -453,11 +460,11 @@ void GUI::setWindowIcon()
 	SDL_FreeSurface(image);
 }
 
-void GUI::switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap& currentMap, HUD& hud)
+void GUI::switchMap(string in_mapFileName, double in_x, double in_y, HUD& hud)
 {
-	currentMap = TerrainMap(in_mapFileName, gamestatePtr);
+	gamestatePtr->currentMap = TerrainMap(in_mapFileName, gamestatePtr);
 
-	string temp = "MAP: " + currentMap.get_mapFileName();
+	string temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 	teleport(in_x, in_y);
 	/*
 	//defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
@@ -465,7 +472,7 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y, TerrainMap&
 	hud.HUD_rect.h = HUD_HEIGHT;
 	hud.HUD_rect.x = 0;
 	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;*/
-	temp = "MAP: " + currentMap.get_mapFileName();
+	temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
 
@@ -508,14 +515,14 @@ void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight)
 		exit(1);
 }
 
-void GUI::toggleMap(TerrainMap& currentMap, HUD& hud)
+void GUI::toggleMap(HUD& hud)
 {	
-	if(currentMap.get_mapFileName() == "map_001.txt")
+	if(gamestatePtr->currentMap.get_mapFileName() == "map_001.txt")
 	{
-		this->switchMap("map_002.txt", 512, 0, currentMap, hud);
+		this->switchMap("map_002.txt", 512, 0, hud);
 	}
 	else
 	{
-		this->switchMap("map_001.txt", 512, 768, currentMap, hud);
+		this->switchMap("map_001.txt", 512, 768, hud);
 	}
 }

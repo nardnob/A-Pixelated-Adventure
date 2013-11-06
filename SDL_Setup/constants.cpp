@@ -34,7 +34,7 @@ const int ENTITY_CLIP_W = 64;
 const int ENTITY_CLIP_H = 64;
 
 // constants for function parameters
-enum { CODE_TERRAIN, CODE_ENTITY, CODE_HUD };
+enum { CODE_TERRAIN, CODE_PLAYER, CODE_HUD, CODE_ENTITY };
 
 enum { TEXTURE_FRONT, TEXTURE_BACK, TEXTURE_LEFT, TEXTURE_RIGHT };
 

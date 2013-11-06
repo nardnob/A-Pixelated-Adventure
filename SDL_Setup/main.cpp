@@ -15,7 +15,7 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "HUD.h"
 #include "Physics.h"
 
-#include <Windows.h> //for OutputDebugString()
+//#include <Windows.h> //for OutputDebugString()
 #include <string>
 #include <vector>
 using namespace std;
@@ -28,26 +28,20 @@ int main( int argc, char* args[] )
 
 	GUI gui = GUI(&gamestate);
 
-	gui.defineClip(CODE_ENTITY, gamestate);
+	//define the first player
+	gui.defineClip(CODE_PLAYER);
 
-	HUD hud = HUD(); //the HUD (holds the hud surface(s) and messages
+	//the HUD (holds the hud surface(s) and messages
+	HUD hud = HUD(); 
 
 	//define the clips (clip up the texture files)
-	gui.defineClip(CODE_TERRAIN, gamestate);
+	gui.defineClip(CODE_TERRAIN);
 	
 	//set up the first currentMap
 	gamestate.init();
 
-    bool quit = false; //to quit the main game loop
-
-	//center the window; does not center the fullscreen window
-	putenv("SDL_VIDEO_CENTERED=1");
-
 	//SDL's init()
-	if( !gui.init(
-		gamestate.currentMap.get_sizeX() * TERRAIN_CLIP_W, 
-		gamestate.currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT
-		) )
+	if( !gui.init() )
         return 1;
 
 	//Initialize SDL_ttf
@@ -55,8 +49,7 @@ int main( int argc, char* args[] )
         return false;    
 
 	//to define the HUD and its messages
-	gui.defineHUD(gamestate.currentMap.get_sizeX() * TERRAIN_CLIP_W, gamestate.currentMap.get_sizeY() * TERRAIN_CLIP_H, gamestate.currentMap, hud);
-
+	gui.defineHUD(hud);
 
 	//SDL load_files to load images
     if( !gui.load_files() )
@@ -65,18 +58,19 @@ int main( int argc, char* args[] )
     //***********************************************************************************
 	//*********** The game loop *********************************************************
 	//***********************************************************************************
-    while( !quit )
+    while( !gui.quit )
     {
+		//reset the frame timer to 0. Used to regulate minimum time per frame
 		gui.fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		gui.eventHandler(quit, hud, gamestate.currentMap.get_sizeX() * TERRAIN_CLIP_W, gamestate.currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, gamestate.currentMap, gamestate); 
+		gui.eventHandler(hud); 
 		
 		//do some physics
 		Physics::doPhysics(gamestate, hud, gui);
 
 		//apply all of the surfaces to surface_screen
-		gui.displayAll(gamestate.currentMap, hud, gamestate);
+		gui.displayAll(hud);
 
 		//Update the screen by flipping surface_screen
 		if( !gui.flipScreen() )
