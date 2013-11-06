@@ -34,6 +34,8 @@ public:
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	bool quit; //only true when done with the game
 
+	double screenOffset_x, screenOffset_y; //the offset to display the screen at, to place it in the middle of the window
+
 	GUI();
 	GUI(Gamestate* in_gamestate);
 
@@ -79,6 +81,9 @@ public:
 	//take a screenshot
 	void screenShot();
 
+	//set the offsets of the surface_screen
+	void setScreenOffsets(HUD& hud);
+
 	//set the window icon to a constant image file
 	void setWindowIcon();
 
@@ -89,7 +94,7 @@ public:
 	void teleport(double in_x, double in_y, int in_direction = -1);
 
 	//toggle between fullscreen and windowed mode
-	void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight);
+	void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, HUD& hud);
 
 	//toggle between map_001.txt and map_002.txt; used for testing
 	void toggleMap(HUD& hud);

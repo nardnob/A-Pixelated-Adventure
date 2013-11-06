@@ -55,6 +55,9 @@ int main( int argc, char* args[] )
     if( !gui.load_files() )
         return 1;
 
+	//set the offsets of the surface_screen for the first time
+	gui.setScreenOffsets(hud);
+
     //***********************************************************************************
 	//*********** The game loop *********************************************************
 	//***********************************************************************************
