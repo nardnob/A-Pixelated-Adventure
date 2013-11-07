@@ -19,7 +19,15 @@ public:
 		base_posX, //the entity's base x position (offset from posX) used for collision calculations
 		base_posY, //the entity's base y position (offset from posY) used for collision calculations
 		base_w, //the width of the entity's base
-		base_h; //the height of the entity's base
+		base_h, //the height of the entity's base
+		velX,
+		velY,
+		forceX,
+		forceY,
+		mass,
+		maxVelX,
+		maxVelY,
+		maxVel;
 
 	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
 

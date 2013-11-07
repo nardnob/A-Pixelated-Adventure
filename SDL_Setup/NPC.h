@@ -8,14 +8,6 @@ class NPC: public Entity
 private:
 	
 public:
-	double 
-		velX,
-		velY,
-		forceX,
-		forceY,
-		mass,
-		maxVelX,
-		maxVelY;
 
 	void toggleTexture(int toChoose);
 

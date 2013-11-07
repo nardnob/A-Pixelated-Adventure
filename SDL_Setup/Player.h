@@ -8,14 +8,6 @@ private:
 	bool
 		keyDown[4];
 public:
-	double 
-		velX,
-		velY,
-		forceX,
-		forceY,
-		mass,
-		maxVelX,
-		maxVelY;
 
 	void pressKey(int toPress);
 	void releaseKey(int toRelease);

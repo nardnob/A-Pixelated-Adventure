@@ -26,6 +26,7 @@ NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_b
 	this->base_posY = in_base_posY;
 	this->base_w = in_base_w;
 	this->base_h = in_base_h;
+	this->maxVel = 2;
 
 	this->currentTexture = TEXTURE_FRONT;
 

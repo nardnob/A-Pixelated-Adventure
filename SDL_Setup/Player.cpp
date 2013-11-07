@@ -20,6 +20,7 @@ Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, doubl
 	this->mass = MASS_PLAYER;
 	this->maxVelX = 3;
 	this->maxVelY = 3;
+	this->maxVel = 4;
 	this->posX = in_posX;
 	this->posY = in_posY;
 	this->base_posX = in_base_posX;
