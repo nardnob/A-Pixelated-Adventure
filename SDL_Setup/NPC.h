@@ -8,7 +8,6 @@ class NPC: public Entity
 private:
 	
 public:
-
 	void toggleTexture(int toChoose);
 
 	NPC();

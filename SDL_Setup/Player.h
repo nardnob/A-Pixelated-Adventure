@@ -8,7 +8,6 @@ private:
 	bool
 		keyDown[4];
 public:
-
 	void pressKey(int toPress);
 	void releaseKey(int toRelease);
 	bool keyIsDown(int i);

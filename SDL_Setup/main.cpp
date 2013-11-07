@@ -55,7 +55,7 @@ int main( int argc, char* args[] )
     if( !gui.load_files() )
         return 1;
 
-	//set the offsets of the surface_screen for the first time
+	//set the offsets of the surface_screen for the first time (to center the screen in the window)
 	gui.setScreenOffsets(hud);
 
     //***********************************************************************************

@@ -149,6 +149,35 @@ void keyboardInput(Gamestate& gamestate)
 	}
 }
 
+void toggleNPCTextures(Gamestate& gamestate)
+{
+	for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
+	{
+		if(abs(gamestate.vector_NPCs.at(i).velX) > abs(gamestate.vector_NPCs.at(i).velY))
+		{
+			if(gamestate.vector_NPCs.at(i).velX > 0)
+			{
+				gamestate.vector_NPCs.at(i).toggleTexture(TEXTURE_RIGHT);
+			}
+			else
+			{
+				gamestate.vector_NPCs.at(i).toggleTexture(TEXTURE_LEFT);
+			}
+		}
+		else
+		{
+			if(gamestate.vector_NPCs.at(i).velY > 0)
+			{
+				gamestate.vector_NPCs.at(i).toggleTexture(TEXTURE_FRONT);
+			}
+			else
+			{
+				gamestate.vector_NPCs.at(i).toggleTexture(TEXTURE_BACK);
+			}
+		}
+	}
+}
+
 void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 {    
 	double
@@ -379,6 +408,8 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 
 	//give the NPCs velocity with AI
 	AIVel(gamestate);
+
+	toggleNPCTextures(gamestate);
 
 	//calculate movement (need to limit position to bounds of window)
 	movement(gamestate);
