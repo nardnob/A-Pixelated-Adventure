@@ -100,13 +100,18 @@ void GUI::defineHUD(HUD& hud)
 	//open the HUD font
 	hud.font_HUD_1 = TTF_OpenFont(FONT_HUD_1_FILENAME, FONT_HUD_1_SIZE);
 
-	hud.HUD_rect.w = SCREEN_WIDTH;
 	hud.HUD_rect.h = HUD_HEIGHT;
 	hud.HUD_rect.x = 0;
 	if(this->fullscreen)
+	{
 		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
+		hud.HUD_rect.w = this->monitorWidth;
+	}
 	else
+	{
 		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
+		hud.HUD_rect.w = SCREEN_WIDTH;
+	}
 
 	hud.advancedMessages.push_back( Message(
 		20, 
@@ -354,7 +359,7 @@ void GUI::frameRate(HUD& hud)
 		this->fpsTimer.currentFrameRate = this->fpsTimer.frameCount / ((this->fpsTimer.get_totalTicks() - this->fpsTimer.firstStartTicks) / 1000);
 		this->fpsTimer.frameCount = 0;
 		this->fpsTimer.firstStartTicks = this->fpsTimer.get_totalTicks();
-		hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(this->fpsTimer.currentFrameRate));
+		hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(static_cast<long long>(this->fpsTimer.currentFrameRate)));
 	}
 
 
@@ -525,12 +530,14 @@ void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, 
 		//this->setVideoMode2(fullscreen, screenWidth, screenHeight);
 		fullscreen = false;
 		setWindowIcon(); //re-set the windows icon
+		hud.HUD_rect.w = SCREEN_WIDTH;
 	} 
 	else
 	{
 		surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 		//this->setVideoMode2(fullscreen, monitorWidth, monitorHeight);
 		fullscreen = true;
+		hud.HUD_rect.w = this->monitorWidth;
 	}
 
 	if(this->fullscreen)

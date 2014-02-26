@@ -38,8 +38,13 @@
 18 24 20 1 //x, y, w, h (in tiles) for boundary 5
 
 
-1 //num mapDoor_boundaries
+1 //num DoorInternal
+16 25 2 1 16 -1.7 //x, y, w, h, toX, toY (in tiles) for door 1
+
+1 //num DoorExternal
 16 25 2 1 map_002.txt 16 -1.7 //x, y, w, h, to_map_name.txt, toX, toY (in tiles) for door 1
+
 
 1 //num NPCs
 4 300 300 17 41 30 23 //entity texture num, posX, posY, basePosX, basePosY, baseW, baseH for NPC 1
+

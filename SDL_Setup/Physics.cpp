@@ -10,7 +10,7 @@
 #include <math.h>
 using namespace std;
 
-#define PI 3.14159265
+//#define PI 3.14159265
 
 /*
 bool badPosition(double inX, double inY, vector<Boundary>& boundaries)

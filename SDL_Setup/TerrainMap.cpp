@@ -157,7 +157,12 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 			NPCBaseH  //base_h
 			));
 
-		gamestate->vector_entities.push_back( &gamestate->vector_NPCs.back() );
+		//gamestate->vector_entities.push_back( &gamestate->vector_NPCs.back() );
+	}
+
+	for(int i = 0; i < gamestate->vector_NPCs.size(); i++)
+	{
+		gamestate->vector_entities.push_back( &gamestate->vector_NPCs.at(i) );
 	}
 
 	fin.close();
