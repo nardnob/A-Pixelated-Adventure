@@ -543,7 +543,7 @@ void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, 
 	if(this->fullscreen)
 		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
 	else
-		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
+		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT; /* SEE HERE! Need to make HUD_HEIGHT variable for smaller screens */
 
 	/* If toggle FullScreen failed, then switch back */
 	if(surface_screen == NULL) 
