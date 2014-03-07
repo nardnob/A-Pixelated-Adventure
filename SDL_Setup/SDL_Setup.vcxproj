@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AttackAbility.cpp" />
     <ClCompile Include="Boundary.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -96,11 +97,15 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ability.h" />
+    <ClInclude Include="AttackAbility.h" />
     <ClInclude Include="Boundary.h" />
+    <ClInclude Include="BuffAbility.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Gamestate.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="ItemAbility.h" />
     <ClInclude Include="MapDoor_Boundary.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NPC.h" />
