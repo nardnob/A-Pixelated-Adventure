@@ -7,8 +7,8 @@
 using namespace std;
 
 //Screen attributes
-const int SCREEN_WIDTH = 1900;
-const int SCREEN_HEIGHT = 1000;
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
 const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 100;
 const string ICON_FILE = "icon2.bmp";
