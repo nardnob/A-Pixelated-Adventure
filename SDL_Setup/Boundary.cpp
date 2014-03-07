@@ -19,5 +19,3 @@ Boundary::Boundary(int in_x, int in_y, int in_w, int in_h, bool in_active)
 	this->h = in_h;
 	this->active = in_active;
 }
-
-//ddd
