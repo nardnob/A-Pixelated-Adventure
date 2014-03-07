@@ -69,7 +69,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AttackAbility.cpp" />
+    <ClCompile Include="PlayerStatus.cpp" />
+    <ClCompile Include="RadiusAttackAbility.cpp" />
     <ClCompile Include="Boundary.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -86,10 +87,7 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="entities.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </Image>
+    <Image Include="entities.png" />
     <Image Include="icon2.bmp" />
     <Image Include="terrain.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -98,7 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
-    <ClInclude Include="AttackAbility.h" />
+    <ClInclude Include="PlayerStatus.h" />
+    <ClInclude Include="RadiusAttackAbility.h" />
     <ClInclude Include="Boundary.h" />
     <ClInclude Include="BuffAbility.h" />
     <ClInclude Include="Entity.h" />

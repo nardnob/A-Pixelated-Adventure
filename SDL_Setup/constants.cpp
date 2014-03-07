@@ -21,7 +21,7 @@ const char FONT_HUD_1_FILENAME[] = "font_HUD_3.ttf";
 //const int NUM_ADVANCED_SETTINGS = 1;//no longer needed. Was using to loop through advanced settings, which are now stored in a vector (can do .size())
 
 //terrain file attributes
-const int TERRAIN_FILE_W = 512;
+const int TERRAIN_FILE_W = 768;
 const int TERRAIN_FILE_H = 512;
 const int TERRAIN_CLIP_W = 32;
 const int TERRAIN_CLIP_H = 32;

@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "constants.cpp"
+#include "PlayerStatus.h"
 using namespace std;
 
 Player::Player()
@@ -7,8 +8,10 @@ Player::Player()
 
 }
 
-Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h)
+Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h, Player* in_player)
 {
+	currentStatus = PlayerStatus(in_player);
+
 	//this->textureNum = textureNum_in;
 	this->active = true;
 

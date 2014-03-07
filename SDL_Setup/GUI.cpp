@@ -87,7 +87,8 @@ void GUI::defineClip(int code_in)
 			BASE_POSX, //base_posX
 			BASE_POSY, //base_posY
 			BASE_W, //base_w
-			BASE_H  //base_h
+			BASE_H, //base_h
+			&gamestatePtr->vector_players.at(0)
 			));
 
 		gamestatePtr->vector_entities.push_back(&gamestatePtr->vector_players.at(0));

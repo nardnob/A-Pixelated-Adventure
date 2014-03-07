@@ -57,18 +57,21 @@
     <ClCompile Include="NPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AttackAbility.cpp">
+    <ClCompile Include="RadiusAttackAbility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="entities.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="terrain.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="icon2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="entities.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -112,13 +115,16 @@
     <ClInclude Include="Ability.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AttackAbility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BuffAbility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ItemAbility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RadiusAttackAbility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
