@@ -28,7 +28,7 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_screen = NULL;
 	this->surface_messager = NULL;
 
-	fullscreen = true;
+	fullscreen = false;
 	quit = false;
 
 	//center the window; does not center the fullscreen window
@@ -203,9 +203,10 @@ void GUI::display(int code_in)
 		{
 			for(int numY = 0; numY < gamestatePtr->currentMap.get_sizeY(); numY++)
 			{
+				//this if is for debugging.. to prevent blitting off screen
 				if(numX * TERRAIN_CLIP_W + this->screenOffset_x + TERRAIN_CLIP_W <= SCREEN_WIDTH && numY * TERRAIN_CLIP_H + this->screenOffset_y + TERRAIN_CLIP_H <= SCREEN_HEIGHT)
-					apply_surface( 
-						numX * TERRAIN_CLIP_W + this->screenOffset_x, 
+					apply_surface(
+						numX * TERRAIN_CLIP_W +this->screenOffset_x,
 						numY * TERRAIN_CLIP_H + this->screenOffset_y, 
 						surface_terrain, 
 						surface_screen, 
@@ -307,8 +308,6 @@ void GUI::eventHandler(HUD& hud)
 					hud);*/
 				toggleFullscreen(
 					fullscreen, 
-					SCREEN_WIDTH, 
-					SCREEN_HEIGHT,
 					hud);
 				OutputDebugString("toggleFullscreen() finished\n");
 				break;
@@ -386,6 +385,7 @@ bool GUI::init()
     {
         return false;
     }
+
 	const SDL_VideoInfo* info = SDL_GetVideoInfo();   //<-- calls SDL_GetVideoInfo();   
 	monitorWidth = info->current_w;
 	monitorHeight = info->current_h;
@@ -397,9 +397,10 @@ bool GUI::init()
 	//surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 	//this->fullscreen = true;
     //surface_screen = SDL_SetVideoMode( this->gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W, this->gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
-	surface_screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 	//surface_screen = SDL_SetVideoMode(monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE);
-	this->fullscreen = false;
+	surface_screen = SDL_SetVideoMode(monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN); //full screen
+	//surface_screen = SDL_SetVideoMode(monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE);
+	this->fullscreen = true;
 
     //If there was an error in setting up the screen
     if( surface_screen == NULL )
@@ -473,8 +474,8 @@ void GUI::screenShot()
 
 void GUI::setScreenOffsets(HUD& hud)
 {
-	this->screenOffset_x = (this->surface_screen->w - (gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W))/2;
-	this->screenOffset_y = (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hud.HUD_rect.h)/2;
+	this->screenOffset_x = 0;// (this->surface_screen->w - (gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W)) / 2;
+	this->screenOffset_y = 0;// (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hud.HUD_rect.h) / 2;
 }
 
 void GUI::setWindowIcon()
@@ -511,7 +512,7 @@ void GUI::teleport(double in_x, double in_y, int in_direction)
 		gamestatePtr->vector_players.at(0).set_currentTexture(in_direction);
 }
 
-void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, HUD& hud)
+void GUI::toggleFullscreen(bool& fullscreen, HUD& hud)
 {
 	Uint32 flags; /* Start with whatever flags you prefer */
 
@@ -519,38 +520,35 @@ void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, 
 
 	if(fullscreen)
 	{
-		surface_screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE ); //windowed mode
+		surface_screen = SDL_SetVideoMode( monitorWidth, monitorWidth, SCREEN_BPP, SDL_SWSURFACE ); //windowed mode
 		//this->setVideoMode2(fullscreen, screenWidth, screenHeight);
 		fullscreen = false;
 		setWindowIcon(); //re-set the windows icon
-		//hud.HUD_rect.w = SCREEN_WIDTH;
-		hud.HUD_rect.w = 10;
+		hud.HUD_rect.w = SCREEN_WIDTH;
+		//hud.HUD_rect.w = 10;
 		hud.advancedMessages.at(6).set_message("Fullscreen:  false");
+		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
 	} 
 	else
 	{
 		surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 		//this->setVideoMode2(fullscreen, monitorWidth, monitorHeight);
 		fullscreen = true;
-		//hud.HUD_rect.w = this->monitorWidth;
-		hud.HUD_rect.w = 10;
+		hud.HUD_rect.w = this->monitorWidth;
+		//hud.HUD_rect.w = 10;
 		hud.advancedMessages.at(6).set_message("Fullscreen:  true");
-	}
-
-	if(this->fullscreen)
 		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
-	else
-		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
+	}
 
 	/* If toggle FullScreen failed, then switch back */
 	if(surface_screen == NULL) 
-		surface_screen = SDL_SetVideoMode(screenWidth, screenHeight, SCREEN_BPP, flags); 
+		surface_screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, flags); 
 
 	 /* If you can't switch back for some reason */
 	if(surface_screen == NULL) 
 		exit(1);
 
-	setScreenOffsets(hud);
+	//setScreenOffsets(hud);
 }
 
 void GUI::toggleMap(HUD& hud)

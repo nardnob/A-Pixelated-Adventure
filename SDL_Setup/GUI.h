@@ -94,7 +94,7 @@ public:
 	void teleport(double in_x, double in_y, int in_direction = -1);
 
 	//toggle between fullscreen and windowed mode
-	void toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, HUD& hud);
+	void toggleFullscreen(bool& fullscreen, HUD& hud);
 
 	//toggle between map_001.txt and map_002.txt; used for testing
 	void toggleMap(HUD& hud);
