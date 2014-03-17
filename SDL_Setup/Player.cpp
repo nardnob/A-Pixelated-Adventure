@@ -8,9 +8,9 @@ Player::Player()
 
 }
 
-Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h, Player* in_player)
+Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h)
 {
-	currentStatus = PlayerStatus(in_player);
+	currentStatus = PlayerStatus();
 
 	//this->textureNum = textureNum_in;
 	this->active = true;

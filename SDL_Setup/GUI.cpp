@@ -87,8 +87,7 @@ void GUI::defineClip(int code_in)
 			BASE_POSX, //base_posX
 			BASE_POSY, //base_posY
 			BASE_W, //base_w
-			BASE_H, //base_h
-			&gamestatePtr->vector_players.at(0)
+			BASE_H //base_h
 			));
 
 		gamestatePtr->vector_entities.push_back(&gamestatePtr->vector_players.at(0));
@@ -154,7 +153,14 @@ void GUI::defineHUD(HUD& hud)
 		20 * 6,
 		hud.font_HUD_1,
 		"MAP:  ",
-		true) );
+		true));
+
+	hud.advancedMessages.push_back(Message(
+		20,
+		20 * 7,
+		hud.font_HUD_1,
+		"Fullscreen:  ",
+		true));
 
 	string temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
@@ -174,13 +180,13 @@ void GUI::display(int code_in, HUD& hud)
 			if(i >= 0 && i < hud.advancedMessages.size() && hud.get_advanced()) //the first 0 to NUM_ADVANCED_SETTINGS are all advanced settings. They are only outputted if we are showing advanced settings. Need to store these in their own vector
 			{
 				surface_messager = TTF_RenderText_Solid( hud.advancedMessages.at(i).get_font(), hud.advancedMessages.at(i).get_message(), FONT_COLOR_WHITE );
-
+				
 				apply_surface(
 					hud.advancedMessages.at(i).get_posX(),
 					hud.advancedMessages.at(i).get_posY(),
 					surface_messager,
 					surface_screen);
-
+					
 				SDL_FreeSurface(surface_messager);
 			}
 		}
@@ -197,12 +203,13 @@ void GUI::display(int code_in)
 		{
 			for(int numY = 0; numY < gamestatePtr->currentMap.get_sizeY(); numY++)
 			{
-				apply_surface( 
-					numX * TERRAIN_CLIP_W + this->screenOffset_x, 
-					numY * TERRAIN_CLIP_H + this->screenOffset_y, 
-					surface_terrain, 
-					surface_screen, 
-					&terrainClip[gamestatePtr->currentMap.mapData[numX][numY]] );
+				if(numX * TERRAIN_CLIP_W + this->screenOffset_x + TERRAIN_CLIP_W <= SCREEN_WIDTH && numY * TERRAIN_CLIP_H + this->screenOffset_y + TERRAIN_CLIP_H <= SCREEN_HEIGHT)
+					apply_surface( 
+						numX * TERRAIN_CLIP_W + this->screenOffset_x, 
+						numY * TERRAIN_CLIP_H + this->screenOffset_y, 
+						surface_terrain, 
+						surface_screen, 
+						&terrainClip[gamestatePtr->currentMap.mapData[numX][numY]] );
 			}
 		}
 		break;
@@ -391,6 +398,7 @@ bool GUI::init()
 	//this->fullscreen = true;
     //surface_screen = SDL_SetVideoMode( this->gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W, this->gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H + HUD_HEIGHT, SCREEN_BPP, SDL_SWSURFACE ); //not full screen
 	surface_screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+	//surface_screen = SDL_SetVideoMode(monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE);
 	this->fullscreen = false;
 
     //If there was an error in setting up the screen
@@ -474,7 +482,6 @@ void GUI::setWindowIcon()
 	Uint32 colorKey;
 	SDL_Surface *image;
 
-	//image = SDL_LoadBMP(ICON_FILE.c_str());
 	image = SDL_LoadBMP(ICON_FILE.c_str());
 	colorKey = SDL_MapRGB(image->format, 0, 255, 0);
 	SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorKey);
@@ -488,26 +495,11 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y, HUD& hud)
 
 	string temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 	teleport(in_x, in_y);
-	/*
-	//defineHUD(currentMap.get_sizeX() * TERRAIN_CLIP_W, currentMap.get_sizeY() * TERRAIN_CLIP_H, currentMap, hud);
-	hud.HUD_rect.w = currentMap.get_sizeX() * TERRAIN_CLIP_W;
-	hud.HUD_rect.h = HUD_HEIGHT;
-	hud.HUD_rect.x = 0;
-	hud.HUD_rect.y = currentMap.get_sizeY() * TERRAIN_CLIP_H;*/
+
 	temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 
-	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
-
-	//need to set new boundary at this x and y to not ...? Not sure what this comment means, lol
 
 	setScreenOffsets(hud);
-	/*
-	if(!fullscreen)
-	{
-		setVideoMode2(false, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-		setScreenOffsets(hud);
-	}*/
 }
 
 void GUI::teleport(double in_x, double in_y, int in_direction)
@@ -531,20 +523,24 @@ void GUI::toggleFullscreen(bool& fullscreen, int screenWidth, int screenHeight, 
 		//this->setVideoMode2(fullscreen, screenWidth, screenHeight);
 		fullscreen = false;
 		setWindowIcon(); //re-set the windows icon
-		hud.HUD_rect.w = SCREEN_WIDTH;
+		//hud.HUD_rect.w = SCREEN_WIDTH;
+		hud.HUD_rect.w = 10;
+		hud.advancedMessages.at(6).set_message("Fullscreen:  false");
 	} 
 	else
 	{
 		surface_screen = SDL_SetVideoMode( monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN ); //full screen
 		//this->setVideoMode2(fullscreen, monitorWidth, monitorHeight);
 		fullscreen = true;
-		hud.HUD_rect.w = this->monitorWidth;
+		//hud.HUD_rect.w = this->monitorWidth;
+		hud.HUD_rect.w = 10;
+		hud.advancedMessages.at(6).set_message("Fullscreen:  true");
 	}
 
 	if(this->fullscreen)
 		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
 	else
-		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT; /* SEE HERE! Need to make HUD_HEIGHT variable for smaller screens */
+		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
 
 	/* If toggle FullScreen failed, then switch back */
 	if(surface_screen == NULL) 
