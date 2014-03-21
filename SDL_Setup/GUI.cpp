@@ -204,7 +204,7 @@ void GUI::display(int code_in)
 			for(int numY = 0; numY < gamestatePtr->currentMap.get_sizeY(); numY++)
 			{
 				//this if is for debugging.. to prevent blitting off screen
-				if(numX * TERRAIN_CLIP_W + this->screenOffset_x + TERRAIN_CLIP_W <= SCREEN_WIDTH && numY * TERRAIN_CLIP_H + this->screenOffset_y + TERRAIN_CLIP_H <= SCREEN_HEIGHT)
+				//if(numX * TERRAIN_CLIP_W + this->screenOffset_x + TERRAIN_CLIP_W <= SCREEN_WIDTH && numY * TERRAIN_CLIP_H + this->screenOffset_y + TERRAIN_CLIP_H <= SCREEN_HEIGHT)
 					apply_surface(
 						numX * TERRAIN_CLIP_W +this->screenOffset_x,
 						numY * TERRAIN_CLIP_H + this->screenOffset_y, 
@@ -474,8 +474,8 @@ void GUI::screenShot()
 
 void GUI::setScreenOffsets(HUD& hud)
 {
-	this->screenOffset_x = 0;// (this->surface_screen->w - (gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W)) / 2;
-	this->screenOffset_y = 0;// (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hud.HUD_rect.h) / 2;
+	this->screenOffset_x = (this->surface_screen->w - (gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W)) / 2;
+	this->screenOffset_y = (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hud.HUD_rect.h) / 2;
 }
 
 void GUI::setWindowIcon()
@@ -548,7 +548,7 @@ void GUI::toggleFullscreen(bool& fullscreen, HUD& hud)
 	if(surface_screen == NULL) 
 		exit(1);
 
-	//setScreenOffsets(hud);
+	setScreenOffsets(hud);
 }
 
 void GUI::toggleMap(HUD& hud)
