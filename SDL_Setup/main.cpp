@@ -8,13 +8,14 @@ The SDL setup functions used in this code were created by following the lazyfoo 
 #include "SDL_ttf.h"
 #include "SDL_mixer.h"
 
-#include "RadiusAttackAbility.h"
 #include "constants.cpp"
 #include "Entity.h"
 #include "Gamestate.h"
 #include "GUI.h"
 #include "HUD.h"
+#include "MenuEngine.h"
 #include "Physics.h"
+#include "RadiusAttackAbility.h"
 
 //#include <Windows.h> //for OutputDebugString()
 #include <string>
@@ -23,10 +24,18 @@ using namespace std;
 
 
 int main( int argc, char* args[] )
-{	
+{
+	//Initialize SDL_ttf
+	if(TTF_Init() == -1)
+		return false;
+
 	Gamestate gamestate = Gamestate();	
 
 	GUI gui = GUI(&gamestate);
+	gamestate.offsetX = &gui.screenOffset_x;
+	gamestate.offsetY = &gui.screenOffset_y;
+	gamestate.monitorWidth = &gui.monitorWidth;
+	gamestate.monitorHeight = &gui.monitorHeight;
 
 	//define the first player
 	gui.defineClip(CODE_PLAYER);
@@ -42,11 +51,7 @@ int main( int argc, char* args[] )
 
 	//SDL's init()
 	if( !gui.init() )
-        return 1;
-
-	//Initialize SDL_ttf
-    if( TTF_Init() == -1 )
-        return false;    
+        return 1;  
 
 	//to define the HUD and its messages
 	gui.defineHUD(hud);
@@ -69,8 +74,18 @@ int main( int argc, char* args[] )
 		//call the eventHandler (send quit as a reference)
 		gui.eventHandler(hud); 
 		
-		//do some physics
-		Physics::doPhysics(gamestate, hud, gui);
+		//switch through the gamestates for the game engine
+		switch(gamestate.currentState)
+		{
+		case STATES_GAMEPLAY:
+			//do some physics
+			Physics::doPhysics(gamestate, hud, gui);
+			break;
+		
+		case STATES_DEATH_MENU:
+			MenuEngine::engine(STATES_DEATH_MENU, gamestate);
+			break;
+		}
 
 		//apply all of the surfaces to surface_screen
 		gui.displayAll(hud);
@@ -79,7 +94,7 @@ int main( int argc, char* args[] )
 		if( !gui.flipScreen() )
 			return 1;
 
-		//regulate the frame rate, and update the currentFrameRate
+		//regulate the frame rate, and update the currentFrameRate (needs to stay at end of game loop)
 		gui.frameRate(hud);
     }
     //***********************************************************************************

@@ -63,6 +63,9 @@
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MenuEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="terrain.png">
@@ -127,6 +130,12 @@
     <ClInclude Include="PlayerStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MenuObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="map_001.txt">
@@ -152,7 +161,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="font_HUD_3.ttf">
+    <Font Include="font_Gamestate_1.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="font_HUD_1.ttf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

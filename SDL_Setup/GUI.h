@@ -19,18 +19,18 @@ private:
 	//The event structure
 	SDL_Event event;
 
+	//The portions of the sprite map to be blitted
+	SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
+	bool fullscreen;	//the window state (full screen or windowed)
+public:
 	//The surfaces
 	SDL_Surface* surface_terrain;
 	SDL_Surface* surface_entities;
 	SDL_Surface* surface_screen;
 	SDL_Surface* surface_messager;
 
-	//The portions of the sprite map to be blitted
-	SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
-
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
-	bool fullscreen;	//the window state (full screen or windowed)
-public:	
+
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	bool quit; //only true when done with the game
 
@@ -51,8 +51,8 @@ public:
 	//define the HUD
 	void defineHUD(HUD& hud);
 
-	//display the _ to the screen surface
-	void display(int code_in);
+	////display the _ to the screen surface
+	//void display(int code_in);
 
 	//display the _ to the screen surface
 	void display(int code_in, HUD& hud);

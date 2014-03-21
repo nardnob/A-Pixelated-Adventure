@@ -295,6 +295,8 @@ void updateHUD(Gamestate& gamestate, HUD& hud)
 		hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y:  " + to_string(int(gamestate.vector_players.at(0).velY)));
 	else
 		hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y: " + to_string(int(gamestate.vector_players.at(0).velY)));
+
+	hud.advancedMessages.at(hud.MESSAGE_LIFE).set_message("Life:  " + to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())));
 }
 
 void movement(Gamestate& gamestate)
@@ -395,6 +397,15 @@ void AIVel(Gamestate& gamestate)
 	}
 }
 
+//check for player death and act on it
+void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
+{
+	if(!gamestate.vector_players.at(0).currentStatus.hasLife())
+	{
+		gamestate.switchState(STATES_DEATH_MENU);
+	}
+}
+
 void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 {	
 	//consider keyboard events for the player
@@ -422,4 +433,7 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 
 	//add friction as a force opposing the velocity
 	friction(gamestate);
+
+	//check for player death
+	deathCheck(gamestate);
 }

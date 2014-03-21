@@ -17,8 +17,12 @@ const string ICON_FILE = "icon2.bmp";
 const int HUD_HEIGHT = 160;
 const SDL_Color FONT_COLOR_WHITE = { 255,255,255 };
 const int FONT_HUD_1_SIZE = 24;
-const char FONT_HUD_1_FILENAME[] = "font_HUD_3.ttf";
+const char FONT_HUD_1_FILENAME[] = "font_HUD_1.ttf";
 //const int NUM_ADVANCED_SETTINGS = 1;//no longer needed. Was using to loop through advanced settings, which are now stored in a vector (can do .size())
+
+//Gamestate attributes
+const int FONT_GAMESTATE_1_SIZE = 72;
+const char FONT_GAMESTATE_1_FILENAME[] = "font_Gamestate_1.ttf";
 
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;
@@ -54,5 +58,8 @@ const double BASE_H = 23; //For the player
 
 //constants for keyboard shortcuts
 enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN };
+
+//constants for gamestates
+enum { STATES_GAMEPLAY, STATES_DEATH_MENU, STATES_START_MENU, STATES_CLASS_SELECTION };
 
 #endif

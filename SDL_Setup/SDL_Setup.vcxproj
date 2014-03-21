@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MenuEngine.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="RadiusAttackAbility.cpp" />
     <ClCompile Include="Boundary.cpp" />
@@ -104,6 +105,8 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="ItemAbility.h" />
     <ClInclude Include="MapDoor_Boundary.h" />
+    <ClInclude Include="MenuEngine.h" />
+    <ClInclude Include="MenuObject.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="Physics.h" />
@@ -129,10 +132,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="font_HUD_3.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </Font>
+    <Font Include="font_Gamestate_1.ttf" />
+    <Font Include="font_HUD_1.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

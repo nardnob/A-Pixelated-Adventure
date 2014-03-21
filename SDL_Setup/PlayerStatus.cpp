@@ -34,5 +34,12 @@ void PlayerStatus::healLife()
 //Take x life from the player (down to a minimum of 0).
 void PlayerStatus::takeLife(float x)
 {
+	this->life -= x;
+	if(this->life < 0)
+		this->life = 0;
+}
 
+float PlayerStatus::lifeAmount() //Returns the amount of life.
+{
+	return this->life;
 }

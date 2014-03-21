@@ -16,6 +16,7 @@ public:
 	void giveLife(float); //Give x life to the player (up to a determined maximum).
 	void takeLife(float); //Take x life from the player (down to a minimum of 0).
 	void healLife(); //Heal the player's life. health set to a determined maximum.
+	float lifeAmount(); //Returns the amount of life.
 };
 
 #endif
