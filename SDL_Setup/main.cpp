@@ -32,16 +32,14 @@ int main( int argc, char* args[] )
 	Gamestate gamestate = Gamestate();	
 
 	GUI gui = GUI(&gamestate);
-	gamestate.offsetX = &gui.screenOffset_x;
-	gamestate.offsetY = &gui.screenOffset_y;
-	gamestate.monitorWidth = &gui.monitorWidth;
-	gamestate.monitorHeight = &gui.monitorHeight;
+	gamestate.gui = &gui;
 
 	//define the first player
 	gui.defineClip(CODE_PLAYER);
 
 	//the HUD (holds the hud surface(s) and messages
 	HUD hud = HUD(); 
+	gui.hudPtr = &hud;
 
 	//define the clips (clip up the texture files)
 	gui.defineClip(CODE_TERRAIN);
@@ -54,14 +52,14 @@ int main( int argc, char* args[] )
         return 1;  
 
 	//to define the HUD and its messages
-	gui.defineHUD(hud);
+	gui.defineHUD();
 
 	//SDL load_files to load images
     if( !gui.load_files() )
         return 1;
 
 	//set the offsets of the surface_screen for the first time (to center the screen in the window)
-	gui.setScreenOffsets(hud);
+	gui.setScreenOffsets();
 
     //***********************************************************************************
 	//*********** The game loop *********************************************************
@@ -72,7 +70,7 @@ int main( int argc, char* args[] )
 		gui.fpsTimer.start();
 
 		//call the eventHandler (send quit as a reference)
-		gui.eventHandler(hud); 
+		gui.eventHandler(); 
 		
 		//switch through the gamestates for the game engine
 		switch(gamestate.currentState)
@@ -88,21 +86,21 @@ int main( int argc, char* args[] )
 		}
 
 		//apply all of the surfaces to surface_screen
-		gui.displayAll(hud);
+		gui.displayAll();
 
 		//Update the screen by flipping surface_screen
 		if( !gui.flipScreen() )
 			return 1;
 
 		//regulate the frame rate, and update the currentFrameRate (needs to stay at end of game loop)
-		gui.frameRate(hud);
+		gui.frameRate();
     }
     //***********************************************************************************
 	//*********** End of the game loop **************************************************
 	//***********************************************************************************
 
     //Free the images and quit SDL
-    gui.clean_up(hud);
+    gui.clean_up();
 
     return 0;
 }

@@ -17,6 +17,8 @@ Message::Message(int in_posX, int in_posY, TTF_Font* in_font, char* in_message, 
 	this->message = in_message;
 	this->width = 0;
 	this->height = 0;
+
+	defineWidthHeight();
 }
 
 Message::Message(int in_posX, int in_posY, TTF_Font* in_font, char* in_message)

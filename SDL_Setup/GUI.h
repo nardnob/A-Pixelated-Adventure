@@ -10,6 +10,7 @@
 #include <string>
 using namespace std;
 
+class Gamestate;
 
 class GUI
 {
@@ -36,6 +37,8 @@ public:
 
 	double screenOffset_x, screenOffset_y; //the offset to display the screen at, to place it in the middle of the window
 
+	HUD* hudPtr;
+
 	GUI();
 	GUI(Gamestate* in_gamestate);
 
@@ -43,31 +46,31 @@ public:
 	void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
 
 	//destroy SDL to exit the program
-	void clean_up(HUD& hud);
+	void clean_up();
 
 	//define the clips
 	void defineClip(int code_in);
 
 	//define the HUD
-	void defineHUD(HUD& hud);
+	void defineHUD();
 
 	////display the _ to the screen surface
 	//void display(int code_in);
 
 	//display the _ to the screen surface
-	void display(int code_in, HUD& hud);
+	void display(int code_in);
 	
 	//display all of the surfaces to the screen surface
-	void displayAll(HUD& hud);
+	void displayAll();
 
 	//the games event handler to process keyboard input and mouse input
-	void eventHandler(HUD& hud);
+	void eventHandler();
 
 	//flip the current screen to the buffer
 	bool flipScreen();
 
 	//limit the framerate and update the current framerate to display
-	void frameRate(HUD& hud);
+	void frameRate();
 
 	//initialize SDL
 	bool init();
@@ -82,22 +85,22 @@ public:
 	void screenShot();
 
 	//set the offsets of the surface_screen
-	void setScreenOffsets(HUD& hud);
+	void setScreenOffsets();
 
 	//set the window icon to a constant image file
 	void setWindowIcon();
 
 	//switches from one map to another
-	void switchMap(string in_mapFileName, double in_x, double in_y, HUD& hud);
+	void switchMap(string in_mapFileName, double in_x, double in_y);
 
 	//teleports the player 0 to (x, y) in the in_direction
 	void teleport(double in_x, double in_y, int in_direction = -1);
 
 	//toggle between fullscreen and windowed mode
-	void toggleFullscreen(bool& fullscreen, HUD& hud);
+	void toggleFullscreen(bool& fullscreen);
 
 	//toggle between map_001.txt and map_002.txt; used for testing
-	void toggleMap(HUD& hud);
+	void toggleMap();
 };
 
 #endif

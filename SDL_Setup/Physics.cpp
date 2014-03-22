@@ -38,7 +38,7 @@ bool badPosition(double inX, double inY, vector<Boundary>& boundaries)
 }
 */
 
-bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* entity, vector<Entity*>& entityVector)
+bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* entity, vector<Entity*>& entityVector, Gamestate& gamestate)
 {
     double
 		pX1 = inX + entity->base_posX, //entity box left side
@@ -96,6 +96,12 @@ bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* e
 
 			if(badX && badY) //collision between two entities
 			{
+				if(entityVector.at(i) == entityVector.at(0)) //if the entity (the one checking for collisions) collides with the player
+				{
+					gamestate.vector_players.at(0).currentStatus.takeLife(
+						entity->playerCollisionDamage()
+						);
+				}
 				return true;
 			}
 		}
@@ -111,10 +117,10 @@ vector<bool> goodNextPosition(Gamestate& gamestate, double nextX, double nextY, 
 	bad.push_back(false);
 	enum { x, y };
 
-	if( badPosition(nextX, entity->posY, gamestate.currentMap.boundaries, entity, gamestate.vector_entities) )
+	if( badPosition(nextX, entity->posY, gamestate.currentMap.boundaries, entity, gamestate.vector_entities, gamestate) )
 		bad.at(x) = true;
 
-	if( badPosition(entity->posX, nextY, gamestate.currentMap.boundaries, entity, gamestate.vector_entities) )
+	if( badPosition(entity->posX, nextY, gamestate.currentMap.boundaries, entity, gamestate.vector_entities, gamestate) )
 		bad.at(y) = true;
 
 	return bad;
@@ -215,7 +221,7 @@ void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 			}
 			else
 			{
-				gui.switchMap(gamestate.currentMap.mapDoor_boundaries.at(i).toMap, gamestate.currentMap.mapDoor_boundaries.at(i).toX, gamestate.currentMap.mapDoor_boundaries.at(i).toY, hud);
+				gui.switchMap(gamestate.currentMap.mapDoor_boundaries.at(i).toMap, gamestate.currentMap.mapDoor_boundaries.at(i).toX, gamestate.currentMap.mapDoor_boundaries.at(i).toY);
 			}
 
 			done = true;

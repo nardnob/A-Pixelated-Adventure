@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "constants.cpp"
 #include "Entity.h"
 #include "PlayerStatus.h"
 
@@ -8,7 +9,7 @@ class Player: public Entity
 {
 private:
 	bool
-		keyDown[4];
+		keyDown[KEY_BUFFER_SIZE];
 
 public:
 	void pressKey(int toPress);

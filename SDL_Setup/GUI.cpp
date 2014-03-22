@@ -45,7 +45,7 @@ void GUI::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destinat
 	SDL_BlitSurface(source, clip, destination, &offset);
 }
 
-void GUI::clean_up(HUD& hud)
+void GUI::clean_up()
 {
 	//The screen surface unallocates automatically
 
@@ -54,7 +54,7 @@ void GUI::clean_up(HUD& hud)
 	SDL_FreeSurface(surface_entities);
 
 	//Close the font that was used
-	TTF_CloseFont(hud.font_HUD_1);
+	TTF_CloseFont(hudPtr->font_HUD_1);
 
 	//Quit SDL_ttf
 	TTF_Quit();
@@ -95,78 +95,88 @@ void GUI::defineClip(int code_in)
 	}
 }
 
-void GUI::defineHUD(HUD& hud)
+void GUI::defineHUD()
 {
 	//open the HUD font
-	hud.font_HUD_1 = TTF_OpenFont(FONT_HUD_1_FILENAME, FONT_HUD_1_SIZE);
+	hudPtr->font_HUD_1 = TTF_OpenFont(FONT_HUD_1_FILENAME, FONT_HUD_1_SIZE);
 
-	hud.HUD_rect.h = HUD_HEIGHT;
-	hud.HUD_rect.x = 0;
-	if(this->fullscreen)
+	hudPtr->HUD_rect.h = HUD_HEIGHT;
+	hudPtr->HUD_rect.x = 0;
+//	if(this->fullscreen)
+//	{
+	hudPtr->HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
+	hudPtr->HUD_rect.w = this->monitorWidth;
+//	}
+	/*else
 	{
-		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
-		hud.HUD_rect.w = this->monitorWidth;
-	}
-	else
-	{
-		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
-		hud.HUD_rect.w = SCREEN_WIDTH;
-	}
+		hudPtr->HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
+		hudPtr->HUD_rect.w = SCREEN_WIDTH;
+	}*/
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->healthBar_BG.w = 100 * 5;
+	hudPtr->healthBar_BG.h = 30;
+	hudPtr->healthBar_BG.x = hudPtr->HUD_rect.x + 30;
+	hudPtr->healthBar_BG.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar_BG.h / 2; //center it (vertically) in the HUD_rect
+
+	hudPtr->healthBar.w = 100 * 5;
+	hudPtr->healthBar.h = 30;
+	hudPtr->healthBar.x = hudPtr->HUD_rect.x + 30;
+	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2; //center it (vertically) in the HUD_rect
+
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 1,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"Vel X: ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 2,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"Vel Y: ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 3,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"Pos X: ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 4,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"Pos Y: ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 5,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"FPS:  ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 6,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"MAP:  ",
 		true));
 
-	hud.advancedMessages.push_back(Message(
+	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 7,
-		hud.font_HUD_1,
+		hudPtr->font_HUD_1,
 		"Life:  ",
 		true));
 	
 	string temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
-	hud.advancedMessages.at(hud.MESSAGE_CURRENTMAP).set_message(temp.c_str());
+	hudPtr->advancedMessages.at(hudPtr->MESSAGE_CURRENTMAP).set_message(temp.c_str());
 }
 
-void GUI::display(int code_in, HUD& hud)
+void GUI::display(int code_in)
 {
 	switch(code_in)
 	{
@@ -176,14 +186,21 @@ void GUI::display(int code_in, HUD& hud)
 		//	loop through advanced messages and display them
 		case CODE_HUD:
 			//fill in the background of the HUD with gray (86, 86, 86 RGB)
-			SDL_FillRect(surface_screen, &hud.HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+			SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+
+			//fill in the health bar background with red
+			SDL_FillRect(surface_screen, &hudPtr->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
+
+			//update the width of the health bars foreground (the green) and display it
+			hudPtr->healthBar.w = (100 * 5) * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
+			SDL_FillRect(surface_screen, &hudPtr->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
 
 			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
-			for(int i = 0; i < hud.advancedMessages.size(); i++)
+			for(int i = 0; i < hudPtr->advancedMessages.size(); i++)
 			{
-				if(hud.get_advanced()) //if displaying advanced messages
+				if(hudPtr->get_advanced()) //if displaying advanced messages
 				{
-					hud.advancedMessages.at(i).display(this->surface_messager, this->surface_screen);
+					hudPtr->advancedMessages.at(i).display(this->surface_messager, this->surface_screen);
 				}
 			}
 			break;		
@@ -221,7 +238,7 @@ void GUI::display(int code_in, HUD& hud)
 	}
 }
 
-void GUI::displayAll(HUD& hud)
+void GUI::displayAll()
 {
 	SDL_FillRect(surface_screen, NULL, 0);
 
@@ -242,9 +259,9 @@ void GUI::displayAll(HUD& hud)
 	switch(gamestatePtr->currentState)
 	{
 		case STATES_GAMEPLAY:
-			display(CODE_TERRAIN, hud);
-			display(CODE_ENTITY, hud);
-			display(CODE_HUD, hud);
+			display(CODE_TERRAIN);
+			display(CODE_ENTITY);
+			display(CODE_HUD);
 			break;
 
 		case STATES_START_MENU:
@@ -260,7 +277,7 @@ void GUI::displayAll(HUD& hud)
 	}
 }
 
-void GUI::eventHandler(HUD& hud)
+void GUI::eventHandler()
 {
 	//While there's events to handle
 	while(SDL_PollEvent(&event))
@@ -291,37 +308,13 @@ void GUI::eventHandler(HUD& hud)
 						OutputDebugString("screenShot() finished\n");
 						break;
 					case SDLK_F3:
-						hud.toggleAdvanced();
-						OutputDebugString("hud.toggleAdvanced() finished\n");
+						hudPtr->toggleAdvanced();
+						OutputDebugString("hudPtr->toggleAdvanced() finished\n");
 						break;
 					case SDLK_SPACE:
+						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
 						gamestatePtr->vector_players.at(0).currentStatus.takeLife(25);
-						/*//just testing
-					case SDLK_1:
-					for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
-					{
-					gamestate.vector_NPCs.at(i).toggleTexture(0);
-					}
-					break;
-					case SDLK_2:
-					for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
-					{
-					gamestate.vector_NPCs.at(i).toggleTexture(1);
-					}
-					break;
-					case SDLK_3:
-					for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
-					{
-					gamestate.vector_NPCs.at(i).toggleTexture(2);
-					}
-					break;
-					case SDLK_4:
-					for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
-					{
-					gamestate.vector_NPCs.at(i).toggleTexture(3);
-					}
-					break;
-					*/
+						break;
 					//case SDLK_F11:/*
 					//	toggleFullscreen(
 					//	fullscreen,
@@ -332,9 +325,8 @@ void GUI::eventHandler(HUD& hud)
 					//		fullscreen,
 					//		hud);
 					//	OutputDebugString("toggleFullscreen() finished\n");
-						break;
 					case SDLK_F12:
-						toggleMap(hud);
+						toggleMap();
 						OutputDebugString("switchMap() finished\n");
 						break;
 					case SDLK_ESCAPE:
@@ -361,6 +353,9 @@ void GUI::eventHandler(HUD& hud)
 					case SDLK_s:
 						gamestatePtr->vector_players.at(0).releaseKey(KEY_DOWN);
 						break;
+					case SDLK_SPACE:
+						gamestatePtr->vector_players.at(0).releaseKey(KEY_SPACE);
+						break;
 				}
 				break;
 			case SDL_QUIT:
@@ -377,7 +372,7 @@ bool GUI::flipScreen()
 	return true;
 }
 
-void GUI::frameRate(HUD& hud)
+void GUI::frameRate()
 {
 	this->fpsTimer.frameCount++;
 	int temp = this->fpsTimer.get_totalTicks();
@@ -388,7 +383,7 @@ void GUI::frameRate(HUD& hud)
 		this->fpsTimer.currentFrameRate = this->fpsTimer.frameCount / ((this->fpsTimer.get_totalTicks() - this->fpsTimer.firstStartTicks) / 1000);
 		this->fpsTimer.frameCount = 0;
 		this->fpsTimer.firstStartTicks = this->fpsTimer.get_totalTicks();
-		hud.advancedMessages.at(hud.MESSAGE_FPS).set_message("FPS: " + to_string(static_cast<long long>(this->fpsTimer.currentFrameRate)));
+		hudPtr->advancedMessages.at(hudPtr->MESSAGE_FPS).set_message("FPS: " + to_string(static_cast<long long>(this->fpsTimer.currentFrameRate)));
 	}
 
 
@@ -494,10 +489,10 @@ void GUI::screenShot()
 	SDL_SaveBMP(surface_screen, temp);
 }
 
-void GUI::setScreenOffsets(HUD& hud)
+void GUI::setScreenOffsets()
 {
 	this->screenOffset_x = (this->surface_screen->w - (gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W)) / 2;
-	this->screenOffset_y = (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hud.HUD_rect.h) / 2;
+	this->screenOffset_y = (this->surface_screen->h - gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H - hudPtr->HUD_rect.h) / 2;
 }
 
 void GUI::setWindowIcon()
@@ -512,7 +507,7 @@ void GUI::setWindowIcon()
 	SDL_FreeSurface(image);
 }
 
-void GUI::switchMap(string in_mapFileName, double in_x, double in_y, HUD& hud)
+void GUI::switchMap(string in_mapFileName, double in_x, double in_y)
 {
 	gamestatePtr->currentMap = TerrainMap(in_mapFileName, gamestatePtr);
 
@@ -521,8 +516,7 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y, HUD& hud)
 
 	temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 
-
-	setScreenOffsets(hud);
+	setScreenOffsets();
 }
 
 void GUI::teleport(double in_x, double in_y, int in_direction)
@@ -534,7 +528,7 @@ void GUI::teleport(double in_x, double in_y, int in_direction)
 		gamestatePtr->vector_players.at(0).set_currentTexture(in_direction);
 }
 
-void GUI::toggleFullscreen(bool& fullscreen, HUD& hud)
+void GUI::toggleFullscreen(bool& fullscreen)
 {
 	Uint32 flags; /* Start with whatever flags you prefer */
 
@@ -546,20 +540,20 @@ void GUI::toggleFullscreen(bool& fullscreen, HUD& hud)
 		//this->setVideoMode2(fullscreen, screenWidth, screenHeight);
 		fullscreen = false;
 		setWindowIcon(); //re-set the windows icon
-		hud.HUD_rect.w = SCREEN_WIDTH;
-		//hud.HUD_rect.w = 10;
-		hud.advancedMessages.at(6).set_message("Fullscreen:  false");
-		hud.HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
+		hudPtr->HUD_rect.w = SCREEN_WIDTH;
+		//hudPtr->HUD_rect.w = 10;
+		hudPtr->advancedMessages.at(6).set_message("Fullscreen:  false");
+		hudPtr->HUD_rect.y = SCREEN_HEIGHT - HUD_HEIGHT;
 	}
 	else
 	{
 		surface_screen = SDL_SetVideoMode(monitorWidth, monitorHeight, SCREEN_BPP, SDL_SWSURFACE | SDL_FULLSCREEN); //full screen
 		//this->setVideoMode2(fullscreen, monitorWidth, monitorHeight);
 		fullscreen = true;
-		hud.HUD_rect.w = this->monitorWidth;
-		//hud.HUD_rect.w = 10;
-		hud.advancedMessages.at(6).set_message("Fullscreen:  true");
-		hud.HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
+		hudPtr->HUD_rect.w = this->monitorWidth;
+		//hudPtr->HUD_rect.w = 10;
+		hudPtr->advancedMessages.at(6).set_message("Fullscreen:  true");
+		hudPtr->HUD_rect.y = this->monitorHeight - HUD_HEIGHT;
 	}
 
 	/* If toggle FullScreen failed, then switch back */
@@ -570,17 +564,17 @@ void GUI::toggleFullscreen(bool& fullscreen, HUD& hud)
 	if(surface_screen == NULL)
 		exit(1);
 
-	setScreenOffsets(hud);
+	setScreenOffsets();
 }
 
-void GUI::toggleMap(HUD& hud)
+void GUI::toggleMap()
 {
 	if(gamestatePtr->currentMap.get_mapFileName() == "map_001.txt")
 	{
-		this->switchMap("map_002.txt", 512, 0, hud);
+		this->switchMap("map_002.txt", 512, 0);
 	}
 	else
 	{
-		this->switchMap("map_001.txt", 512, 768, hud);
+		this->switchMap("map_001.txt", 512, 768);
 	}
 }

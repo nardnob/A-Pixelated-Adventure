@@ -6,6 +6,7 @@ PlayerStatus::PlayerStatus()
 {
 	this->life = 100; //Should be set to a determined maximum
 	//this->life = stats.get_maxLife();
+	this->maxLife = 100; //should be set to a determined maximum
 }
 
 //Give x life to the player (up to a determined maximum).
@@ -42,4 +43,9 @@ void PlayerStatus::takeLife(float x)
 float PlayerStatus::lifeAmount() //Returns the amount of life.
 {
 	return this->life;
+}
+
+float PlayerStatus::lifePercent()
+{
+	return this->life / this->maxLife;
 }

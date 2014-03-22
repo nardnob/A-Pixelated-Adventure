@@ -33,6 +33,8 @@ public:
 
 	Entity();
 
+	virtual float playerCollisionDamage() { return 0.0; }
+
 	int get_currentTexture() { return this->currentTexture; }
 	void set_currentTexture(int in_currentTexture) { this->currentTexture = in_currentTexture; }
 

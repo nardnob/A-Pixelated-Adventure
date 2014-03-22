@@ -9,6 +9,8 @@ NPC::NPC()
 
 NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h)
 {
+	this->baseDamage = 1;
+
 	//this->textureNum = textureNum_in;
 	this->active = true;
 
@@ -44,4 +46,10 @@ NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_b
 void NPC::toggleTexture(int toChoose)
 {
 	this->currentTexture = toChoose;
+}
+
+float NPC::playerCollisionDamage()
+{
+	//if the attack speed cooldown has passed since the last attack.. need to work on
+	return this->baseDamage;
 }

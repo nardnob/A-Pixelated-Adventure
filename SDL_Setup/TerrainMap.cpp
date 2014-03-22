@@ -133,7 +133,7 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 		return false;
 	}
 
-	gamestate->vector_entities.reserve(10);
+	//gamestate->vector_entities.reserve(10);
 	for(int i = 1; i <= numNPCs; i++)
 	{
 		fin
@@ -145,7 +145,7 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 			>> NPCBaseW
 			>> NPCBaseH;
 
-		//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
+		//define an npc by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 		gamestate->vector_NPCs.push_back(NPC(
 			( (NPCClipNum * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
 			( ((NPCClipNum * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)

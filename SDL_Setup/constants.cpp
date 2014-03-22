@@ -23,6 +23,8 @@ const char FONT_HUD_1_FILENAME[] = "font_HUD_1.ttf";
 //Gamestate attributes
 const int FONT_GAMESTATE_1_SIZE = 72;
 const char FONT_GAMESTATE_1_FILENAME[] = "font_Gamestate_1.ttf";
+const int FONT_GAMESTATE_2_SIZE = 18;
+const char FONT_GAMESTATE_2_FILENAME[] = "font_Gamestate_1.ttf";
 
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;
@@ -57,7 +59,8 @@ const double BASE_H = 23; //For the player
 
 
 //constants for keyboard shortcuts
-enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN };
+const int KEY_BUFFER_SIZE = 5;
+enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_SPACE };
 
 //constants for gamestates
 enum { STATES_GAMEPLAY, STATES_DEATH_MENU, STATES_START_MENU, STATES_CLASS_SELECTION };

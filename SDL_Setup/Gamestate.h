@@ -2,6 +2,7 @@
 #define GAMESTATE_H
 
 #include "Entity.h"
+#include "GUI.h"
 #include "MenuObject.h"
 #include "NPC.h"
 #include "Player.h"
@@ -15,7 +16,7 @@
 #include <vector>
 using namespace std;
 
-//class TerrainMap;
+class GUI;
 
 class Gamestate
 {
@@ -24,13 +25,11 @@ public:
 	Gamestate();
 
 	TTF_Font* font_Gamestate_1;
+	TTF_Font* font_Gamestate_2;
 
 	int currentState; //The current state of the game to be calculated / displayed. i.e. Gameplay, menu system, etc.
 
-	double* offsetX;
-	double* offsetY;
-	int* monitorWidth;
-	int* monitorHeight;
+	GUI* gui;
 
 	TerrainMap currentMap; //the current map object
 	vector<Player> vector_players; //vector to hold the Player object(s)
