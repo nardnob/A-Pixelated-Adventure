@@ -514,7 +514,8 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y)
 	string temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
 	teleport(in_x, in_y);
 
-	temp = "MAP: " + gamestatePtr->currentMap.get_mapFileName();
+	//Set the map file name for advanced messages (i.e. Map: map_001.txt)
+	hudPtr->advancedMessages.at(hudPtr->MESSAGE_CURRENTMAP).set_message(temp);
 
 	setScreenOffsets();
 }
