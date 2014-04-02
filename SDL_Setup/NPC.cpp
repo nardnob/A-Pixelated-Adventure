@@ -7,7 +7,7 @@ NPC::NPC()
 
 }
 
-NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h)
+NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h, double in_base_damage)
 {
 	this->baseDamage = 1;
 
@@ -29,6 +29,7 @@ NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_b
 	this->base_w = in_base_w;
 	this->base_h = in_base_h;
 	this->maxVel = 2;
+	this->baseDamage = in_base_damage;
 
 	this->currentTexture = TEXTURE_FRONT;
 

@@ -113,13 +113,13 @@ void GUI::defineHUD()
 		hudPtr->HUD_rect.w = SCREEN_WIDTH;
 	}*/
 
-	hudPtr->healthBar_BG.w = 100 * 5;
-	hudPtr->healthBar_BG.h = 30;
+	hudPtr->healthBar_BG.w = HEALTHBAR_WIDTH;
+	hudPtr->healthBar_BG.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar_BG.x = hudPtr->HUD_rect.x + 30;
 	hudPtr->healthBar_BG.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar_BG.h / 2; //center it (vertically) in the HUD_rect
 
-	hudPtr->healthBar.w = 100 * 5;
-	hudPtr->healthBar.h = 30;
+	hudPtr->healthBar.w = HEALTHBAR_WIDTH;
+	hudPtr->healthBar.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar.x = hudPtr->HUD_rect.x + 30;
 	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2; //center it (vertically) in the HUD_rect
 
@@ -192,7 +192,7 @@ void GUI::display(int code_in)
 			SDL_FillRect(surface_screen, &hudPtr->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
 
 			//update the width of the health bars foreground (the green) and display it
-			hudPtr->healthBar.w = (100 * 5) * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
+			hudPtr->healthBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
 			SDL_FillRect(surface_screen, &hudPtr->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
 
 			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)

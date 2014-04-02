@@ -48,3 +48,15 @@
 1 //num NPCs
 4 300 300 17 41 30 23 //entity texture num, posX, posY, basePosX, basePosY, baseW, baseH for NPC 1
 
+//numX
+//numY
+//tile ID's
+
+//num boundaries
+//x, y, w, h (in tiles) for boundary 1
+
+//num DoorExternal
+//x, y, w, h, to_map_name.txt, toX, toY (in tiles) for door 1
+
+//num NPCs
+//entity texture num, posX, posY, basePosX, basePosY, baseW, baseH, baseDamage for NPC 1

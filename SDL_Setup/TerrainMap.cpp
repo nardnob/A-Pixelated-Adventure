@@ -40,7 +40,8 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 		NPCBasePosX = 0,
 		NPCBasePosY = 0,
 		NPCBaseW = 0,
-		NPCBaseH = 0;
+		NPCBaseH = 0,
+		NPCBaseDamage = 0;
 
 	string toMap;
 
@@ -143,7 +144,8 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 			>> NPCBasePosX
 			>> NPCBasePosY
 			>> NPCBaseW
-			>> NPCBaseH;
+			>> NPCBaseH
+			>> NPCBaseDamage;
 
 		//define an npc by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 		gamestate->vector_NPCs.push_back(NPC(
@@ -154,7 +156,8 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 			NPCBasePosX, //base_posX
 			NPCBasePosY, //base_posY
 			NPCBaseW, //base_w
-			NPCBaseH  //base_h
+			NPCBaseH,  //base_h
+			NPCBaseDamage //baseDamage
 			));
 
 		//gamestate->vector_entities.push_back( &gamestate->vector_NPCs.back() );

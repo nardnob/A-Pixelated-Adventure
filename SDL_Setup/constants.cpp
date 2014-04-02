@@ -19,6 +19,8 @@ const SDL_Color FONT_COLOR_WHITE = { 255,255,255 };
 const int FONT_HUD_1_SIZE = 24;
 const char FONT_HUD_1_FILENAME[] = "font_HUD_1.ttf";
 //const int NUM_ADVANCED_SETTINGS = 1;//no longer needed. Was using to loop through advanced settings, which are now stored in a vector (can do .size())
+const int HEALTHBAR_WIDTH = 500;
+const int HEALTHBAR_HEIGHT = 30;
 
 //Gamestate attributes
 const int FONT_GAMESTATE_1_SIZE = 72;

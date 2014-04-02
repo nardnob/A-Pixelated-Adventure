@@ -13,7 +13,7 @@ public:
 	float playerCollisionDamage();	
 
 	NPC();
-	NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h);
+	NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_base_posX, double in_base_posY, double in_base_w, double in_base_h, double in_base_damage);
 };
 
 #endif
