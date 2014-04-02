@@ -9,6 +9,7 @@
 #include "Timer.h"
 
 #include <ctime>
+#include <cmath>
 #include <fstream>
 #include <string>
 #include <Windows.h>
@@ -16,7 +17,7 @@ using namespace std;
 
 GUI::GUI()
 {
-
+	
 }
 
 GUI::GUI(Gamestate* in_gamestate)
@@ -92,6 +93,21 @@ void GUI::defineClip(int code_in)
 
 			gamestatePtr->vector_entities.push_back(&gamestatePtr->vector_players.at(0));
 			break;
+	}
+}
+
+void putpixel(SDL_Surface* screen, int x, int y)
+{
+	Uint32 *pixel = (Uint32*)screen->pixels;
+	Uint32 *p = pixel + y*screen->pitch / 4 + x;
+	*p = SDL_MapRGB(screen->format, 0x00, 0x64, 0x00);
+}
+
+void DrawCircle(SDL_Surface* screen, int radius)
+{
+	for(int i = 0; i <= 360; i++)
+	{
+		putpixel(screen, radius * cos(i), radius * sin(i));
 	}
 }
 
@@ -190,7 +206,6 @@ void GUI::display(int code_in)
 {
 	switch(code_in)
 	{
-
 		//display the hud:
 		//	display HUD rect at bottom of screen
 		//	loop through advanced messages and display them
@@ -206,12 +221,18 @@ void GUI::display(int code_in)
 				gamestatePtr->vector_entities.at(i)->healthBar_border.x += this->screenOffset_x;
 				gamestatePtr->vector_entities.at(i)->healthBar_border.y += this->screenOffset_y;
 
+				//if(
+				//	gamestatePtr->vector_entities.at(i)->healthBar_border.x >= screenOffset_x
+				//	&& gamestatePtr->vector_entities.at(i)->healthBar_border.y >= screenOffset_y
+				//	&& gamestatePtr->vector_entities.at(i)->healthBar_border.x + gamestatePtr->vector_entities.at(i)->healthBar_border.w <= screenOffset_x + gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W
+				//	&& gamestatePtr->vector_entities.at(i)->healthBar_border.y + gamestatePtr->vector_entities.at(i)->healthBar_border.h <= screenOffset_y + gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H
+				//	) //make sure the healthbars don't blit offscreen (or they'll mess up I think)
 				if(
-					gamestatePtr->vector_entities.at(i)->healthBar_border.x >= screenOffset_x
-					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y >= screenOffset_y
-					&& gamestatePtr->vector_entities.at(i)->healthBar_border.x + gamestatePtr->vector_entities.at(i)->healthBar_border.w <= screenOffset_x + gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W
-					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y + gamestatePtr->vector_entities.at(i)->healthBar_border.h <= screenOffset_y + gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H
-					) //make sure the healthbars don't blit offscreen (or they'll mess up I think)
+					gamestatePtr->vector_entities.at(i)->healthBar_border.x >= 0
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y >= 0
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.x + gamestatePtr->vector_entities.at(i)->healthBar_border.w < monitorWidth
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y + gamestatePtr->vector_entities.at(i)->healthBar_border.h < monitorHeight
+					)
 				{
 					//display the entitie's gray healthbar border
 					SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_border, SDL_MapRGB(surface_screen->format, 86, 86, 86));
