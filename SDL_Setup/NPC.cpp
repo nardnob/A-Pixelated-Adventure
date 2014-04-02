@@ -41,6 +41,21 @@ NPC::NPC(int in_clipX, int in_clipY, double in_posX, double in_posY, double in_b
 		this->rect[i].w = ENTITY_CLIP_W;
 		this->rect[i].h = ENTITY_CLIP_H;
 	}
+
+	this->healthBar.w = HEALTHBAR_ENTITY_WIDTH;
+	this->healthBar.h = HEALTHBAR_ENTITY_HEIGHT;
+	this->healthBar.x = this->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	this->healthBar.y = this->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+
+	this->healthBar_BG.w = HEALTHBAR_ENTITY_WIDTH;
+	this->healthBar_BG.h = HEALTHBAR_ENTITY_HEIGHT;
+	this->healthBar_BG.x = this->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	this->healthBar_BG.y = this->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+
+	this->healthBar_border.w = HEALTHBAR_BORDER_ENTITY_WIDTH;
+	this->healthBar_border.h = HEALTHBAR_BORDER_ENTITY_HEIGHT;
+	this->healthBar_border.x = this->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
+	this->healthBar_border.y = this->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
 }
 
 //should only accept a constant, i.e. TEXTURE_RIGHT, TEXTURE_LEFT. Must not overreach the bounds of the rect[] (currentTexture will be used as rect[currentTexture] in display)

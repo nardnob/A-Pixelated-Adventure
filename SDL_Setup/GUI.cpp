@@ -122,7 +122,17 @@ void GUI::defineHUD()
 	hudPtr->healthBar.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar.x = hudPtr->HUD_rect.x + 30;
 	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2; //center it (vertically) in the HUD_rect
+	
+	//healthbar message
+	hudPtr->hudMessages.push_back(Message(
+		hudPtr->healthBar.x + hudPtr->healthBar.w / 2 + HEALTHBAR_MESSAGE_OFFSET_X,
+		hudPtr->healthBar.y + hudPtr->healthBar.h / 2 + HEALTHBAR_MESSAGE_OFFSET_Y,
+		hudPtr->font_HUD_1,
+		"100 / 100",
+		true
+		));
 
+	//advanced messages
 	hudPtr->advancedMessages.push_back(Message(
 		20,
 		20 * 1,
@@ -185,6 +195,29 @@ void GUI::display(int code_in)
 		//	display HUD rect at bottom of screen
 		//	loop through advanced messages and display them
 		case CODE_HUD:
+			
+			//Display all entity healthbars above them
+			for(int i = 0; i < gamestatePtr->vector_entities.size(); i++)
+			{
+				gamestatePtr->vector_entities.at(i)->healthBar.x += this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar.y += this->screenOffset_y;
+				gamestatePtr->vector_entities.at(i)->healthBar_BG.x += this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar_BG.y += this->screenOffset_y;
+				gamestatePtr->vector_entities.at(i)->healthBar_border.x += this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar_border.y += this->screenOffset_y;
+
+				//display the entitie's gray healthbar border
+				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_border, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+
+				//display the entitie's red healthbar
+				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
+
+				//update the width of the health bars foreground (the green) and display it
+				gamestatePtr->vector_entities.at(i)->healthBar.w = HEALTHBAR_ENTITY_WIDTH * gamestatePtr->vector_entities.at(i)->currentStatus.lifePercent();
+				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
+			}
+			
+
 			//fill in the background of the HUD with gray (86, 86, 86 RGB)
 			SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
 
@@ -194,6 +227,12 @@ void GUI::display(int code_in)
 			//update the width of the health bars foreground (the green) and display it
 			hudPtr->healthBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
 			SDL_FillRect(surface_screen, &hudPtr->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
+
+			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
+			for(int i = 0; i < hudPtr->hudMessages.size(); i++)
+			{
+				hudPtr->hudMessages.at(i).display(this->surface_messager, this->surface_screen);
+			}
 
 			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
 			for(int i = 0; i < hudPtr->advancedMessages.size(); i++)

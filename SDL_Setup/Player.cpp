@@ -46,6 +46,21 @@ Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, doubl
 	{
 		this->keyDown[i] = false;
 	}
+
+	this->healthBar.w = HEALTHBAR_ENTITY_WIDTH;
+	this->healthBar.h = HEALTHBAR_ENTITY_HEIGHT;
+	this->healthBar.x = this->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	this->healthBar.y = this->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+
+	this->healthBar_BG.w = HEALTHBAR_ENTITY_WIDTH;
+	this->healthBar_BG.h = HEALTHBAR_ENTITY_HEIGHT;
+	this->healthBar_BG.x = this->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	this->healthBar_BG.y = this->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+
+	this->healthBar_border.w = HEALTHBAR_BORDER_ENTITY_WIDTH;
+	this->healthBar_border.h = HEALTHBAR_BORDER_ENTITY_HEIGHT;
+	this->healthBar_border.x = this->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
+	this->healthBar_border.y = this->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
 }
 
 void Player::pressKey(int toPress)

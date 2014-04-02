@@ -21,6 +21,19 @@ const char FONT_HUD_1_FILENAME[] = "font_HUD_1.ttf";
 //const int NUM_ADVANCED_SETTINGS = 1;//no longer needed. Was using to loop through advanced settings, which are now stored in a vector (can do .size())
 const int HEALTHBAR_WIDTH = 500;
 const int HEALTHBAR_HEIGHT = 30;
+const int HEALTHBAR_MESSAGE_OFFSET_X = -49;
+const int HEALTHBAR_MESSAGE_OFFSET_Y = -14;
+const int HEALTHBAR_ENTITY_OFFSET_X = 8;
+const int HEALTHBAR_ENTITY_OFFSET_Y = -15;
+const int HEALTHBAR_ENTITY_WIDTH = 48;
+const int HEALTHBAR_ENTITY_HEIGHT = 7;
+
+
+//the gray border for the healthbar.. will actually be a gray SDLrect behind it
+const int HEALTHBAR_BORDER_ENTITY_OFFSET_X = 6;
+const int HEALTHBAR_BORDER_ENTITY_OFFSET_Y = -17;
+const int HEALTHBAR_BORDER_ENTITY_WIDTH = 52;
+const int HEALTHBAR_BORDER_ENTITY_HEIGHT = 11;
 
 //Gamestate attributes
 const int FONT_GAMESTATE_1_SIZE = 72;

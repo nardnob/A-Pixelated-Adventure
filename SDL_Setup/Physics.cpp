@@ -303,6 +303,8 @@ void updateHUD(Gamestate& gamestate, HUD& hud)
 		hud.advancedMessages.at(hud.MESSAGE_VELY).set_message("Vel Y: " + to_string(int(gamestate.vector_players.at(0).velY)));
 
 	hud.advancedMessages.at(hud.MESSAGE_LIFE).set_message("Life:  " + to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())));
+
+	hud.hudMessages.at(0).set_message(to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
 }
 
 void movement(Gamestate& gamestate)
@@ -326,6 +328,14 @@ void movement(Gamestate& gamestate)
 		{
 			gamestate.vector_entities.at(i)->posY = nextY;
 		}
+
+		//update the entitie's healthbar positions
+		gamestate.vector_entities.at(i)->healthBar.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
+		gamestate.vector_entities.at(i)->healthBar.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+		gamestate.vector_entities.at(i)->healthBar_BG.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
+		gamestate.vector_entities.at(i)->healthBar_BG.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+		gamestate.vector_entities.at(i)->healthBar_border.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
+		gamestate.vector_entities.at(i)->healthBar_border.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
 	}
 }
 

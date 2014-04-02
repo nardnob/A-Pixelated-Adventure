@@ -3,6 +3,8 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
+#include "PlayerStatus.h"
+
 class Entity //will probably want to make this abstract
 {
 private:
@@ -30,6 +32,12 @@ public:
 		maxVel;
 
 	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
+
+	PlayerStatus currentStatus;
+
+	SDL_Rect healthBar; //the green foreground of the health bar; should decrease with health
+	SDL_Rect healthBar_BG; //the red background of the health bar
+	SDL_Rect healthBar_border; //the gray border for the healthbar
 
 	Entity();
 

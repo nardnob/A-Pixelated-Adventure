@@ -18,7 +18,8 @@ public:
 
 	TTF_Font* font_HUD_1;
 	vector<Message> advancedMessages; //all of the advanced messages of the HUD. only displayed if advanced (if f3)
-	
+	vector<Message> hudMessages; //Messages for the hud, such as the health on the health bar	
+
 	enum { MESSAGE_VELX, MESSAGE_VELY, MESSAGE_POSX, MESSAGE_POSY, MESSAGE_FPS, MESSAGE_CURRENTMAP, MESSAGE_LIFE };
 	
 	void toggleAdvanced();
