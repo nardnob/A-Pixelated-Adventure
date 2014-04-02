@@ -206,17 +206,24 @@ void GUI::display(int code_in)
 				gamestatePtr->vector_entities.at(i)->healthBar_border.x += this->screenOffset_x;
 				gamestatePtr->vector_entities.at(i)->healthBar_border.y += this->screenOffset_y;
 
-				//display the entitie's gray healthbar border
-				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_border, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+				if(
+					gamestatePtr->vector_entities.at(i)->healthBar_border.x >= screenOffset_x
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y >= screenOffset_y
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.x + gamestatePtr->vector_entities.at(i)->healthBar_border.w <= screenOffset_x + gamestatePtr->currentMap.get_sizeX() * TERRAIN_CLIP_W
+					&& gamestatePtr->vector_entities.at(i)->healthBar_border.y + gamestatePtr->vector_entities.at(i)->healthBar_border.h <= screenOffset_y + gamestatePtr->currentMap.get_sizeY() * TERRAIN_CLIP_H
+					) //make sure the healthbars don't blit offscreen (or they'll mess up I think)
+				{
+					//display the entitie's gray healthbar border
+					SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_border, SDL_MapRGB(surface_screen->format, 86, 86, 86));
 
-				//display the entitie's red healthbar
-				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
+					//display the entitie's red healthbar
+					SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
 
-				//update the width of the health bars foreground (the green) and display it
-				gamestatePtr->vector_entities.at(i)->healthBar.w = HEALTHBAR_ENTITY_WIDTH * gamestatePtr->vector_entities.at(i)->currentStatus.lifePercent();
-				SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
+					//update the width of the health bars foreground (the green) and display it
+					gamestatePtr->vector_entities.at(i)->healthBar.w = HEALTHBAR_ENTITY_WIDTH * gamestatePtr->vector_entities.at(i)->currentStatus.lifePercent();
+					SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
+				}
 			}
-			
 
 			//fill in the background of the HUD with gray (86, 86, 86 RGB)
 			SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
