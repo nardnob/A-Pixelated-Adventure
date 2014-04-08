@@ -149,8 +149,8 @@ bool TerrainMap::loadMap(Gamestate* gamestate)
 
 		//define an npc by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 		gamestate->vector_NPCs.push_back(NPC(
-			( (NPCClipNum * ENTITY_CLIP_W) % ENTITY_FILE_W ), //clipX, the x value of the entity clip (in the entity texture file)
-			( ((NPCClipNum * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H ), //clipY, the y value of the entity to clip (in the entity texture file)
+			NPCClipNum * ENTITY_CLIP_W * 4, //clipX, the x value of the entity clip (in the entity texture file)
+			ENTITY_CLIP_H, //clipY, the y value of the entity to clip (in the entity texture file)
 			NPCPosX, //posX
 			NPCPosY, //posY
 			NPCBasePosX, //base_posX

@@ -81,8 +81,8 @@ void GUI::defineClip(int code_in)
 		case CODE_PLAYER:
 			//define a player by putting them into the player vector, then putting a pointer of them into the entity vector (for polymorphism output)
 			gamestatePtr->vector_players.push_back(Player(
-				((0 * ENTITY_CLIP_W) % ENTITY_FILE_W), //clipX, the x value of the entity clip (in the entity texture file)
-				(((0 * ENTITY_CLIP_W) / ENTITY_FILE_W) * ENTITY_CLIP_H), //clipY, the y value of the entity to clip (in the entity texture file)
+				0 * ENTITY_CLIP_W, //clipX, the x value of the entity clip (in the entity texture file)
+				ENTITY_CLIP_H, //clipY, the y value of the entity to clip (in the entity texture file)
 				100, //posX
 				100, //posY
 				BASE_POSX, //base_posX
