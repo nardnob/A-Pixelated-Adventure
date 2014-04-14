@@ -31,6 +31,13 @@ public:
 		maxVelY,
 		maxVel;
 
+	int
+		walkSpeed = 10, //reset value for toWalk
+		toWalk = 0, //frames left to walk before the sprite changes for walking animation
+		spriteOffsetY = 0; //offset of the sprite for walking
+
+	bool walking = false;
+
 	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
 
 	PlayerStatus currentStatus;

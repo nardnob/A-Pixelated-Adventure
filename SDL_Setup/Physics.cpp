@@ -422,6 +422,31 @@ void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 	}
 }
 
+void walkingAnimations(Gamestate& gamestate)
+{
+	for(int i = 0; i < gamestate.vector_entities.size(); i++)
+	{
+		if(gamestate.vector_entities.at(i)->walking)
+		{
+			if(gamestate.vector_entities.at(i)->toWalk == 0)
+			{
+				if(gamestate.vector_entities.at(i)->spriteOffsetY < 0)
+				{
+					gamestate.vector_entities.at(i)->spriteOffsetY = ENTITY_CLIP_H;
+				}
+				else
+				{
+					gamestate.vector_entities.at(i)->spriteOffsetY = -ENTITY_CLIP_H;
+				}
+
+				gamestate.vector_entities.at(i)->toWalk = gamestate.vector_entities.at(i)->walkSpeed;
+			}
+
+			gamestate.vector_entities.at(i)->toWalk--;
+		}
+	}
+}
+
 void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 {	
 	//consider keyboard events for the player
@@ -440,6 +465,8 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 
 	//calculate movement (need to limit position to bounds of window)
 	movement(gamestate);
+
+	walkingAnimations(gamestate);
 
 	//update the advanced messages
 	updateHUD(gamestate, hud);

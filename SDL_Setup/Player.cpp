@@ -65,12 +65,39 @@ Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, doubl
 
 void Player::pressKey(int toPress)
 {
+	bool startWalking = true;;
+	for(int i = 0; i < 4; i++)
+	{
+		if(keyDown[i])
+			startWalking = false;
+	}
+
 	this->keyDown[toPress] = true;
+
+	if(startWalking)
+	{
+		this->walking = true;
+		this->toWalk = this->walkSpeed;
+		this->spriteOffsetY = ENTITY_CLIP_H;
+	}
 }
 
 void Player::releaseKey(int toRelease)
 {
 	this->keyDown[toRelease] = false;
+
+	bool stopWalking = true;
+	for(int i = 0; i < 4; i++)
+	{
+		if(keyDown[i])
+			stopWalking = false;
+	}
+
+	if(stopWalking)
+	{
+		this->walking = false;
+		this->spriteOffsetY = 0;
+	}
 }
 
 bool Player::keyIsDown(int i)

@@ -294,12 +294,16 @@ void GUI::display(int code_in)
 			case CODE_ENTITY:
 				for(int i = gamestatePtr->vector_entities.size() - 1; i >= 0; i--)
 				{
+					SDL_Rect temp = gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()];
+					temp.y += gamestatePtr->vector_entities.at(i)->spriteOffsetY;
+
 					apply_surface(
 						gamestatePtr->vector_entities.at(i)->posX + this->screenOffset_x,
 						gamestatePtr->vector_entities.at(i)->posY + this->screenOffset_y,
 						surface_entities,
 						surface_screen,
-						&gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()]);
+						&temp);
+						//&gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()]);
 				}
 				break;
 	}
