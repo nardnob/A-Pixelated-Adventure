@@ -311,7 +311,7 @@ void GUI::display(int code_in)
 				
 				for(int i = tempEntities.size() - 1; i >= 0; i--)
 				{
-					SDL_Rect temp = tempEntities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()];
+					SDL_Rect temp = tempEntities.at(i)->rect[tempEntities.at(i)->get_currentTexture()];
 					temp.y += tempEntities.at(i)->spriteOffsetY;
 
 					apply_surface(
