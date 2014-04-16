@@ -314,7 +314,9 @@ void movement(Gamestate& gamestate)
 		//test for boundary collisions; only update position if no boundary collision with said update
 		double
 			nextX = gamestate.vector_entities.at(i)->posX + gamestate.vector_entities.at(i)->velX,
-			nextY = gamestate.vector_entities.at(i)->posY + gamestate.vector_entities.at(i)->velY;
+			nextY = gamestate.vector_entities.at(i)->posY + gamestate.vector_entities.at(i)->velY,
+			movedX = 0,
+			movedY = 0;
 
 		vector<bool> bad = goodNextPosition(gamestate, nextX, nextY, gamestate.vector_entities.at(i));
 		enum { x, y };
@@ -322,10 +324,12 @@ void movement(Gamestate& gamestate)
 		//update positions
 		if( !bad.at(x) )
 		{
+			movedX = nextX - gamestate.vector_entities.at(i)->posX;
 			gamestate.vector_entities.at(i)->posX = nextX;
 		}
 		if( !bad.at(y) )
 		{
+			movedY = nextY - gamestate.vector_entities.at(i)->posY;
 			gamestate.vector_entities.at(i)->posY = nextY;
 		}
 
@@ -336,6 +340,27 @@ void movement(Gamestate& gamestate)
 		gamestate.vector_entities.at(i)->healthBar_BG.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
 		gamestate.vector_entities.at(i)->healthBar_border.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
 		gamestate.vector_entities.at(i)->healthBar_border.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
+
+		if(i != 0)
+		{
+			//update walking variables for non-player entities based on change in position
+			if(sqrt(pow(movedX, 2) + pow(movedY, 2)) > .1) //if a non player entity has moved
+			{
+				//start walking if it's the beginning of walking, not a continuation
+				if(!gamestate.vector_entities.at(i)->walking)
+				{
+					gamestate.vector_entities.at(i)->walking = true;
+					gamestate.vector_entities.at(i)->toWalk = gamestate.vector_entities.at(i)->walkSpeed;
+					gamestate.vector_entities.at(i)->walkUpNext = true;
+					gamestate.vector_entities.at(i)->spriteOffsetY = ENTITY_CLIP_H;
+				}
+			}
+			else //else stop walking if not moving
+			{
+				gamestate.vector_entities.at(i)->walking = false;
+				gamestate.vector_entities.at(i)->spriteOffsetY = 0;
+			}
+		}
 	}
 }
 
@@ -430,13 +455,22 @@ void walkingAnimations(Gamestate& gamestate)
 		{
 			if(gamestate.vector_entities.at(i)->toWalk == 0)
 			{
-				if(gamestate.vector_entities.at(i)->spriteOffsetY < 0)
+				if(gamestate.vector_entities.at(i)->spriteOffsetY != 0)
 				{
-					gamestate.vector_entities.at(i)->spriteOffsetY = ENTITY_CLIP_H;
+					gamestate.vector_entities.at(i)->spriteOffsetY = 0;
 				}
 				else
 				{
-					gamestate.vector_entities.at(i)->spriteOffsetY = -ENTITY_CLIP_H;
+					if(gamestate.vector_entities.at(i)->walkUpNext)
+					{
+						gamestate.vector_entities.at(i)->walkUpNext = false;
+						gamestate.vector_entities.at(i)->spriteOffsetY = ENTITY_CLIP_H;
+					}
+					else
+					{
+						gamestate.vector_entities.at(i)->walkUpNext = true;
+						gamestate.vector_entities.at(i)->spriteOffsetY = -ENTITY_CLIP_H;
+					}
 				}
 
 				gamestate.vector_entities.at(i)->toWalk = gamestate.vector_entities.at(i)->walkSpeed;

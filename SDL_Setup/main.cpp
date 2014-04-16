@@ -66,34 +66,41 @@ int main( int argc, char* args[] )
 	//***********************************************************************************
     while( !gui.quit )
     {
-		//reset the frame timer to 0. Used to regulate minimum time per frame
-		gui.fpsTimer.start();
-
-		//call the eventHandler (send quit as a reference)
-		gui.eventHandler(); 
-		
-		//switch through the gamestates for the game engine
-		switch(gamestate.currentState)
+		try
 		{
-		case STATES_GAMEPLAY:
-			//do some physics
-			Physics::doPhysics(gamestate, hud, gui);
-			break;
-		
-		case STATES_DEATH_MENU:
-			MenuEngine::engine(STATES_DEATH_MENU, gamestate);
-			break;
+			//reset the frame timer to 0. Used to regulate minimum time per frame
+			gui.fpsTimer.start();
+
+			//call the eventHandler (send quit as a reference)
+			gui.eventHandler();
+
+			//switch through the gamestates for the game engine
+			switch(gamestate.currentState)
+			{
+			case STATES_GAMEPLAY:
+				//do some physics
+				Physics::doPhysics(gamestate, hud, gui);
+				break;
+
+			case STATES_DEATH_MENU:
+				MenuEngine::engine(STATES_DEATH_MENU, gamestate);
+				break;
+			}
+
+			//apply all of the surfaces to surface_screen
+			gui.displayAll();
+
+			//Update the screen by flipping surface_screen
+			if(!gui.flipScreen())
+				return 1;
+
+			//regulate the frame rate, and update the currentFrameRate (needs to stay at end of game loop)
+			gui.frameRate();
 		}
-
-		//apply all of the surfaces to surface_screen
-		gui.displayAll();
-
-		//Update the screen by flipping surface_screen
-		if( !gui.flipScreen() )
-			return 1;
-
-		//regulate the frame rate, and update the currentFrameRate (needs to stay at end of game loop)
-		gui.frameRate();
+		//catch(std::exception& e)
+		catch(...)
+		{
+		}
     }
     //***********************************************************************************
 	//*********** End of the game loop **************************************************

@@ -36,7 +36,9 @@ public:
 		toWalk = 0, //frames left to walk before the sprite changes for walking animation
 		spriteOffsetY = 0; //offset of the sprite for walking
 
-	bool walking = false;
+	bool 
+		walking = false, 
+		walkUpNext = true;
 
 	SDL_Rect rect[4]; //to hold the clip(s) (of the textures)
 
