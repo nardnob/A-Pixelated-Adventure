@@ -8,6 +8,7 @@
 #include "MapDoor_Boundary.h"
 #include "Timer.h"
 
+#include <algorithm>
 #include <ctime>
 #include <cmath>
 #include <fstream>
@@ -202,6 +203,11 @@ void GUI::defineHUD()
 	hudPtr->advancedMessages.at(hudPtr->MESSAGE_CURRENTMAP).set_message(temp.c_str());
 }
 
+bool sortEntitiesFunc(Entity* i, Entity* j)
+{
+	return ((i->posY + i->base_posY) > (j->posY + j->base_posY));
+}
+
 void GUI::display(int code_in)
 {
 	switch(code_in)
@@ -292,14 +298,25 @@ void GUI::display(int code_in)
 
 			//loop through and display the entities (a vector of good guys and bad guys and every entity ever)
 			case CODE_ENTITY:
-				for(int i = gamestatePtr->vector_entities.size() - 1; i >= 0; i--)
+				OutputDebugString("Beginning Entity vector sort!\n");
+				//sort the Entities by depth and then output them
+				vector<Entity*> tempEntities;
+				for(int i = 0; i < gamestatePtr->vector_entities.size(); i++)
 				{
-					SDL_Rect temp = gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()];
-					temp.y += gamestatePtr->vector_entities.at(i)->spriteOffsetY;
+					tempEntities.push_back(gamestatePtr->vector_entities.at(i));
+				}
+
+				//sort the entities by depth, lowest posY first
+				sort(tempEntities.begin(), tempEntities.end(), sortEntitiesFunc);
+				
+				for(int i = tempEntities.size() - 1; i >= 0; i--)
+				{
+					SDL_Rect temp = tempEntities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()];
+					temp.y += tempEntities.at(i)->spriteOffsetY;
 
 					apply_surface(
-						gamestatePtr->vector_entities.at(i)->posX + this->screenOffset_x,
-						gamestatePtr->vector_entities.at(i)->posY + this->screenOffset_y,
+						tempEntities.at(i)->posX + this->screenOffset_x,
+						tempEntities.at(i)->posY + this->screenOffset_y,
 						surface_entities,
 						surface_screen,
 						&temp);

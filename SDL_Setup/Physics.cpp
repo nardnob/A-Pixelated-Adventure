@@ -432,8 +432,8 @@ void AIVel(Gamestate& gamestate)
 		
 		gamestate.vector_entities.at(i)->velX = gamestate.vector_entities.at(i)->maxVel * cos(angle);
 		gamestate.vector_entities.at(i)->velY = gamestate.vector_entities.at(i)->maxVel * sin(angle);
-		OutputDebugString(("cos(angle)[" + to_string(i) + "]: " + to_string(cos(angle)) + "\n").c_str());
-		OutputDebugString(("sin(angle)[" + to_string(i) + "]: " + to_string(sin(angle)) + "\n\n").c_str());
+		//OutputDebugString(("cos(angle)[" + to_string(i) + "]: " + to_string(cos(angle)) + "\n").c_str());
+		//OutputDebugString(("sin(angle)[" + to_string(i) + "]: " + to_string(sin(angle)) + "\n\n").c_str());
 
 	}
 }

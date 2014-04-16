@@ -98,7 +98,7 @@ int main( int argc, char* args[] )
 			gui.frameRate();
 		}
 		//catch(std::exception& e)
-		catch(...)
+		catch(...) //bad-practice attempt at a catch-all to prevent crashes in full-screen
 		{
 		}
     }
