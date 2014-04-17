@@ -20,9 +20,9 @@ Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, doubl
 	this->velX = 0;
 	this->velY = 0; 
 	this->mass = MASS_PLAYER;
-	this->maxVelX = 3;
-	this->maxVelY = 3;
-	this->maxVel = 4;
+	this->maxVelX = 2;
+	this->maxVelY = 2;
+	this->maxVel = sqrt(pow(this->maxVelX, 2) + pow(this->maxVelY, 2));
 	this->posX = in_posX;
 	this->posY = in_posY;
 	this->base_posX = in_base_posX;
@@ -77,7 +77,7 @@ void Player::pressKey(int toPress)
 	{
 		this->walking = true;
 		this->toWalk = this->walkSpeed;
-		this->walkUpNext = true;
+		this->walkUpNext = false;
 		this->spriteOffsetY = ENTITY_CLIP_H;
 	}
 }

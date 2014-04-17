@@ -368,6 +368,18 @@ void limitVelocity(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
+		double currentVel = sqrt(pow(gamestate.vector_players.at(i).velX, 2) + pow(gamestate.vector_players.at(i).velY, 2));
+
+		if(currentVel > gamestate.vector_players.at(i).maxVel)
+		{
+			//divide each component by magnitude to create a unit vector
+			//multiply each component by desired magnitude (max vel in this case)
+			gamestate.vector_players.at(i).velX /= (currentVel * 1 / gamestate.vector_players.at(i).maxVel);
+			gamestate.vector_players.at(i).velY /= (currentVel * 1 / gamestate.vector_players.at(i).maxVel);
+		}
+
+		/*
+		//This limits per vector component (x and y), meaning diagonal is faster than horizontal or vertical movement
 		if(gamestate.vector_players.at(i).velX > gamestate.vector_players.at(i).maxVelX)
 			gamestate.vector_players.at(i).velX = gamestate.vector_players.at(i).maxVelX;
 		else
@@ -378,6 +390,7 @@ void limitVelocity(Gamestate& gamestate)
 		else
 			if(gamestate.vector_players.at(i).velY < -gamestate.vector_players.at(i).maxVelY)
 				gamestate.vector_players.at(i).velY = -gamestate.vector_players.at(i).maxVelY;
+		*/
 	}
 }
 
