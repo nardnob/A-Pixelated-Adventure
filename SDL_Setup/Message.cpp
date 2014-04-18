@@ -1,5 +1,6 @@
 #include "constants.cpp"
 #include "Message.h"
+#include <Windows.h>
 using namespace std;
 
 Message::Message()
@@ -76,14 +77,10 @@ int Message::get_height()
 }
 
 
-bool Message::mouseOver()
+void Message::handleMouseOver()
 {
-
-	return false;
 }
 
-bool Message::mouseClick()
+void Message::handleMouseClick()
 {
-
-	return false;
 }

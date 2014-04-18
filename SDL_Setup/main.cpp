@@ -43,9 +43,6 @@ int main( int argc, char* args[] )
 
 	//define the clips (clip up the texture files)
 	gui.defineClip(CODE_TERRAIN);
-	
-	//set up the first currentMap
-	gamestate.init();
 
 	//SDL's init()
 	if( !gui.init() )
@@ -61,6 +58,9 @@ int main( int argc, char* args[] )
 	//set the offsets of the surface_screen for the first time (to center the screen in the window)
 	gui.setScreenOffsets();
 
+	//set up the first currentMap
+	gamestate.init();
+
     //***********************************************************************************
 	//*********** The game loop *********************************************************
 	//***********************************************************************************
@@ -71,7 +71,7 @@ int main( int argc, char* args[] )
 			//reset the frame timer to 0. Used to regulate minimum time per frame
 			gui.fpsTimer.start();
 
-			//call the eventHandler (send quit as a reference)
+			//call the eventHandler
 			gui.eventHandler();
 
 			//switch through the gamestates for the game engine
@@ -81,9 +81,11 @@ int main( int argc, char* args[] )
 				//do some physics
 				Physics::doPhysics(gamestate, hud, gui);
 				break;
-
 			case STATES_DEATH_MENU:
 				MenuEngine::engine(STATES_DEATH_MENU, gamestate);
+				break;
+			case STATES_START_MENU:
+				MenuEngine::engine(STATES_START_MENU, gamestate);
 				break;
 			}
 

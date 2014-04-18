@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 #include "constants.cpp"
 #include "Message.h"
 #include "Gamestate.h"
@@ -16,11 +18,19 @@ Gamestate::Gamestate()
 void Gamestate::init()
 {	
 	//initialize the currentMap object with the mapFileName text file
-	currentMap = TerrainMap("map_001.txt", this);
+	//currentMap = TerrainMap("map_001.txt", this);
+	this->switchState(STATES_START_MENU);
 }
 
 void Gamestate::switchState(int newState)
 {
+	
+	//delete the memory spaces in the heap
+	for(int i = 0; i < this->vector_menuObjects.size(); i++)
+	{
+		delete this->vector_menuObjects.at(i);
+	}
+
 	//clear the current menuObjects
 	this->vector_menuObjects.clear();
 
@@ -36,9 +46,6 @@ void Gamestate::switchState(int newState)
 	switch(newState)
 	{
 	case STATES_DEATH_MENU:		
-		//reload to map_001 at the starting point
-		gui->switchMap("map_001.txt", 100, 100);
-
 		this->vector_menuObjects.push_back(
 			new Message(
 				0,
@@ -52,11 +59,11 @@ void Gamestate::switchState(int newState)
 
 		this->vector_menuObjects.push_back(
 			new Message(
-			0,
-			0,
-			this->font_Gamestate_2,
-			"Press Spacebar to continue ...",
-			true
+				0,
+				0,
+				this->font_Gamestate_2,
+				"Press Spacebar to continue ...",
+				true
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 3)/4 - this->vector_menuObjects.back()->get_height() / 2;
@@ -64,8 +71,25 @@ void Gamestate::switchState(int newState)
 		break;
 
 	case STATES_GAMEPLAY:
+		//reload to map_001 at the starting point
+		gui->switchMap("map_001.txt", 100, 100);
+
 		//restore the players' life
 		vector_players.at(0).currentStatus.healLife();
+		break;
+
+	case STATES_START_MENU:
+		this->vector_menuObjects.push_back(
+			new Message(
+			0,
+			0,
+			this->font_Gamestate_1,
+			"A Pixelated Adventure",
+			true
+			));
+
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight / 4 - this->vector_menuObjects.back()->get_height() / 2;
 
 		break;
 	}

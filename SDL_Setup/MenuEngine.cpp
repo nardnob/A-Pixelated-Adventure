@@ -10,5 +10,12 @@ void MenuEngine::engine(int state, Gamestate& gamestate)
 			gamestate.switchState(STATES_GAMEPLAY);
 		}
 		break;
+
+	case STATES_START_MENU:
+		if(gamestate.vector_players.at(0).keyIsDown(KEY_SPACE))
+		{
+			gamestate.switchState(STATES_GAMEPLAY);
+		}
+		break;
 	}
 }

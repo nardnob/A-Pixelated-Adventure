@@ -28,8 +28,8 @@ public:
 	//display the message at (x,y) with it's message and font
 	void display(SDL_Surface* surface_messager, SDL_Surface* surface_screen);
 
-	bool mouseOver();
-	bool mouseClick();
+	void handleMouseOver();
+	void handleMouseClick();
 
 	int get_width();
 	int get_height();

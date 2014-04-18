@@ -353,6 +353,11 @@ void GUI::displayAll()
 			break;
 
 		case STATES_START_MENU:
+			//Display all of the MenuObjects
+			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+			{
+				gamestatePtr->vector_menuObjects.at(i)->display(surface_messager, surface_screen);
+			}
 			break;
 
 		case STATES_DEATH_MENU:
@@ -369,7 +374,7 @@ void GUI::eventHandler()
 {
 	//While there's events to handle
 	while(SDL_PollEvent(&event))
-	{
+	{		
 		switch(event.type)
 		{
 			case SDL_KEYDOWN:
@@ -393,11 +398,9 @@ void GUI::eventHandler()
 						break;
 					case SDLK_F2:
 						screenShot();
-						OutputDebugString("screenShot() finished\n");
 						break;
 					case SDLK_F3:
 						hudPtr->toggleAdvanced();
-						OutputDebugString("hudPtr->toggleAdvanced() finished\n");
 						break;
 					case SDLK_SPACE:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
@@ -415,7 +418,6 @@ void GUI::eventHandler()
 					//	OutputDebugString("toggleFullscreen() finished\n");
 					case SDLK_F12:
 						toggleMap();
-						OutputDebugString("switchMap() finished\n");
 						break;
 					case SDLK_ESCAPE:
 						quit = true;
