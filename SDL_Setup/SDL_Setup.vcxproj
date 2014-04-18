@@ -88,7 +88,9 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="buttons.png" />
     <Image Include="entities.png" />
+    <Image Include="healthbar.png" />
     <Image Include="icon2.bmp" />
     <Image Include="terrain.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -99,6 +101,7 @@
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Boundary.h" />
     <ClInclude Include="BuffAbility.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Gamestate.h" />
     <ClInclude Include="GUI.h" />

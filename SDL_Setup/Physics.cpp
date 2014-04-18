@@ -304,7 +304,7 @@ void updateHUD(Gamestate& gamestate, HUD& hud)
 
 	hud.advancedMessages.at(hud.MESSAGE_LIFE).set_message("Life:  " + to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())));
 
-	hud.hudMessages.at(0).set_message(to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
+	hud.hudMessages.at(0).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.lifeAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
 }
 
 void movement(Gamestate& gamestate)

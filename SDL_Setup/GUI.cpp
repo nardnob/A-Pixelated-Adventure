@@ -29,6 +29,8 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_entities = NULL;
 	this->surface_screen = NULL;
 	this->surface_messager = NULL;
+	this->surface_healthbar = NULL;
+	this->surface_buttons = NULL;
 
 	fullscreen = false;
 	quit = false;
@@ -54,6 +56,8 @@ void GUI::clean_up()
 	//Free the sprite map
 	SDL_FreeSurface(surface_terrain);
 	SDL_FreeSurface(surface_entities);
+	SDL_FreeSurface(surface_healthbar);
+	SDL_FreeSurface(surface_buttons);
 
 	//Close the font that was used
 	TTF_CloseFont(hudPtr->font_HUD_1);
@@ -132,13 +136,13 @@ void GUI::defineHUD()
 
 	hudPtr->healthBar_BG.w = HEALTHBAR_WIDTH;
 	hudPtr->healthBar_BG.h = HEALTHBAR_HEIGHT;
-	hudPtr->healthBar_BG.x = hudPtr->HUD_rect.x + 30;
-	hudPtr->healthBar_BG.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar_BG.h / 2; //center it (vertically) in the HUD_rect
+	hudPtr->healthBar_BG.x = hudPtr->HUD_rect.x + HEALTHBAR_OFFSET_X;
+	hudPtr->healthBar_BG.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar_BG.h / 2 + HEALTHBAR_OFFSET_Y; //center it (vertically) in the HUD_rect
 
 	hudPtr->healthBar.w = HEALTHBAR_WIDTH;
 	hudPtr->healthBar.h = HEALTHBAR_HEIGHT;
-	hudPtr->healthBar.x = hudPtr->HUD_rect.x + 30;
-	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2; //center it (vertically) in the HUD_rect
+	hudPtr->healthBar.x = hudPtr->HUD_rect.x + HEALTHBAR_OFFSET_X;
+	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2 + HEALTHBAR_OFFSET_Y; //center it (vertically) in the HUD_rect
 	
 	//healthbar message
 	hudPtr->hudMessages.push_back(Message(
@@ -262,7 +266,10 @@ void GUI::display(int code_in)
 			hudPtr->healthBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
 			SDL_FillRect(surface_screen, &hudPtr->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
 
-			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
+			//display the overlay of the healthbar
+			apply_surface(hudPtr->healthBar.x - 75, hudPtr->healthBar.y - 12, surface_healthbar, surface_screen);
+
+			//display the hud messages
 			for(int i = 0; i < hudPtr->hudMessages.size(); i++)
 			{
 				hudPtr->hudMessages.at(i).display(this->surface_messager, this->surface_screen);
@@ -298,7 +305,6 @@ void GUI::display(int code_in)
 
 			//loop through and display the entities (a vector of good guys and bad guys and every entity ever)
 			case CODE_ENTITY:
-				OutputDebugString("Beginning Entity vector sort!\n");
 				//sort the Entities by depth and then output them
 				vector<Entity*> tempEntities;
 				for(int i = 0; i < gamestatePtr->vector_entities.size(); i++)
@@ -527,9 +533,13 @@ bool GUI::load_files()
 	//Load the sprite map
 	surface_terrain = load_image("terrain.png");
 	surface_entities = load_image("entities.png");
+	surface_healthbar = load_image("healthbar.png");
+	surface_buttons = load_image("buttons.png");
 
 	if(surface_terrain == NULL
-	   || surface_entities == NULL)
+	   || surface_entities == NULL
+	   || surface_healthbar == NULL
+	   || surface_buttons == NULL)
 	{
 		return false;
 	}
