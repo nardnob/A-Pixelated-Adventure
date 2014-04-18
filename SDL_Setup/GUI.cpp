@@ -272,7 +272,7 @@ void GUI::display(int code_in)
 			//display the hud messages
 			for(int i = 0; i < hudPtr->hudMessages.size(); i++)
 			{
-				hudPtr->hudMessages.at(i).display(this->surface_messager, this->surface_screen);
+				hudPtr->hudMessages.at(i).display(this->surface_messager, this->surface_buttons, this->surface_screen);
 			}
 
 			//display the advanced messages if advanced is enabled in hud. (if f3 was pressed)
@@ -280,7 +280,7 @@ void GUI::display(int code_in)
 			{
 				if(hudPtr->get_advanced()) //if displaying advanced messages
 				{
-					hudPtr->advancedMessages.at(i).display(this->surface_messager, this->surface_screen);
+					hudPtr->advancedMessages.at(i).display(this->surface_messager, this->surface_buttons, this->surface_screen);
 				}
 			}
 			break;		
@@ -362,7 +362,7 @@ void GUI::displayAll()
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
-				gamestatePtr->vector_menuObjects.at(i)->display(surface_messager, surface_screen);
+				gamestatePtr->vector_menuObjects.at(i)->display(surface_messager, surface_buttons, surface_screen);
 			}
 			break;
 
@@ -370,9 +370,36 @@ void GUI::displayAll()
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
-				gamestatePtr->vector_menuObjects.at(i)->display(surface_messager, surface_screen);
+				gamestatePtr->vector_menuObjects.at(i)->display(this->surface_messager, this->surface_buttons, this->surface_screen);
 			}
 			break;
+	}
+}
+
+void GUI::handleMouseMotion(int x, int y)
+{
+	mouse_x = x;
+	mouse_y = y;
+
+	for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+	{
+		gamestatePtr->vector_menuObjects.at(i)->handleMouseOver(x, y);
+	}
+}
+
+void GUI::handleMouseDown(int x, int y)
+{
+	for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+	{
+		gamestatePtr->vector_menuObjects.at(i)->handleMouseDown(x, y);
+	}
+}
+
+void GUI::handleMouseUp(int x, int y)
+{
+	for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+	{
+		gamestatePtr->vector_menuObjects.at(i)->handleMouseUp(x, y);
 	}
 }
 
@@ -454,6 +481,19 @@ void GUI::eventHandler()
 						break;
 				}
 				break;
+
+			case SDL_MOUSEMOTION:
+				handleMouseMotion(event.button.x, event.button.y);
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				handleMouseDown(event.button.x, event.button.y);
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				handleMouseUp(event.button.x, event.button.y);
+				break;
+
 			case SDL_QUIT:
 				quit = true;
 				break;

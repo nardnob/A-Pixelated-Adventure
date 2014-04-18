@@ -1,9 +1,35 @@
 #ifndef BUTTON_H
 #define BUTTON_H
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+#include "SDL_mixer.h"
 
-class Button
+#include "MenuObject.h"
+using namespace std;
+
+class Button : public MenuObject
 {
 public:
+	SDL_Rect buttonRect;
+
+	int rectOffset_y = 0;
+
+	bool
+		mouseOver = false,
+		mouseDown = false,
+		clicked = true;
+
+	void defineWidthHeight();
+	int get_width();
+	int get_height();
+	void display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons, SDL_Surface* surface_screen);
+	void handleMouseOver(int x, int y);
+	void handleMouseDown(int x, int y);
+	void handleMouseUp(int x, int y);
+	void updateOffset();
+
+	Button(int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY);
 
 private:
 

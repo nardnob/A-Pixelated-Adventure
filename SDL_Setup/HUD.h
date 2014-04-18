@@ -2,6 +2,7 @@
 #define HUD_H
 #include "SDL.h"
 #include "SDL_ttf.h"
+
 #include "Message.h"
 #include <vector>
 using namespace std;

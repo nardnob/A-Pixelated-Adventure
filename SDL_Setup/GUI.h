@@ -34,6 +34,8 @@ public:
 
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
 
+	int mouse_x, mouse_y;
+
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	bool quit; //only true when done with the game
 
@@ -73,6 +75,12 @@ public:
 
 	//limit the framerate and update the current framerate to display
 	void frameRate();
+
+	void handleMouseMotion(int x, int y);
+
+	void handleMouseDown(int x, int y);
+
+	void handleMouseUp(int x, int y);
 
 	//initialize SDL
 	bool init();

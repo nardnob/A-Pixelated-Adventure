@@ -26,10 +26,11 @@ public:
 	Message(int in_posX, int in_posY, TTF_Font* in_font, char* in_message, bool in_active);
 
 	//display the message at (x,y) with it's message and font
-	void display(SDL_Surface* surface_messager, SDL_Surface* surface_screen);
+	void display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons, SDL_Surface* surface_screen);
 
-	void handleMouseOver();
-	void handleMouseClick();
+	void handleMouseOver(int x, int y);
+	void handleMouseDown(int x, int y);
+	void handleMouseUp(int x, int y);
 
 	int get_width();
 	int get_height();

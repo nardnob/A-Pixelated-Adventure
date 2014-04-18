@@ -43,7 +43,7 @@ void Message::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest
 	SDL_BlitSurface(source, clip, destination, &offset);
 }
 
-void Message::display(SDL_Surface* surface_messager, SDL_Surface* surface_screen)
+void Message::display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons, SDL_Surface* surface_screen)
 {
 	surface_messager = TTF_RenderText_Solid(this->font, this->message.c_str(), FONT_COLOR_WHITE);
 
@@ -77,10 +77,14 @@ int Message::get_height()
 }
 
 
-void Message::handleMouseOver()
+void Message::handleMouseOver(int x, int y)
 {
 }
 
-void Message::handleMouseClick()
+void Message::handleMouseDown(int x, int y)
+{
+}
+
+void Message::handleMouseUp(int x, int y)
 {
 }

@@ -1,6 +1,7 @@
 #include <Windows.h>
 
 #include "constants.cpp"
+#include "Button.h"
 #include "Message.h"
 #include "Gamestate.h"
 using namespace std;
@@ -24,7 +25,6 @@ void Gamestate::init()
 
 void Gamestate::switchState(int newState)
 {
-	
 	//delete the memory spaces in the heap
 	for(int i = 0; i < this->vector_menuObjects.size(); i++)
 	{
@@ -81,15 +81,50 @@ void Gamestate::switchState(int newState)
 	case STATES_START_MENU:
 		this->vector_menuObjects.push_back(
 			new Message(
-			0,
-			0,
-			this->font_Gamestate_1,
-			"A Pixelated Adventure",
-			true
+				0,
+				0,
+				this->font_Gamestate_1,
+				"A Pixelated Adventure",
+				true
 			));
-
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight / 4 - this->vector_menuObjects.back()->get_height() / 2;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+				647,
+				78,
+				0,
+				0,
+				0,
+				0
+				));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			647,
+			78,
+			0,
+			0,
+			0,
+			0
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 100;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			647,
+			78,
+			0,
+			0,
+			0,
+			0
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 200;
 
 		break;
 	}
