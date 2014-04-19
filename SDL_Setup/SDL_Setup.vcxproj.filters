@@ -89,6 +89,9 @@
     <Image Include="..\..\..\..\Desktop\ui_sheet.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="title.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerrainMap.h">

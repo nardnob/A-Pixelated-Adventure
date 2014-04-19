@@ -29,6 +29,7 @@ public:
 	SDL_Surface* surface_entities;
 	SDL_Surface* surface_screen;
 	SDL_Surface* surface_messager;
+	SDL_Surface* surface_titleBar;
 	SDL_Surface* surface_healthbar;
 	SDL_Surface* surface_buttons;
 

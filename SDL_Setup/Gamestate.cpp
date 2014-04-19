@@ -81,17 +81,6 @@ void Gamestate::switchState(int newState)
 
 	case STATES_START_MENU:
 		this->vector_menuObjects.push_back(
-			new Message(
-				0,
-				0,
-				this->font_Gamestate_1,
-				"A Pixelated Adventure",
-				true
-			));
-		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = gui->monitorHeight / 4 - this->vector_menuObjects.back()->get_height() / 2;
-
-		this->vector_menuObjects.push_back(
 			new Button(
 				&this->vector_clickEvents,
 				Button::BUTTON_START,
