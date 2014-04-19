@@ -89,6 +89,7 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\ui_sheet.png" />
     <Image Include="buttons.png" />
     <Image Include="entities.png" />
     <Image Include="healthbar.png" />
