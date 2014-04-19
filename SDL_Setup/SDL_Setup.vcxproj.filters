@@ -177,6 +177,9 @@
     <Text Include="map_example.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Credits.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font_Gamestate_1.ttf">

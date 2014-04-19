@@ -123,6 +123,7 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Credits.txt" />
     <Text Include="DoneThisBatch.txt" />
     <Text Include="map_001.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
