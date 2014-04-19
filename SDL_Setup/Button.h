@@ -6,6 +6,8 @@
 #include "SDL_mixer.h"
 
 #include "MenuObject.h"
+
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -18,6 +20,8 @@ public:
 		rectOffset_y = 0,
 		clickId;
 
+	string message;
+
 	vector<int>* clickEvents;
 
 	void defineWidthHeight();
@@ -29,13 +33,16 @@ public:
 
 	enum { BUTTON_START, BUTTON_OPTIONS, BUTTON_CREDITS, BUTTON_EXIT };
 
-	Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY);
+	Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, 
+		   int in_posX, int in_posY, string in_message, TTF_Font* in_font);
 
 private:
 	bool
 		mouseOver = false,
 		mouseDown = false,
 		clicked = true;
+
+	TTF_Font* font;
 
 	void updateOffset();
 	void onClick(int clickId);

@@ -33,6 +33,7 @@ void MenuEngine::engine(int state, Gamestate& gamestate)
 				break;
 
 			case Button::BUTTON_EXIT:
+				gamestate.gui->quit = true;
 				break;
 			}
 			gamestate.vector_clickEvents.pop_back();

@@ -26,6 +26,7 @@ public:
 
 	TTF_Font* font_Gamestate_1;
 	TTF_Font* font_Gamestate_2;
+	TTF_Font* font_Gamestate_3;
 
 	int currentState; //The current state of the game to be calculated / displayed. i.e. Gameplay, menu system, etc.
 

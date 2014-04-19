@@ -14,6 +14,7 @@ Gamestate::Gamestate()
 	//open the Gamestate font
 	font_Gamestate_1 = TTF_OpenFont(FONT_GAMESTATE_1_FILENAME, FONT_GAMESTATE_1_SIZE);
 	font_Gamestate_2 = TTF_OpenFont(FONT_GAMESTATE_2_FILENAME, FONT_GAMESTATE_2_SIZE);
+	font_Gamestate_3 = TTF_OpenFont(FONT_GAMESTATE_3_FILENAME, FONT_GAMESTATE_3_SIZE);
 }
 
 void Gamestate::init()
@@ -99,7 +100,9 @@ void Gamestate::switchState(int newState)
 				0,
 				0,
 				0,
-				0
+				0,
+				"Start the Game",
+				this->font_Gamestate_3
 				));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2;
@@ -113,7 +116,9 @@ void Gamestate::switchState(int newState)
 			0,
 			0,
 			0,
-			0
+			0,
+			"Options",
+			this->font_Gamestate_3
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 100;
@@ -127,7 +132,9 @@ void Gamestate::switchState(int newState)
 			0,
 			0,
 			0,
-			0
+			0,
+			"Credits",
+			this->font_Gamestate_3
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 200;
@@ -135,13 +142,15 @@ void Gamestate::switchState(int newState)
 		this->vector_menuObjects.push_back(
 			new Button(
 			&this->vector_clickEvents,
-			Button::BUTTON_CREDITS,
+			Button::BUTTON_EXIT,
 			647,
 			78,
 			0,
 			0,
 			0,
-			0
+			0,
+			"Exit",
+			this->font_Gamestate_3
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 300;

@@ -3,9 +3,11 @@
 #include <Windows.h>
 
 #include "Button.h"
+#include "constants.cpp"
 using namespace std;
 
-Button::Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY)
+Button::Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, 
+			   int in_posY, string in_message, TTF_Font* in_font)
 {
 	this->clickEvents = in_clickEvents;
 	this->clickId = in_clickId;
@@ -15,6 +17,8 @@ Button::Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in
 	this->buttonRect.y = in_rectY;
 	this->posX = in_posX;
 	this->posY = in_posY;
+	this->message = in_message;
+	this->font = in_font;
 }
 
 void Button::defineWidthHeight()
@@ -53,6 +57,16 @@ void Button::display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons
 		surface_buttons,
 		surface_screen,
 		&temp);
+
+	surface_messager = TTF_RenderText_Solid(this->font, this->message.c_str(), FONT_COLOR_WHITE);
+	
+	apply_surface(
+		this->posX + this->buttonRect.w / 2 - surface_messager->w / 2,
+		this->posY + this->buttonRect.h / 2 - surface_messager->h / 2,
+		surface_messager,
+		surface_screen);
+
+	SDL_FreeSurface(surface_messager);
 }
 
 void Button::handleMouseOver(int x, int y)

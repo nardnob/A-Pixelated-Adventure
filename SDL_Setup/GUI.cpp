@@ -359,6 +359,8 @@ void GUI::displayAll()
 			break;
 
 		case STATES_START_MENU:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 146, 102, 44));
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{

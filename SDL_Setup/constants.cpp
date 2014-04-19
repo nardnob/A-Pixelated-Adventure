@@ -39,9 +39,11 @@ const int HEALTHBAR_BORDER_ENTITY_HEIGHT = 11;
 
 //Gamestate attributes
 const int FONT_GAMESTATE_1_SIZE = 72;
-const char FONT_GAMESTATE_1_FILENAME[] = "font_Gamestate_1.ttf";
 const int FONT_GAMESTATE_2_SIZE = 18;
+const int FONT_GAMESTATE_3_SIZE = 24;
+const char FONT_GAMESTATE_1_FILENAME[] = "font_Gamestate_1.ttf";
 const char FONT_GAMESTATE_2_FILENAME[] = "font_Gamestate_1.ttf";
+const char FONT_GAMESTATE_3_FILENAME[] = "font_Gamestate_1.ttf";
 
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;
