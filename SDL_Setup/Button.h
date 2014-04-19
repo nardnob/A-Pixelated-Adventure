@@ -6,6 +6,7 @@
 #include "SDL_mixer.h"
 
 #include "MenuObject.h"
+#include <vector>
 using namespace std;
 
 class Button : public MenuObject
@@ -13,25 +14,32 @@ class Button : public MenuObject
 public:
 	SDL_Rect buttonRect;
 
-	int rectOffset_y = 0;
+	int
+		rectOffset_y = 0,
+		clickId;
 
+	vector<int>* clickEvents;
+
+	void defineWidthHeight();
+	int get_width();
+	int get_height();
+	void handleMouseOver(int x, int y);
+	void handleMouseDown(int x, int y);
+	void handleMouseUp(int x, int y);
+
+	enum { BUTTON_START, BUTTON_OPTIONS, BUTTON_CREDITS, BUTTON_EXIT };
+
+	Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY);
+
+private:
 	bool
 		mouseOver = false,
 		mouseDown = false,
 		clicked = true;
 
-	void defineWidthHeight();
-	int get_width();
-	int get_height();
-	void display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons, SDL_Surface* surface_screen);
-	void handleMouseOver(int x, int y);
-	void handleMouseDown(int x, int y);
-	void handleMouseUp(int x, int y);
 	void updateOffset();
-
-	Button(int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY);
-
-private:
+	void onClick(int clickId);
+	void display(SDL_Surface* surface_messager, SDL_Surface* surface_buttons, SDL_Surface* surface_screen);
 
 };
 

@@ -92,6 +92,8 @@ void Gamestate::switchState(int newState)
 
 		this->vector_menuObjects.push_back(
 			new Button(
+				&this->vector_clickEvents,
+				Button::BUTTON_START,
 				647,
 				78,
 				0,
@@ -104,6 +106,8 @@ void Gamestate::switchState(int newState)
 
 		this->vector_menuObjects.push_back(
 			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_OPTIONS,
 			647,
 			78,
 			0,
@@ -116,6 +120,8 @@ void Gamestate::switchState(int newState)
 
 		this->vector_menuObjects.push_back(
 			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_CREDITS,
 			647,
 			78,
 			0,
@@ -125,6 +131,20 @@ void Gamestate::switchState(int newState)
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 200;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_CREDITS,
+			647,
+			78,
+			0,
+			0,
+			0,
+			0
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 300;
 
 		break;
 	}

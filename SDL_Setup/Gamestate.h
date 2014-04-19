@@ -37,6 +37,7 @@ public:
 	vector<Entity*> vector_entities; //this will hold a vector of all entities (for polymorphism to output all entities in one loop, regardless of specific types)
 
 	vector<MenuObject*> vector_menuObjects; //A vector holding the menu objects, cleared and loaded for each new state.
+	vector<int> vector_clickEvents;
 
 	//switch the current state
 	void switchState(int newState);

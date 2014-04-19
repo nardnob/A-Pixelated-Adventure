@@ -1,11 +1,14 @@
 #include <string>
+#include <vector>
 #include <Windows.h>
 
 #include "Button.h"
 using namespace std;
 
-Button::Button(int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY)
+Button::Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, int in_posX, int in_posY)
 {
+	this->clickEvents = in_clickEvents;
+	this->clickId = in_clickId;
 	this->buttonRect.w = in_rectW;
 	this->buttonRect.h = in_rectH;
 	this->buttonRect.x = in_rectX;
@@ -90,14 +93,20 @@ void Button::handleMouseUp(int x, int y)
 	   && x <= this->posX + this->buttonRect.w
 	   && y >= this->posY
 	   && y <= this->posY + this->buttonRect.h
+	   && this->mouseDown
 	   )
 	{
-		//action
+		onClick(this->clickId);
 	}
 
 	this->mouseDown = false;
 
 	this->updateOffset();
+}
+
+void Button::onClick(int clickId)
+{
+	clickEvents->push_back(clickId);
 }
 
 void Button::updateOffset()
