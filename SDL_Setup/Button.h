@@ -31,7 +31,7 @@ public:
 	void handleMouseDown(int x, int y);
 	void handleMouseUp(int x, int y);
 
-	enum { BUTTON_START, BUTTON_OPTIONS, BUTTON_CREDITS, BUTTON_EXIT };
+	enum { BUTTON_TOSTATE_GAMEPLAY, BUTTON_OPTIONS, BUTTON_CREDITS, BUTTON_EXIT };
 
 	Button(vector<int>* in_clickEvents, int in_clickId, int in_rectW, int in_rectH, int in_rectX, int in_rectY, 
 		   int in_posX, int in_posY, string in_message, TTF_Font* in_font);

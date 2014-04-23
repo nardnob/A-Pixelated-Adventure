@@ -87,6 +87,9 @@ int main( int argc, char* args[] )
 			case STATES_START_MENU:
 				MenuEngine::engine(STATES_START_MENU, gamestate);
 				break;
+			case STATES_PAUSE_MENU:
+				MenuEngine::engine(STATES_PAUSE_MENU, gamestate);
+				break;
 			}
 
 			//apply all of the surfaces to surface_screen

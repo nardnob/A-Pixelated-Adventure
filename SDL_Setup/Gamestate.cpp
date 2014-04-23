@@ -22,6 +22,8 @@ void Gamestate::init()
 	//initialize the currentMap object with the mapFileName text file
 	//currentMap = TerrainMap("map_001.txt", this);
 	this->switchState(STATES_START_MENU);
+//	gui->switchMap("map_001.txt", 100, 100);
+	//vector_players.at(0).currentStatus.healLife();
 }
 
 void Gamestate::switchState(int newState)
@@ -46,6 +48,29 @@ void Gamestate::switchState(int newState)
 
 	switch(newState)
 	{
+	case STATES_PAUSE_MENU:
+		this->vector_menuObjects.push_back(
+			new Message(
+			0,
+			0,
+			this->font_Gamestate_1,
+			"Paused",
+			true
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight / 2 - this->vector_menuObjects.back()->get_height() / 2;
+
+		this->vector_menuObjects.push_back(
+			new Message(
+			0,
+			0,
+			this->font_Gamestate_2,
+			"Press Spacebar to continue ...",
+			true
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2;
+		break;
 	case STATES_DEATH_MENU:		
 		this->vector_menuObjects.push_back(
 			new Message(
@@ -72,18 +97,23 @@ void Gamestate::switchState(int newState)
 		break;
 
 	case STATES_GAMEPLAY:
-		//reload to map_001 at the starting point
-		gui->switchMap("map_001.txt", 100, 100);
+		if(this->resetGameplay)
+		{
+			//reload to map_001 at the starting point
+			gui->switchMap("map_001.txt", 100, 100);
 
-		//restore the players' life
-		vector_players.at(0).currentStatus.healLife();
+			//restore the players' life
+			vector_players.at(0).currentStatus.healLife();
+
+			this->resetGameplay = false;
+		}
 		break;
 
 	case STATES_START_MENU:
 		this->vector_menuObjects.push_back(
 			new Button(
 				&this->vector_clickEvents,
-				Button::BUTTON_START,
+				Button::BUTTON_TOSTATE_GAMEPLAY,
 				647,
 				78,
 				0,

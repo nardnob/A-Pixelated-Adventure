@@ -147,9 +147,9 @@ void GUI::defineHUD()
 	hudPtr->healthBar.w = HEALTHBAR_WIDTH;
 	hudPtr->healthBar.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar.x = hudPtr->HUD_rect.x + HEALTHBAR_OFFSET_X;
-	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2 + HEALTHBAR_OFFSET_Y; //center it (vertically) in the HUD_rect
+	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2 + HEALTHBAR_OFFSET_Y; //center it (vertially) in the HUD_rect
 	
-	//healthbar message
+	//healthbar messagec
 	hudPtr->hudMessages.push_back(Message(
 		hudPtr->healthBar.x + hudPtr->healthBar.w / 2 + HEALTHBAR_MESSAGE_OFFSET_X,
 		hudPtr->healthBar.y + hudPtr->healthBar.h / 2 + HEALTHBAR_MESSAGE_OFFSET_Y,

@@ -12,6 +12,14 @@ void MenuEngine::engine(int state, Gamestate& gamestate)
 		}
 		break;
 
+	case STATES_PAUSE_MENU:
+		if(gamestate.vector_players.at(0).keyIsDown(KEY_SPACE))
+		{
+			gamestate.resetGameplay = true;
+			gamestate.switchState(STATES_GAMEPLAY);
+		}
+		break;
+
 	case STATES_START_MENU:
 		if(gamestate.vector_players.at(0).keyIsDown(KEY_SPACE))
 		{
@@ -22,7 +30,7 @@ void MenuEngine::engine(int state, Gamestate& gamestate)
 		{
 			switch(gamestate.vector_clickEvents.at(i))
 			{
-			case Button::BUTTON_START:
+			case Button::BUTTON_TOSTATE_GAMEPLAY:
 				gamestate.switchState(STATES_GAMEPLAY);
 				break;
 

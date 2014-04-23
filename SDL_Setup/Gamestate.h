@@ -30,6 +30,8 @@ public:
 
 	int currentState; //The current state of the game to be calculated / displayed. i.e. Gameplay, menu system, etc.
 
+	bool resetGameplay = true;
+
 	GUI* gui;
 
 	TerrainMap currentMap; //the current map object
