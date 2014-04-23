@@ -58,6 +58,10 @@ const int ENTITY_FILE_H = 512;
 const int ENTITY_CLIP_W = 64;
 const int ENTITY_CLIP_H = 64;
 
+//button constants
+const int BUTTON_1_WIDTH = 647;
+const int BUTTON_1_HEIGHT = 78;
+
 // constants for function parameters
 enum { CODE_TERRAIN, CODE_PLAYER, CODE_HUD, CODE_ENTITY };
 
@@ -78,10 +82,10 @@ const double BASE_H = 23; //For the player
 
 
 //constants for keyboard shortcuts
-const int KEY_BUFFER_SIZE = 5;
-enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_SPACE };
+const int KEY_BUFFER_SIZE = 6;
+enum { KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_SPACE, KEY_ESC };
 
 //constants for gamestates
-enum { STATES_GAMEPLAY, STATES_DEATH_MENU, STATES_START_MENU, STATES_PAUSE_MENU };
+enum { STATES_GAMEPLAY, STATES_DEATH_MENU, STATES_START_MENU, STATES_PAUSE_MENU, STATES_OPTIONS_MENU, STATES_CREDITS_MENU };
 
 #endif

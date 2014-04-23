@@ -358,6 +358,7 @@ void GUI::displayAll()
 	switch(gamestatePtr->currentState)
 	{
 		case STATES_GAMEPLAY:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 0, 0, 0));
 			display(CODE_TERRAIN);
 			display(CODE_ENTITY);
 			display(CODE_HUD);
@@ -375,13 +376,42 @@ void GUI::displayAll()
 			}
 			break;
 
-		case STATES_DEATH_MENU:
+		case STATES_PAUSE_MENU:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
 				gamestatePtr->vector_menuObjects.at(i)->display(this->surface_messager, this->surface_buttons, this->surface_screen);
 			}
 			break;
+
+		case STATES_DEATH_MENU:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+			//Display all of the MenuObjects
+			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+			{
+				gamestatePtr->vector_menuObjects.at(i)->display(this->surface_messager, this->surface_buttons, this->surface_screen);
+			}
+			break;
+
+		case STATES_OPTIONS_MENU:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+			//Display all of the MenuObjects
+			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+			{
+				gamestatePtr->vector_menuObjects.at(i)->display(this->surface_messager, this->surface_buttons, this->surface_screen);
+			}
+			break;
+
+		case STATES_CREDITS_MENU:
+			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+			//Display all of the MenuObjects
+			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
+			{
+				gamestatePtr->vector_menuObjects.at(i)->display(this->surface_messager, this->surface_buttons, this->surface_screen);
+			}
+			break;
+
 	}
 }
 
@@ -438,15 +468,17 @@ void GUI::eventHandler()
 					case SDLK_s:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_DOWN);
 						break;
+					case SDLK_SPACE:
+						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
+						break;
+					case SDLK_ESCAPE:
+						gamestatePtr->vector_players.at(0).pressKey(KEY_ESC);
+						break;
 					case SDLK_F2:
 						screenShot();
 						break;
 					case SDLK_F3:
 						hudPtr->toggleAdvanced();
-						break;
-					case SDLK_SPACE:
-						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
-						gamestatePtr->vector_players.at(0).currentStatus.takeLife(25);
 						break;
 					//case SDLK_F11:/*
 					//	toggleFullscreen(
@@ -460,9 +492,6 @@ void GUI::eventHandler()
 					//	OutputDebugString("toggleFullscreen() finished\n");
 					case SDLK_F12:
 						toggleMap();
-						break;
-					case SDLK_ESCAPE:
-						quit = true;
 						break;
 				}
 				break;
@@ -488,6 +517,8 @@ void GUI::eventHandler()
 					case SDLK_SPACE:
 						gamestatePtr->vector_players.at(0).releaseKey(KEY_SPACE);
 						break;
+					case SDLK_ESCAPE:
+						gamestatePtr->vector_players.at(0).releaseKey(KEY_ESC);
 				}
 				break;
 

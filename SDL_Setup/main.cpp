@@ -78,6 +78,8 @@ int main( int argc, char* args[] )
 			switch(gamestate.currentState)
 			{
 			case STATES_GAMEPLAY:
+				MenuEngine::engine(STATES_GAMEPLAY, gamestate);
+
 				//do some physics
 				Physics::doPhysics(gamestate, hud, gui);
 				break;
@@ -89,6 +91,12 @@ int main( int argc, char* args[] )
 				break;
 			case STATES_PAUSE_MENU:
 				MenuEngine::engine(STATES_PAUSE_MENU, gamestate);
+				break;
+			case STATES_OPTIONS_MENU:
+				MenuEngine::engine(STATES_OPTIONS_MENU, gamestate);
+				break;
+			case STATES_CREDITS_MENU:
+				MenuEngine::engine(STATES_CREDITS_MENU, gamestate);
 				break;
 			}
 

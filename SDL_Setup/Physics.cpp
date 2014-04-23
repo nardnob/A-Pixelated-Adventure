@@ -128,7 +128,7 @@ vector<bool> goodNextPosition(Gamestate& gamestate, double nextX, double nextY, 
 
 void keyboardInput(Gamestate& gamestate)
 {
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < KEY_BUFFER_SIZE; i++)
 	{
 		if(gamestate.vector_players.at(0).keyIsDown(i))
 		{
@@ -149,6 +149,9 @@ void keyboardInput(Gamestate& gamestate)
 			case KEY_DOWN:
 				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
 				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
+				break;
+			case KEY_SPACE:
+				gamestate.vector_players.at(0).currentStatus.takeLife(1);
 				break;
 			}
 		}
