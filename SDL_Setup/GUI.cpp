@@ -570,11 +570,13 @@ void GUI::eventHandler()
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				handleMouseDown(event.button.x, event.button.y);
+				if(event.button.button == SDL_BUTTON_LEFT)
+					handleMouseDown(event.button.x, event.button.y);
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-				handleMouseUp(event.button.x, event.button.y);
+				if(event.button.button == SDL_BUTTON_LEFT)
+					handleMouseUp(event.button.x, event.button.y);
 				break;
 
 			case SDL_QUIT:
