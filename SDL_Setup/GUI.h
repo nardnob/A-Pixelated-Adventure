@@ -34,6 +34,7 @@ public:
 	SDL_Surface* surface_healthbar;
 	SDL_Surface* surface_buttons;
 	SDL_Surface* surface_credits;
+	SDL_Surface* surface_cursor_primary;
 
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
 
@@ -41,7 +42,7 @@ public:
 	int button_1_width;
 	int button_1_height;
 
-	int mouse_x, mouse_y;
+	int mouse_x = 0, mouse_y = 0;
 
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	bool quit; //only true when done with the game
