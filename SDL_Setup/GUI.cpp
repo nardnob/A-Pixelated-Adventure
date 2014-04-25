@@ -32,6 +32,7 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_healthbar = NULL;
 	this->surface_buttons = NULL;
 	this->surface_titleBar = NULL;
+	this->surface_credits = NULL;
 
 	fullscreen = false;
 	quit = false;
@@ -60,6 +61,7 @@ void GUI::clean_up()
 	SDL_FreeSurface(surface_healthbar);
 	SDL_FreeSurface(surface_buttons);
 	SDL_FreeSurface(surface_titleBar);
+	SDL_FreeSurface(surface_credits);
 
 	//Close the font that was used
 	TTF_CloseFont(hudPtr->font_HUD_1);
@@ -448,6 +450,8 @@ void GUI::displayAll()
 
 			apply_surface(this->monitorWidth / 2 - uiClip[UI_CLIP_HEADER].w / 2, 0, surface_titleBar, surface_screen, &this->uiClip[UI_CLIP_HEADER]);
 
+			apply_surface(this->monitorWidth / 2 - this->surface_credits->w / 2, this->monitorHeight / 10 + uiClip[UI_CLIP_HEADER].h, surface_credits, surface_screen);
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
@@ -672,18 +676,21 @@ bool GUI::load_files()
 	{
 		surface_buttons = load_image("buttons_small.png");
 		surface_titleBar = load_image("title_small.png");
+		surface_credits = load_image("credits_small.png");
 	}
 	else
 	{
 		surface_buttons = load_image("buttons.png");
 		surface_titleBar = load_image("title.png");
+		surface_credits = load_image("credits.png");
 	}
 
 	if(surface_terrain == NULL
 	   || surface_entities == NULL
 	   || surface_healthbar == NULL
 	   || surface_buttons == NULL
-	   || surface_titleBar == NULL)
+	   || surface_titleBar == NULL
+	   || surface_credits == NULL)
 	{
 		return false;
 	}

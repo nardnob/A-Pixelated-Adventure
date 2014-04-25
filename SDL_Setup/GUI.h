@@ -33,6 +33,7 @@ public:
 	SDL_Surface* surface_titleBar;
 	SDL_Surface* surface_healthbar;
 	SDL_Surface* surface_buttons;
+	SDL_Surface* surface_credits;
 
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
 

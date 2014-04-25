@@ -128,6 +128,7 @@ void Gamestate::switchState(int newState)
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight / 5 - this->vector_menuObjects.back()->get_height() / 2;
 
+		/*
 		this->vector_menuObjects.push_back(
 			new Message(
 			0,
@@ -160,7 +161,7 @@ void Gamestate::switchState(int newState)
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth * 3 / 8;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight / 2 + this->vector_menuObjects.back()->get_height() / 2 * 3;
-		
+		*/
 		/*
 		this->vector_menuObjects.push_back(
 			new Message(
