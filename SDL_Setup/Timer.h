@@ -19,6 +19,8 @@ private:
 	bool started;
     
 public:
+	bool allowPhysics = true;
+
 	//Initializes variables
 	Timer();
     

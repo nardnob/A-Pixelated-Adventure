@@ -11,10 +11,23 @@ using namespace std;
 
 class Physics 
 {
-private:
-
 public:
 	static void doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui);
+	static void updateHealthbarPos(Gamestate* gamestate, int i);
+private:
+	static bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* entity, vector<Entity*>& entityVector, Gamestate& gamestate);
+	static vector<bool> goodNextPosition(Gamestate& gamestate, double nextX, double nextY, Entity* entity);
+	static void keyboardInput(Gamestate& gamestate);
+	static void toggleNPCTextures(Gamestate& gamestate);
+	static void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud);
+	static void friction(Gamestate& gamestate);
+	static void updateHUD(Gamestate& gamestate, HUD& hud);
+	static void movement(Gamestate& gamestate);
+	static void limitVelocity(Gamestate& gamestate);
+	static void forceToVelocity(Gamestate& gamestate);
+	static void AIVel(Gamestate& gamestate);
+	static void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/);
+	static void walkingAnimations(Gamestate& gamestate);
 };
 
 #endif

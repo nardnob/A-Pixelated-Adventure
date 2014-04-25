@@ -6,6 +6,7 @@
 #include "GUI.h"
 #include "HUD.h"
 #include "MapDoor_Boundary.h"
+#include "Physics.h"
 #include "Timer.h"
 
 #include <algorithm>
@@ -275,6 +276,17 @@ void GUI::display(int code_in)
 				gamestatePtr->vector_entities.at(i)->healthBar_BG.y += this->screenOffset_y;
 				gamestatePtr->vector_entities.at(i)->healthBar_border.x += this->screenOffset_x;
 				gamestatePtr->vector_entities.at(i)->healthBar_border.y += this->screenOffset_y;
+				/*
+				SDL_Rect temp_healthBar = gamestatePtr->vector_entities.at(i)->healthBar;
+				SDL_Rect temp_healthBar_BG = gamestatePtr->vector_entities.at(i)->healthBar_BG;
+				SDL_Rect temp_healthBar_border = gamestatePtr->vector_entities.at(i)->healthBar_border;
+				temp_healthBar.x += this->screenOffset_x;
+				temp_healthBar.y += this->screenOffset_y;
+				temp_healthBar_BG.x += this->screenOffset_x;
+				temp_healthBar_BG.y += this->screenOffset_y;
+				temp_healthBar_border.x += this->screenOffset_x;
+				temp_healthBar_border.y += this->screenOffset_y;
+				*/
 
 				//if(
 				//	gamestatePtr->vector_entities.at(i)->healthBar_border.x >= screenOffset_x
@@ -299,6 +311,13 @@ void GUI::display(int code_in)
 					gamestatePtr->vector_entities.at(i)->healthBar.w = HEALTHBAR_ENTITY_WIDTH * gamestatePtr->vector_entities.at(i)->currentStatus.lifePercent();
 					SDL_FillRect(surface_screen, &gamestatePtr->vector_entities.at(i)->healthBar, SDL_MapRGB(surface_screen->format, 0, 185, 0));
 				}
+
+				gamestatePtr->vector_entities.at(i)->healthBar.x -= this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar.y -= this->screenOffset_y;
+				gamestatePtr->vector_entities.at(i)->healthBar_BG.x -= this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar_BG.y -= this->screenOffset_y;
+				gamestatePtr->vector_entities.at(i)->healthBar_border.x -= this->screenOffset_x;
+				gamestatePtr->vector_entities.at(i)->healthBar_border.y -= this->screenOffset_y;
 			}
 
 			//fill in the background of the HUD with gray (86, 86, 86 RGB)
@@ -604,24 +623,30 @@ bool GUI::flipScreen()
 
 void GUI::frameRate()
 {
-	this->fpsTimer.frameCount++;
-	int temp = this->fpsTimer.get_totalTicks();
-
-	//count the frame rate every 10 frames
-	if(this->fpsTimer.frameCount == 10)
-	{
-		this->fpsTimer.currentFrameRate = this->fpsTimer.frameCount / ((this->fpsTimer.get_totalTicks() - this->fpsTimer.firstStartTicks) / 1000);
-		this->fpsTimer.frameCount = 0;
-		this->fpsTimer.firstStartTicks = this->fpsTimer.get_totalTicks();
-		hudPtr->advancedMessages.at(hudPtr->MESSAGE_FPS).set_message("FPS: " + to_string(static_cast<long long>(this->fpsTimer.currentFrameRate)));
-	}
-
-
-	//If we want to cap the frame rate
-	if(this->fpsTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+	//If the framerate is above the cap and physics is good to go
+	if(this->fpsTimer.get_ticks() >= 1000 / FRAMES_PER_SECOND)
 	{
 		//Sleep the remaining frame time
-		SDL_Delay((1000 / FRAMES_PER_SECOND) - this->fpsTimer.get_ticks());
+		//SDL_Delay((1000 / FRAMES_PER_SECOND) - this->fpsTimer.get_ticks());
+		this->fpsTimer.allowPhysics = true;
+		OutputDebugString("\n\n1\n\n");
+
+		this->fpsTimer.frameCount++;
+		int temp = this->fpsTimer.get_totalTicks();
+
+		//count the frame rate every 10 frames
+		if(this->fpsTimer.frameCount == 10)
+		{
+			this->fpsTimer.currentFrameRate = this->fpsTimer.frameCount / ((this->fpsTimer.get_totalTicks() - this->fpsTimer.firstStartTicks) / 1000);
+			this->fpsTimer.frameCount = 0;
+			this->fpsTimer.firstStartTicks = this->fpsTimer.get_totalTicks();
+			hudPtr->advancedMessages.at(hudPtr->MESSAGE_FPS).set_message("FPS: " + to_string(static_cast<long long>(this->fpsTimer.currentFrameRate)));
+		}
+	}
+	else
+	{
+		this->fpsTimer.allowPhysics = false;
+		OutputDebugString("\n\n2\n\n");
 	}
 }
 
@@ -668,7 +693,7 @@ bool GUI::init()
 	SDL_WM_SetCaption("A Pixelated Adventure", NULL);
 
 	//hide the cursor to display the custom cursor instead
-	//SDL_ShowCursor(0);
+	SDL_ShowCursor(0);
 
 	//If everything initialized fine
 	return true;
@@ -779,6 +804,8 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y)
 	hudPtr->advancedMessages.at(hudPtr->MESSAGE_CURRENTMAP).set_message(temp);
 
 	setScreenOffsets();
+
+	Physics::updateHealthbarPos(gamestatePtr, 0);
 }
 
 void GUI::teleport(double in_x, double in_y, int in_direction)

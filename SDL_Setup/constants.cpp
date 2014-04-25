@@ -10,7 +10,7 @@ using namespace std;
 const int SCREEN_WIDTH = 1366;
 const int SCREEN_HEIGHT = 768;
 const int SCREEN_BPP = 32;
-const int FRAMES_PER_SECOND = 10;// 0;
+const int FRAMES_PER_SECOND = 5;// 0;
 const string ICON_FILE = "icon2.bmp";
 
 //HUD attributes

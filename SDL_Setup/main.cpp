@@ -64,6 +64,8 @@ int main( int argc, char* args[] )
 	//set up the first currentMap
 	gamestate.init();
 
+	gui.fpsTimer.start();
+
     //***********************************************************************************
 	//*********** The game loop *********************************************************
 	//***********************************************************************************
@@ -71,9 +73,6 @@ int main( int argc, char* args[] )
     {
 		try
 		{
-			//reset the frame timer to 0. Used to regulate minimum time per frame
-			gui.fpsTimer.start();
-
 			//call the eventHandler
 			gui.eventHandler();
 
@@ -83,8 +82,14 @@ int main( int argc, char* args[] )
 			case STATES_GAMEPLAY:
 				MenuEngine::engine(STATES_GAMEPLAY, gamestate);
 
-				//do some physics
-				Physics::doPhysics(gamestate, hud, gui);
+				if(gui.fpsTimer.allowPhysics)
+				{
+					//do some physics
+					Physics::doPhysics(gamestate, hud, gui);
+
+					//reset the frame timer to 0. Used to regulate minimum time per frame
+					gui.fpsTimer.start();
+				}
 				break;
 			case STATES_DEATH_MENU:
 				MenuEngine::engine(STATES_DEATH_MENU, gamestate);

@@ -38,7 +38,7 @@ bool badPosition(double inX, double inY, vector<Boundary>& boundaries)
 }
 */
 
-bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* entity, vector<Entity*>& entityVector, Gamestate& gamestate)
+bool Physics::badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* entity, vector<Entity*>& entityVector, Gamestate& gamestate)
 {
     double
 		pX1 = inX + entity->base_posX, //entity box left side
@@ -110,7 +110,7 @@ bool badPosition(double inX, double inY, vector<Boundary>& boundaries, Entity* e
 	return false;
 }
 
-vector<bool> goodNextPosition(Gamestate& gamestate, double nextX, double nextY, Entity* entity)
+vector<bool> Physics::goodNextPosition(Gamestate& gamestate, double nextX, double nextY, Entity* entity)
 {
 	vector<bool> bad;
 	bad.push_back(false);
@@ -126,7 +126,7 @@ vector<bool> goodNextPosition(Gamestate& gamestate, double nextX, double nextY, 
 	return bad;
 }
 
-void keyboardInput(Gamestate& gamestate)
+void Physics::keyboardInput(Gamestate& gamestate)
 {
 	for(int i = 0; i < KEY_BUFFER_SIZE; i++)
 	{
@@ -158,7 +158,7 @@ void keyboardInput(Gamestate& gamestate)
 	}
 }
 
-void toggleNPCTextures(Gamestate& gamestate)
+void Physics::toggleNPCTextures(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_NPCs.size(); i++)
 	{
@@ -187,7 +187,7 @@ void toggleNPCTextures(Gamestate& gamestate)
 	}
 }
 
-void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
+void Physics::resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 {    
 	double
 		pX1 = gamestate.vector_players.at(0).posX + gamestate.vector_players.at(0).base_posX, //gamestate.vector_players.at(0) box left side
@@ -237,7 +237,7 @@ void resolveDoorCollisions(Gamestate& gamestate, GUI& gui, HUD& hud)
 	
 }
 
-void friction(Gamestate& gamestate)
+void Physics::friction(Gamestate& gamestate)
 {
 	//calculate friction
 	for(int i = 0; i < gamestate.vector_entities.size(); i++)
@@ -281,7 +281,7 @@ void friction(Gamestate& gamestate)
 	}
 }
 
-void updateHUD(Gamestate& gamestate, HUD& hud)
+void Physics::updateHUD(Gamestate& gamestate, HUD& hud)
 {
 	//update advancedMessages for pos
 	if(gamestate.vector_players.at(0).posX >= 0) //only for appearance.. can remove this and the next if
@@ -310,7 +310,18 @@ void updateHUD(Gamestate& gamestate, HUD& hud)
 	hud.hudMessages.at(0).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.lifeAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
 }
 
-void movement(Gamestate& gamestate)
+void Physics::updateHealthbarPos(Gamestate* gamestate, int i)
+{
+	//update the entitie's healthbar positions
+	gamestate->vector_entities.at(i)->healthBar.x = gamestate->vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	gamestate->vector_entities.at(i)->healthBar.y = gamestate->vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+	gamestate->vector_entities.at(i)->healthBar_BG.x = gamestate->vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
+	gamestate->vector_entities.at(i)->healthBar_BG.y = gamestate->vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
+	gamestate->vector_entities.at(i)->healthBar_border.x = gamestate->vector_entities.at(i)->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
+	gamestate->vector_entities.at(i)->healthBar_border.y = gamestate->vector_entities.at(i)->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
+}
+
+void Physics::movement(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_entities.size(); i++)
 	{
@@ -336,13 +347,7 @@ void movement(Gamestate& gamestate)
 			gamestate.vector_entities.at(i)->posY = nextY;
 		}
 
-		//update the entitie's healthbar positions
-		gamestate.vector_entities.at(i)->healthBar.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
-		gamestate.vector_entities.at(i)->healthBar.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
-		gamestate.vector_entities.at(i)->healthBar_BG.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_ENTITY_OFFSET_X;
-		gamestate.vector_entities.at(i)->healthBar_BG.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_ENTITY_OFFSET_Y;
-		gamestate.vector_entities.at(i)->healthBar_border.x = gamestate.vector_entities.at(i)->posX + HEALTHBAR_BORDER_ENTITY_OFFSET_X;
-		gamestate.vector_entities.at(i)->healthBar_border.y = gamestate.vector_entities.at(i)->posY + HEALTHBAR_BORDER_ENTITY_OFFSET_Y;
+		updateHealthbarPos(&gamestate, i);
 
 		if(i != 0)
 		{
@@ -367,7 +372,7 @@ void movement(Gamestate& gamestate)
 	}
 }
 
-void limitVelocity(Gamestate& gamestate)
+void Physics::limitVelocity(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
@@ -397,7 +402,7 @@ void limitVelocity(Gamestate& gamestate)
 	}
 }
 
-void forceToVelocity(Gamestate& gamestate)
+void Physics::forceToVelocity(Gamestate& gamestate)
 {	
 	for(int i = 0; i < gamestate.vector_players.size(); i++)
 	{
@@ -411,7 +416,7 @@ void forceToVelocity(Gamestate& gamestate)
 	}
 }
 
-void AIVel(Gamestate& gamestate)
+void Physics::AIVel(Gamestate& gamestate)
 {
 	double angle, deltaX, deltaY;
 	for(int i = 1; i < gamestate.vector_entities.size(); i++)
@@ -455,7 +460,7 @@ void AIVel(Gamestate& gamestate)
 }
 
 //check for player death and act on it
-void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
+void Physics::deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 {
 	if(!gamestate.vector_players.at(0).currentStatus.hasLife())
 	{
@@ -463,7 +468,7 @@ void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 	}
 }
 
-void walkingAnimations(Gamestate& gamestate)
+void Physics::walkingAnimations(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_entities.size(); i++)
 	{
