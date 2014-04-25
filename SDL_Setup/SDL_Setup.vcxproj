@@ -91,6 +91,9 @@
   <ItemGroup>
     <Image Include="..\..\..\..\Desktop\ui_sheet.png" />
     <Image Include="buttons.png" />
+    <Image Include="buttons_small.png" />
+    <Image Include="credits.png" />
+    <Image Include="credits_small.png" />
     <Image Include="entities.png" />
     <Image Include="healthbar.png" />
     <Image Include="icon2.bmp" />
@@ -99,6 +102,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </Image>
     <Image Include="title.png" />
+    <Image Include="title_small.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />

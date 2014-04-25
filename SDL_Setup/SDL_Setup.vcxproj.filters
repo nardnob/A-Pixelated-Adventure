@@ -92,6 +92,18 @@
     <Image Include="title.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="credits.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="credits_small.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="buttons_small.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="title_small.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerrainMap.h">
