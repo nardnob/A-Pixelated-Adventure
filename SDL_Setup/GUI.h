@@ -36,10 +36,15 @@ public:
 
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
 
+	//button size attributes
+	int button_1_width;
+	int button_1_height;
+
 	int mouse_x, mouse_y;
 
 	Timer fpsTimer; //timer to regulate and monitor the frames per second
 	bool quit; //only true when done with the game
+	bool smallMonitor; //if monitor is not 1920x1080, need to support smaller resolutions with UI
 
 	double screenOffset_x, screenOffset_y; //the offset to display the screen at, to place it in the middle of the window
 

@@ -45,6 +45,9 @@ const int HEALTHBAR_BORDER_ENTITY_HEIGHT = 11;
 const int FONT_GAMESTATE_1_SIZE = 72;
 const int FONT_GAMESTATE_2_SIZE = 18;
 const int FONT_GAMESTATE_3_SIZE = 24;
+const int FONT_GAMESTATE_1_SIZE_SMALL = 48; //for monitors < 1920x1080
+const int FONT_GAMESTATE_2_SIZE_SMALL = 12; //for monitors < 1920x1080
+const int FONT_GAMESTATE_3_SIZE_SMALL = 18; //for monitors < 1920x1080
 const char FONT_GAMESTATE_1_FILENAME[] = "font_Gamestate_1.ttf";
 const char FONT_GAMESTATE_2_FILENAME[] = "font_Gamestate_1.ttf";
 const char FONT_GAMESTATE_3_FILENAME[] = "font_Gamestate_1.ttf";
@@ -62,12 +65,8 @@ const int ENTITY_FILE_H = 512;
 const int ENTITY_CLIP_W = 64;
 const int ENTITY_CLIP_H = 64;
 
-//button constants
-const int BUTTON_1_WIDTH = 647;
-const int BUTTON_1_HEIGHT = 78;
-
 // constants for function parameters
-enum { CODE_TERRAIN, CODE_PLAYER, CODE_HUD, CODE_ENTITY };
+enum { CODE_TERRAIN, CODE_PLAYER, CODE_HUD, CODE_ENTITY, CODE_UI };
 
 enum { TEXTURE_FRONT, TEXTURE_BACK, TEXTURE_LEFT, TEXTURE_RIGHT };
 

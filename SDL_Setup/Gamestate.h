@@ -49,6 +49,8 @@ public:
 	
 	//set up the first currentMap
 	void init();
+
+	void defineFont();
 };
 
 #endif

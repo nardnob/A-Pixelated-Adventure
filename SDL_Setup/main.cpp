@@ -46,7 +46,10 @@ int main( int argc, char* args[] )
 
 	//SDL's init()
 	if( !gui.init() )
-        return 1;  
+		return 1;
+
+	gui.defineClip(CODE_UI);
+	gamestate.defineFont();
 
 	//to define the HUD and its messages
 	gui.defineHUD();

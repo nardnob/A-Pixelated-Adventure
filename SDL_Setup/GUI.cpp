@@ -38,18 +38,6 @@ GUI::GUI(Gamestate* in_gamestate)
 
 	//center the window; does not center the fullscreen window
 	putenv("SDL_VIDEO_CENTERED=1");
-
-	//Title bar "A Pixelated Adventure"
-	uiClip[0].w = 1056;
-	uiClip[0].h = 408;
-	uiClip[0].x = 0;
-	uiClip[0].y = 0;
-
-	//generic title bar for menus
-	uiClip[1].w = 582;
-	uiClip[1].h = 342;
-	uiClip[1].x = 1056;
-	uiClip[1].y = 0;
 }
 
 void GUI::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
@@ -114,6 +102,42 @@ void GUI::defineClip(int code_in)
 				));
 
 			gamestatePtr->vector_entities.push_back(&gamestatePtr->vector_players.at(0));
+			break;
+		case CODE_UI:
+			if(this->smallMonitor)
+			{
+				//Title bar "A Pixelated Adventure"
+				uiClip[0].w = 752;
+				uiClip[0].h = 290;
+				uiClip[0].x = 0;
+				uiClip[0].y = 0;
+
+				//generic title bar for menus
+				uiClip[1].w = 413;
+				uiClip[1].h = 244;
+				uiClip[1].x = 752;
+				uiClip[1].y = 0;
+
+				button_1_width = 460;
+				button_1_height = 55;
+			}
+			else
+			{
+				//Title bar "A Pixelated Adventure"
+				uiClip[0].w = 1056;
+				uiClip[0].h = 408;
+				uiClip[0].x = 0;
+				uiClip[0].y = 0;
+
+				//generic title bar for menus
+				uiClip[1].w = 582;
+				uiClip[1].h = 342;
+				uiClip[1].x = 1056;
+				uiClip[1].y = 0;
+
+				button_1_width = 647;
+				button_1_height = 78;
+			}
 			break;
 	}
 }
@@ -602,6 +626,15 @@ bool GUI::init()
 	monitorWidth = info->current_w;
 	monitorHeight = info->current_h;
 
+	if(monitorWidth != 1920 && monitorHeight != 1080)
+	{
+		this->smallMonitor = true;
+	}
+	else
+	{
+		this->smallMonitor = false;
+	}
+
 	//set the window icon 32x32 bmp. 0 255 0: colorkey for transparency
 	setWindowIcon();
 
@@ -633,8 +666,16 @@ bool GUI::load_files()
 	surface_terrain = load_image("terrain.png");
 	surface_entities = load_image("entities.png");
 	surface_healthbar = load_image("healthbar.png");
-	surface_buttons = load_image("buttons.png");
-	surface_titleBar = load_image("title.png");
+	if(this->smallMonitor)
+	{
+		surface_buttons = load_image("buttons_small.png");
+		surface_titleBar = load_image("title_small.png");
+	}
+	else
+	{
+		surface_buttons = load_image("buttons.png");
+		surface_titleBar = load_image("title.png");
+	}
 
 	if(surface_terrain == NULL
 	   || surface_entities == NULL
