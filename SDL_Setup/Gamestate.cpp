@@ -56,12 +56,24 @@ void Gamestate::switchState(int newState)
 			0,
 			0,
 			this->font_Gamestate_1,
-			"Options - Under Construction",
+			"Options",
+			true
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight / 5 - this->vector_menuObjects.back()->get_height() / 2;
+
+		this->vector_menuObjects.push_back(
+			new Message(
+			0,
+			0,
+			this->font_Gamestate_3,
+			"Under Construction",
 			true
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = gui->monitorHeight / 2 - this->vector_menuObjects.back()->get_height() / 2;
 
+		/*
 		this->vector_menuObjects.push_back(
 			new Message(
 			0,
@@ -72,6 +84,24 @@ void Gamestate::switchState(int newState)
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 7) / 8 - this->vector_menuObjects.back()->get_height() / 2;
+		*/
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_PREVIOUS,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
+			0,
+			0,
+			0,
+			0,
+			"Back",
+			this->font_Gamestate_3
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 300;
+
 		break;
 	case STATES_CREDITS_MENU:
 		this->vector_menuObjects.push_back(
@@ -83,7 +113,7 @@ void Gamestate::switchState(int newState)
 			true
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = 100;// gui->monitorHeight / 2 - this->vector_menuObjects.back()->get_height() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight / 5 - this->vector_menuObjects.back()->get_height() / 2;
 
 		this->vector_menuObjects.push_back(
 			new Message(
@@ -93,19 +123,19 @@ void Gamestate::switchState(int newState)
 			"Brandon Dixson - Lead Developer",
 			true
 			));
-		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 400;
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - 250;// -this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 500;
 
 		this->vector_menuObjects.push_back(
 			new Message(
 			0,
 			0,
 			this->font_Gamestate_3,
-			"Brooks Wright - Business Manager & Level Design",
+			"Brooks Wright  - Business Manager & Level Design",
 			true
 			));
-		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 500;
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - 250;// -this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 600;
 
 		this->vector_menuObjects.push_back(
 			new Message(
@@ -115,9 +145,10 @@ void Gamestate::switchState(int newState)
 			"David Loveless - Created Base Entity Sprites",
 			true
 			));
-		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 600;
-
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - 250;// -this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = /*(gui->monitorHeight * 3) / 4 - this->vector_menuObjects.back()->get_height() / 2 -*/ 700;
+		
+		/*
 		this->vector_menuObjects.push_back(
 			new Message(
 			0,
@@ -128,7 +159,25 @@ void Gamestate::switchState(int newState)
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 7) / 8 - this->vector_menuObjects.back()->get_height() / 2;
+		*/
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_STARTMENU,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
+			0,
+			0,
+			0,
+			0,
+			"Back",
+			this->font_Gamestate_3
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 300;
 		break;
+
 	case STATES_PAUSE_MENU:
 		this->vector_menuObjects.push_back(
 			new Message(
@@ -139,18 +188,55 @@ void Gamestate::switchState(int newState)
 			true
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = gui->monitorHeight / 2 - this->vector_menuObjects.back()->get_height() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight / 5 - this->vector_menuObjects.back()->get_height() / 2;
 
 		this->vector_menuObjects.push_back(
-			new Message(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_GAMEPLAY,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
 			0,
 			0,
-			this->font_Gamestate_2,
-			"Press Spacebar to continue ...",
-			true
+			0,
+			0,
+			"Resume (spacebar)",
+			this->font_Gamestate_3
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
-		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 7) / 8 - this->vector_menuObjects.back()->get_height() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_OPTIONS,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
+			0,
+			0,
+			0,
+			0,
+			"Options",
+			this->font_Gamestate_3
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 100;
+
+		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_STARTMENU,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
+			0,
+			0,
+			0,
+			0,
+			"Main Menu",
+			this->font_Gamestate_3
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 200;
 
 		this->vector_menuObjects.push_back(
 			new Button(
@@ -162,11 +248,11 @@ void Gamestate::switchState(int newState)
 			0,
 			0,
 			0,
-			"Exit",
+			"Exit Game",
 			this->font_Gamestate_3
 			));
-		this->vector_menuObjects.back()->posX = gui->monitorWidth - this->vector_menuObjects.back()->get_width() - 5;
-		this->vector_menuObjects.back()->posY = gui->monitorHeight - this->vector_menuObjects.back()->get_height() - 5;
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 3 / 5 - this->vector_menuObjects.back()->get_height() / 2 + 300;
 		break;
 	case STATES_DEATH_MENU:		
 		this->vector_menuObjects.push_back(
@@ -181,6 +267,23 @@ void Gamestate::switchState(int newState)
 		this->vector_menuObjects.back()->posY = gui->monitorHeight / 2 - this->vector_menuObjects.back()->get_height() / 2;
 
 		this->vector_menuObjects.push_back(
+			new Button(
+			&this->vector_clickEvents,
+			Button::BUTTON_TOSTATE_STARTMENU,
+			BUTTON_1_WIDTH,
+			BUTTON_1_HEIGHT,
+			0,
+			0,
+			0,
+			0,
+			"Return to the Main Menu",
+			this->font_Gamestate_3
+			));
+		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
+		this->vector_menuObjects.back()->posY = gui->monitorHeight * 7 / 8 - this->vector_menuObjects.back()->get_height() / 2;
+
+		/*
+		this->vector_menuObjects.push_back(
 			new Message(
 				0,
 				0,
@@ -190,6 +293,7 @@ void Gamestate::switchState(int newState)
 			));
 		this->vector_menuObjects.back()->posX = gui->monitorWidth / 2 - this->vector_menuObjects.back()->get_width() / 2;
 		this->vector_menuObjects.back()->posY = (gui->monitorHeight * 7) / 8 - this->vector_menuObjects.back()->get_height() / 2;
+		*/
 		break;
 
 	case STATES_GAMEPLAY:
@@ -225,7 +329,7 @@ void Gamestate::switchState(int newState)
 		this->vector_menuObjects.push_back(
 			new Button(
 			&this->vector_clickEvents,
-			Button::BUTTON_OPTIONS,
+			Button::BUTTON_TOSTATE_OPTIONS,
 			BUTTON_1_WIDTH,
 			BUTTON_1_HEIGHT,
 			0,
@@ -241,7 +345,7 @@ void Gamestate::switchState(int newState)
 		this->vector_menuObjects.push_back(
 			new Button(
 			&this->vector_clickEvents,
-			Button::BUTTON_CREDITS,
+			Button::BUTTON_TOSTATE_CREDITS,
 			BUTTON_1_WIDTH,
 			BUTTON_1_HEIGHT,
 			0,

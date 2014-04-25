@@ -18,6 +18,7 @@ const int HUD_HEIGHT = 160;
 const SDL_Color FONT_COLOR_WHITE = { 255,255,255 };
 const int FONT_HUD_1_SIZE = 24;
 const char FONT_HUD_1_FILENAME[] = "font_HUD_1.ttf";
+
 //const int NUM_ADVANCED_SETTINGS = 1;//no longer needed. Was using to loop through advanced settings, which are now stored in a vector (can do .size())
 const int HEALTHBAR_WIDTH = 402;
 const int HEALTHBAR_HEIGHT = 48;
@@ -30,6 +31,9 @@ const int HEALTHBAR_ENTITY_OFFSET_Y = -15;
 const int HEALTHBAR_ENTITY_WIDTH = 48;
 const int HEALTHBAR_ENTITY_HEIGHT = 7;
 
+//UI attributes
+const int UI_CLIP_COUNT = 2;
+enum { UI_CLIP_TITLE, UI_CLIP_HEADER };
 
 //the gray border for the healthbar.. will actually be a gray SDLrect behind it
 const int HEALTHBAR_BORDER_ENTITY_OFFSET_X = 6;

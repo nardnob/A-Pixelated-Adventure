@@ -22,6 +22,7 @@ private:
 
 	//The portions of the sprite map to be blitted
 	SDL_Rect terrainClip[ TERRAIN_CLIP_COUNT ];
+	SDL_Rect uiClip[UI_CLIP_COUNT];
 	bool fullscreen;	//the window state (full screen or windowed)
 public:
 	//The surfaces

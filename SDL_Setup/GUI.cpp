@@ -38,6 +38,18 @@ GUI::GUI(Gamestate* in_gamestate)
 
 	//center the window; does not center the fullscreen window
 	putenv("SDL_VIDEO_CENTERED=1");
+
+	//Title bar "A Pixelated Adventure"
+	uiClip[0].w = 1056;
+	uiClip[0].h = 408;
+	uiClip[0].x = 0;
+	uiClip[0].y = 0;
+
+	//generic title bar for menus
+	uiClip[1].w = 582;
+	uiClip[1].h = 342;
+	uiClip[1].x = 1056;
+	uiClip[1].y = 0;
 }
 
 void GUI::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip)
@@ -367,7 +379,7 @@ void GUI::displayAll()
 		case STATES_START_MENU:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
 
-			apply_surface(this->monitorWidth / 2 - surface_titleBar->w / 2, 0, surface_titleBar, surface_screen);
+			apply_surface(this->monitorWidth / 2 - uiClip[UI_CLIP_TITLE].w / 2, 0, surface_titleBar, surface_screen, &this->uiClip[UI_CLIP_TITLE]);
 
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
@@ -378,6 +390,7 @@ void GUI::displayAll()
 
 		case STATES_PAUSE_MENU:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
@@ -396,6 +409,9 @@ void GUI::displayAll()
 
 		case STATES_OPTIONS_MENU:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+
+			apply_surface(this->monitorWidth / 2 - uiClip[UI_CLIP_HEADER].w / 2, 0, surface_titleBar, surface_screen, &this->uiClip[UI_CLIP_HEADER]);
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
@@ -405,6 +421,9 @@ void GUI::displayAll()
 
 		case STATES_CREDITS_MENU:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+
+			apply_surface(this->monitorWidth / 2 - uiClip[UI_CLIP_HEADER].w / 2, 0, surface_titleBar, surface_screen, &this->uiClip[UI_CLIP_HEADER]);
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{

@@ -34,6 +34,8 @@ public:
 
 	GUI* gui;
 
+	vector<int> backTo; //Vector of state ID's to go back to from menus.. like from options back to either a) the pause menu or b) the start menu
+
 	TerrainMap currentMap; //the current map object
 	vector<Player> vector_players; //vector to hold the Player object(s)
 	vector<NPC> vector_NPCs;
