@@ -34,7 +34,7 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_buttons = NULL;
 	this->surface_titleBar = NULL;
 	this->surface_credits = NULL;
-	this->surface_cursor_primary = NULL;
+	//this->surface_cursor_primary = NULL;
 
 	fullscreen = false;
 	quit = false;
@@ -64,7 +64,7 @@ void GUI::clean_up()
 	SDL_FreeSurface(surface_buttons);
 	SDL_FreeSurface(surface_titleBar);
 	SDL_FreeSurface(surface_credits);
-	SDL_FreeSurface(surface_cursor_primary);
+	//SDL_FreeSurface(surface_cursor_primary);
 
 	//Close the font that was used
 	TTF_CloseFont(hudPtr->font_HUD_1);
@@ -438,6 +438,8 @@ void GUI::displayAll()
 		case STATES_PAUSE_MENU:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 60, 52, 43));
 
+			apply_surface(this->monitorWidth / 2 - uiClip[UI_CLIP_HEADER].w / 2, 0, surface_titleBar, surface_screen, &this->uiClip[UI_CLIP_HEADER]);
+
 			//Display all of the MenuObjects
 			for(int i = 0; i < gamestatePtr->vector_menuObjects.size(); i++)
 			{
@@ -483,7 +485,7 @@ void GUI::displayAll()
 	}
 
 	//apply the custom cursor to the screen
-	apply_surface(mouse_x, mouse_y, surface_cursor_primary, surface_screen);
+	//apply_surface(mouse_x, mouse_y, surface_cursor_primary, surface_screen);
 }
 
 void GUI::handleMouseMotion(int x, int y)
@@ -693,7 +695,7 @@ bool GUI::init()
 	SDL_WM_SetCaption("A Pixelated Adventure", NULL);
 
 	//hide the cursor to display the custom cursor instead
-	SDL_ShowCursor(0);
+	//SDL_ShowCursor(0);
 
 	//If everything initialized fine
 	return true;
@@ -705,7 +707,7 @@ bool GUI::load_files()
 	surface_terrain = load_image("terrain.png");
 	surface_entities = load_image("entities.png");
 	surface_healthbar = load_image("healthbar.png");
-	surface_cursor_primary = load_image("cursor_primary.png");
+	//surface_cursor_primary = load_image("cursor_primary.png");
 	if(this->smallMonitor)
 	{
 		surface_buttons = load_image("buttons_small.png");
@@ -725,7 +727,7 @@ bool GUI::load_files()
 	   || surface_buttons == NULL
 	   || surface_titleBar == NULL
 	   || surface_credits == NULL
-	   || surface_cursor_primary == NULL)
+	   /*|| surface_cursor_primary == NULL*/)
 	{
 		return false;
 	}

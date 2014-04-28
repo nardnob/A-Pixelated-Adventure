@@ -64,11 +64,17 @@ Player::Player(int in_clipX, int in_clipY, double in_posX, double in_posY, doubl
 
 void Player::pressKey(int toPress)
 {
-	bool startWalking = true;;
-	for(int i = 0; i < 4; i++)
+	bool startWalking = false;
+
+	if(toPress >= 0 && toPress <= 3)
 	{
-		if(keyDown[i])
-			startWalking = false;
+		startWalking = true;
+
+		for(int i = 0; i < 4; i++)
+		{
+			if(keyDown[i])
+				startWalking = false;
+		}
 	}
 
 	this->keyDown[toPress] = true;
