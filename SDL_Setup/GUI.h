@@ -91,6 +91,8 @@ public:
 
 	void handleMouseUp(int x, int y);
 
+	void handlePlayerInput(int in_key);
+
 	//initialize SDL
 	bool init();
 

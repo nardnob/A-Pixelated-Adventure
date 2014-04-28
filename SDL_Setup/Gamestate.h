@@ -1,6 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include "Ability.h"
 #include "Entity.h"
 #include "GUI.h"
 #include "MenuObject.h"
@@ -43,6 +44,9 @@ public:
 
 	vector<MenuObject*> vector_menuObjects; //A vector holding the menu objects, cleared and loaded for each new state.
 	vector<int> vector_clickEvents;
+
+	vector<Ability*> vector_abilities_player; //A vector to hold player abilities (attacks, buffs, etc) to be handled per physics frame
+	vector<Ability*> vector_abilities_mobs; //A vector to hold monster attack abilities to be handled per physics frame
 
 	//switch the current state
 	void switchState(int newState);

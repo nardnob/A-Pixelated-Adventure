@@ -59,6 +59,12 @@ const int TERRAIN_CLIP_W = 32;
 const int TERRAIN_CLIP_H = 32;
 const int TERRAIN_CLIP_COUNT = 8;
 
+//animation file attributes
+const int ANIMATION_FILE_W = 1000;
+const int ANIMATION_FILE_H = 900;
+const int ANIMATION_CLIP_W = 100;
+const int ANIMATION_CLIP_H = 100;
+
 //entity file attributes
 const int ENTITY_FILE_W = 768;
 const int ENTITY_FILE_H = 512;

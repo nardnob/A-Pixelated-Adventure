@@ -7,6 +7,7 @@
 #include "HUD.h"
 #include "MapDoor_Boundary.h"
 #include "Physics.h"
+#include "RadiusAttackAbility.h"
 #include "Timer.h"
 
 #include <algorithm>
@@ -515,6 +516,19 @@ void GUI::handleMouseUp(int x, int y)
 	}
 }
 
+void GUI::handlePlayerInput(int in_key)
+{
+	if(gamestatePtr->currentState == STATES_GAMEPLAY)
+	{
+		switch(in_key)
+		{
+		case KEY_SPACE:
+			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(&gamestatePtr->vector_entities, 100, 25));
+			break;
+		}
+	}
+}
+
 void GUI::eventHandler()
 {
 	//While there's events to handle
@@ -543,6 +557,7 @@ void GUI::eventHandler()
 						break;
 					case SDLK_SPACE:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
+							handlePlayerInput(KEY_SPACE);
 						break;
 					case SDLK_ESCAPE:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_ESC);
@@ -631,7 +646,6 @@ void GUI::frameRate()
 		//Sleep the remaining frame time
 		//SDL_Delay((1000 / FRAMES_PER_SECOND) - this->fpsTimer.get_ticks());
 		this->fpsTimer.allowPhysics = true;
-		OutputDebugString("\n\n1\n\n");
 
 		this->fpsTimer.frameCount++;
 		int temp = this->fpsTimer.get_totalTicks();
@@ -648,7 +662,6 @@ void GUI::frameRate()
 	else
 	{
 		this->fpsTimer.allowPhysics = false;
-		OutputDebugString("\n\n2\n\n");
 	}
 }
 

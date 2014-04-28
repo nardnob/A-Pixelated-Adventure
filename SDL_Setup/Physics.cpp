@@ -151,7 +151,7 @@ void Physics::keyboardInput(Gamestate& gamestate)
 				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
 				break;
 			case KEY_SPACE:
-				gamestate.vector_players.at(0).currentStatus.takeLife(1);
+				//gamestate.vector_players.at(0).currentStatus.takeLife(1);
 				break;
 			}
 		}
@@ -466,6 +466,14 @@ void Physics::deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 	{
 		gamestate.switchState(STATES_DEATH_MENU);
 	}
+	
+	for(int i = gamestate.vector_entities.size() - 1; i >= 1; i--)
+	{
+		if(!gamestate.vector_entities.at(i)->currentStatus.hasLife())
+		{
+			gamestate.vector_entities.erase(gamestate.vector_entities.begin() + i);
+		}
+	}
 }
 
 void Physics::walkingAnimations(Gamestate& gamestate)
@@ -502,10 +510,23 @@ void Physics::walkingAnimations(Gamestate& gamestate)
 	}
 }
 
+void Physics::handleAbilities(Gamestate& gamestate)
+{
+	for(int i = 0; i < gamestate.vector_abilities_player.size(); i++)
+	{ 
+		gamestate.vector_abilities_player.at(i)->useAbility();
+		delete gamestate.vector_abilities_player.at(i);
+		gamestate.vector_abilities_player.pop_back();
+	}
+}
+
 void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 {	
 	//consider keyboard events for the player
 	keyboardInput(gamestate);
+
+	//hande attack vectors (mob and player)
+	handleAbilities(gamestate);
 	
 	//convert force to velocity
 	forceToVelocity(gamestate);
