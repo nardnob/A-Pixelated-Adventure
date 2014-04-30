@@ -54,10 +54,10 @@ const char FONT_GAMESTATE_3_FILENAME[] = "font_Gamestate_1.ttf";
 
 //terrain file attributes
 const int TERRAIN_FILE_W = 512;
-const int TERRAIN_FILE_H = 512;
+const int TERRAIN_FILE_H = 1024;
 const int TERRAIN_CLIP_W = 32;
 const int TERRAIN_CLIP_H = 32;
-const int TERRAIN_CLIP_COUNT = 8;
+const int TERRAIN_CLIP_COUNT = 512;
 
 //animation file attributes
 const int ANIMATION_FILE_W = 1000;

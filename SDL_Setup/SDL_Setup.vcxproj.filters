@@ -189,9 +189,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="map_001.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="ToDo.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -211,6 +208,18 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Credits.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="map_000.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="map_001.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="map_005.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="outdoor.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

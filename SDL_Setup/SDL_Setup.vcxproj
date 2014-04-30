@@ -136,14 +136,14 @@
   <ItemGroup>
     <Text Include="Credits.txt" />
     <Text Include="DoneThisBatch.txt" />
-    <Text Include="map_001.txt">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </Text>
+    <Text Include="map_000.txt" />
+    <Text Include="map_001.txt" />
     <Text Include="map_002.txt" />
     <Text Include="map_003.txt" />
     <Text Include="map_004.txt" />
+    <Text Include="map_005.txt" />
     <Text Include="map_example.txt" />
+    <Text Include="outdoor.txt" />
     <Text Include="ToDo.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
