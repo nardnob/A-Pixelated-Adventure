@@ -319,7 +319,7 @@ void Gamestate::switchState(int newState)
 			//restore the players' life
 			vector_players.at(0).currentStatus.healLife();
 
-			this->resetGameplay = false;
+			//this->resetGameplay = false;
 		}
 		break;
 

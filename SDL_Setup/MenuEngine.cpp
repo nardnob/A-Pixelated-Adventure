@@ -12,10 +12,12 @@ void MenuEngine::engine(int state, Gamestate& gamestate)
 		}
 		break;
 	case STATES_DEATH_MENU:
+		/*
 		if(gamestate.vector_players.at(0).keyIsDown(KEY_SPACE))
 		{
 			gamestate.switchState(STATES_START_MENU);
 		}
+		*/
 
 		for(int i = 0; i < gamestate.vector_clickEvents.size(); i++)
 		{

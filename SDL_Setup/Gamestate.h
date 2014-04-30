@@ -2,6 +2,7 @@
 #define GAMESTATE_H
 
 #include "Ability.h"
+#include "Animation.h"
 #include "Entity.h"
 #include "GUI.h"
 #include "MenuObject.h"
@@ -47,6 +48,8 @@ public:
 
 	vector<Ability*> vector_abilities_player; //A vector to hold player abilities (attacks, buffs, etc) to be handled per physics frame
 	vector<Ability*> vector_abilities_mobs; //A vector to hold monster attack abilities to be handled per physics frame
+
+	vector<Animation*> vector_animations; //A vector to hold the animations (like aoe animations or player animations)
 
 	//switch the current state
 	void switchState(int newState);

@@ -1,3 +1,5 @@
+#include "AnimationEntity.h"
+#include "AnimationStatic.h"
 #include "Boundary.h"
 #include "constants.cpp"
 #include "HUD.h"
@@ -124,38 +126,6 @@ vector<bool> Physics::goodNextPosition(Gamestate& gamestate, double nextX, doubl
 		bad.at(y) = true;
 
 	return bad;
-}
-
-void Physics::keyboardInput(Gamestate& gamestate)
-{
-	for(int i = 0; i < KEY_BUFFER_SIZE; i++)
-	{
-		if(gamestate.vector_players.at(0).keyIsDown(i))
-		{
-			switch(i)
-			{
-			case KEY_LEFT:
-				gamestate.vector_players.at(0).forceX = gamestate.vector_players.at(0).forceX - WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_LEFT);
-				break;
-			case KEY_RIGHT:
-				gamestate.vector_players.at(0).forceX += WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_RIGHT);
-				break;
-			case KEY_UP:
-				gamestate.vector_players.at(0).forceY = gamestate.vector_players.at(0).forceY - WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_BACK);
-				break;
-			case KEY_DOWN:
-				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
-				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
-				break;
-			case KEY_SPACE:
-				//gamestate.vector_players.at(0).currentStatus.takeLife(1);
-				break;
-			}
-		}
-	}
 }
 
 void Physics::toggleNPCTextures(Gamestate& gamestate)
@@ -510,22 +480,97 @@ void Physics::walkingAnimations(Gamestate& gamestate)
 	}
 }
 
+void Physics::degradeAnimations(Gamestate& gamestate)
+{
+	for(int i = gamestate.vector_animations.size() - 1; i >= 0; i--)
+	{
+		gamestate.vector_animations.at(i)->degrade();
+		if(gamestate.vector_animations.at(i)->anticipatesDeath())
+		{
+			delete gamestate.vector_animations.at(i);
+			gamestate.vector_animations.erase(gamestate.vector_animations.begin() + i);			
+		}
+	}
+}
+
 void Physics::handleAbilities(Gamestate& gamestate)
 {
 	for(int i = 0; i < gamestate.vector_abilities_player.size(); i++)
 	{ 
+		//use the ability from the abilities vector
 		gamestate.vector_abilities_player.at(i)->useAbility();
+
+		//add any animations associated with the ability to the animation vector
+		switch(gamestate.vector_abilities_player.at(i)->get_animationType())
+		{
+		case ANIMATION_TYPE_NONE: //do not add an animation
+			break;
+		case ANIMATION_TYPE_STATIC:
+			gamestate.vector_animations.push_back(new AnimationStatic(
+				gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
+				gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
+				gamestate.vector_abilities_player.at(i)->get_animationNum(),
+				gamestate.vector_abilities_player.at(i)->get_animationDegradationRate()
+				));
+			break;
+		case ANIMATION_TYPE_ENTITY:
+			gamestate.vector_animations.push_back(new AnimationEntity(
+				gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
+				gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
+				gamestate.vector_abilities_player.at(i)->get_animationNum(),
+				gamestate.vector_abilities_player.at(i)->get_animationDegradationRate(),
+				gamestate.vector_abilities_player.at(i)->ownerEntity
+				));
+			break;
+		}
+
+		//delete the ability and remove it from the ability vector
 		delete gamestate.vector_abilities_player.at(i);
 		gamestate.vector_abilities_player.pop_back();
 	}
 }
 
+void Physics::keyboardInput(Gamestate& gamestate)
+{
+	for(int i = 0; i < KEY_BUFFER_SIZE; i++)
+	{
+		if(gamestate.vector_players.at(0).keyIsDown(i))
+		{
+			switch(i)
+			{
+			case KEY_LEFT:
+				gamestate.vector_players.at(0).forceX = gamestate.vector_players.at(0).forceX - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_LEFT);
+				break;
+			case KEY_RIGHT:
+				gamestate.vector_players.at(0).forceX += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_RIGHT);
+				break;
+			case KEY_UP:
+				gamestate.vector_players.at(0).forceY = gamestate.vector_players.at(0).forceY - WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_BACK);
+				break;
+			case KEY_DOWN:
+				gamestate.vector_players.at(0).forceY += WALKING_FORCE;
+				gamestate.vector_players.at(0).toggleTexture(TEXTURE_FRONT);
+				break;
+			case KEY_SPACE:
+				//gamestate.vector_players.at(0).currentStatus.takeLife(1);
+				break;
+			}
+		}
+	}
+}
+
 void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
-{	
+{
+	//degrade animations (before possibily adding new animations)
+	degradeAnimations(gamestate);
+
 	//consider keyboard events for the player
 	keyboardInput(gamestate);
 
-	//hande attack vectors (mob and player)
+	//handle attack vectors (mob and player)
 	handleAbilities(gamestate);
 	
 	//convert force to velocity

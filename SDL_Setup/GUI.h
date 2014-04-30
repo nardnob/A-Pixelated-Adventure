@@ -35,6 +35,7 @@ public:
 	SDL_Surface* surface_buttons;
 	SDL_Surface* surface_credits;
 	//SDL_Surface* surface_cursor_primary;
+	SDL_Surface* surface_animations;
 
 	int monitorWidth, monitorHeight; //the width and height of the monitor defined at runtime
 

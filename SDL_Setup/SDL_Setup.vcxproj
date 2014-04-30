@@ -69,6 +69,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationEntity.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationStatic.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="MenuEngine.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
@@ -90,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\Desktop\ui_sheet.png" />
+    <Image Include="animations.png" />
     <Image Include="buttons.png" />
     <Image Include="buttons_small.png" />
     <Image Include="credits.png" />
@@ -107,6 +111,7 @@
   <ItemGroup>
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationEntity.h" />
     <ClInclude Include="AnimationStatic.h" />
     <ClInclude Include="Boundary.h" />
     <ClInclude Include="BuffAbility.h" />

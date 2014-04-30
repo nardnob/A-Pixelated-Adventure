@@ -35,6 +35,7 @@ GUI::GUI(Gamestate* in_gamestate)
 	this->surface_buttons = NULL;
 	this->surface_titleBar = NULL;
 	this->surface_credits = NULL;
+	this->surface_animations = NULL;
 	//this->surface_cursor_primary = NULL;
 
 	fullscreen = false;
@@ -65,6 +66,7 @@ void GUI::clean_up()
 	SDL_FreeSurface(surface_buttons);
 	SDL_FreeSurface(surface_titleBar);
 	SDL_FreeSurface(surface_credits);
+	SDL_FreeSurface(surface_animations);
 	//SDL_FreeSurface(surface_cursor_primary);
 
 	//Close the font that was used
@@ -368,32 +370,40 @@ void GUI::display(int code_in)
 				}
 				break;
 
-			//loop through and display the entities (a vector of good guys and bad guys and every entity ever)
-			case CODE_ENTITY:
-				//sort the Entities by depth and then output them
-				vector<Entity*> tempEntities;
-				for(int i = 0; i < gamestatePtr->vector_entities.size(); i++)
-				{
-					tempEntities.push_back(gamestatePtr->vector_entities.at(i));
-				}
+		//loop through and display the entities (a vector of good guys and bad guys and every entity ever)
+		case CODE_ENTITY:
+			//sort the Entities by depth and then output them
+		{
+			vector<Entity*> tempEntities;
+			for(int i = 0; i < gamestatePtr->vector_entities.size(); i++)
+			{
+				tempEntities.push_back(gamestatePtr->vector_entities.at(i));
+			}
 
-				//sort the entities by depth, lowest posY first
-				sort(tempEntities.begin(), tempEntities.end(), sortEntitiesFunc);
-				
-				for(int i = tempEntities.size() - 1; i >= 0; i--)
-				{
-					SDL_Rect temp = tempEntities.at(i)->rect[tempEntities.at(i)->get_currentTexture()];
-					temp.y += tempEntities.at(i)->spriteOffsetY;
+			//sort the entities by depth, lowest posY first
+			sort(tempEntities.begin(), tempEntities.end(), sortEntitiesFunc);
 
-					apply_surface(
-						tempEntities.at(i)->posX + this->screenOffset_x,
-						tempEntities.at(i)->posY + this->screenOffset_y,
-						surface_entities,
-						surface_screen,
-						&temp);
-						//&gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()]);
-				}
-				break;
+			for(int i = tempEntities.size() - 1; i >= 0; i--)
+			{
+				SDL_Rect temp = tempEntities.at(i)->rect[tempEntities.at(i)->get_currentTexture()];
+				temp.y += tempEntities.at(i)->spriteOffsetY;
+
+				apply_surface(
+					tempEntities.at(i)->posX + this->screenOffset_x,
+					tempEntities.at(i)->posY + this->screenOffset_y,
+					surface_entities,
+					surface_screen,
+					&temp);
+				//&gamestatePtr->vector_entities.at(i)->rect[gamestatePtr->vector_entities.at(i)->get_currentTexture()]);
+			}
+			break;
+		}
+		case CODE_ANIMATIONS:
+			for(int i = 0; i < gamestatePtr->vector_animations.size(); i++)
+			{
+				gamestatePtr->vector_animations.at(i)->display(surface_animations, surface_screen, this->screenOffset_x, this->screenOffset_y);
+			}
+			break;
 	}
 }
 
@@ -422,6 +432,7 @@ void GUI::displayAll()
 			display(CODE_TERRAIN);
 			display(CODE_ENTITY);
 			display(CODE_HUD);
+			display(CODE_ANIMATIONS);
 			break;
 
 		case STATES_START_MENU:
@@ -523,7 +534,8 @@ void GUI::handlePlayerInput(int in_key)
 		switch(in_key)
 		{
 		case KEY_SPACE:
-			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(&gamestatePtr->vector_entities, 100, 25));
+			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(gamestatePtr->vector_entities.at(0), &gamestatePtr->vector_entities, 50, 25,
+				ANIMATION_TYPE_ENTITY, 0, ANIMATION_DEGRADATION_RATE));
 			break;
 		}
 	}
@@ -721,6 +733,8 @@ bool GUI::load_files()
 	surface_entities = load_image("entities.png");
 	surface_healthbar = load_image("healthbar.png");
 	//surface_cursor_primary = load_image("cursor_primary.png");
+	surface_animations = load_image("animations.png");
+
 	if(this->smallMonitor)
 	{
 		surface_buttons = load_image("buttons_small.png");
@@ -740,6 +754,7 @@ bool GUI::load_files()
 	   || surface_buttons == NULL
 	   || surface_titleBar == NULL
 	   || surface_credits == NULL
+	   || surface_animations == NULL
 	   /*|| surface_cursor_primary == NULL*/)
 	{
 		return false;
@@ -821,6 +836,27 @@ void GUI::switchMap(string in_mapFileName, double in_x, double in_y)
 	setScreenOffsets();
 
 	Physics::updateHealthbarPos(gamestatePtr, 0);
+
+	//clear vector_abilities_player
+	for(int i = gamestatePtr->vector_abilities_player.size() - 1; i >= 0; i--)
+	{
+		delete gamestatePtr->vector_abilities_player.at(i);
+		gamestatePtr->vector_abilities_player.erase(gamestatePtr->vector_abilities_player.begin() + i);
+	}
+
+	//clear vector_abilities_mob
+	for(int i = gamestatePtr->vector_abilities_mobs.size() - 1; i >= 0; i--)
+	{
+		delete gamestatePtr->vector_abilities_mobs.at(i);
+		gamestatePtr->vector_abilities_mobs.erase(gamestatePtr->vector_abilities_mobs.begin() + i);
+	}
+	
+	//clear vector_animations
+	for(int i = gamestatePtr->vector_animations.size() - 1; i >= 0; i--)
+	{
+		delete gamestatePtr->vector_animations.at(i);
+		gamestatePtr->vector_animations.erase(gamestatePtr->vector_animations.begin() + i);
+	}
 }
 
 void GUI::teleport(double in_x, double in_y, int in_direction)

@@ -29,6 +29,7 @@ private:
 	static void deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/);
 	static void walkingAnimations(Gamestate& gamestate);
 	static void handleAbilities(Gamestate& gamestate);
+	static void degradeAnimations(Gamestate& gamestate);
 };
 
 #endif

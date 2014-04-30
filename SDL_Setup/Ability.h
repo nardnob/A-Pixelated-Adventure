@@ -10,8 +10,13 @@ class Ability
 {
 public:
 	virtual void useAbility() {}
-private:
+	virtual int get_animationType() { return 0; }
+	virtual int get_animationNum() { return 0; }
+	virtual int get_animationDegradationRate() { return 0; }
+	Entity* ownerEntity;
+protected:
 	vector<Entity*>* vector_entities;
+	int animationType, animationNum, animationDegradationRate;
 };
 
 #endif
