@@ -1,8 +1,8 @@
 #include "AnimationEntity.h"
 
-AnimationEntity::AnimationEntity(int in_posX, int in_posY, int in_animationNum, int in_degradationRate, Entity* in_entity)
+AnimationEntity::AnimationEntity(int in_posX, int in_posY, int in_animationNum, int in_degradationRate, Entity* in_ownerEntity)
 {
-	this->entity = in_entity;
+	this->ownerEntity = in_ownerEntity;
 
 	this->posX = in_posX;
 	this->posY = in_posY;
@@ -19,8 +19,8 @@ AnimationEntity::AnimationEntity(int in_posX, int in_posY, int in_animationNum, 
 
 void AnimationEntity::degrade() //if(thatObject.anticaptesDeath()) kill him ... should be checked by caller after caller calls degrade
 {
-	this->posX = this->entity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2;
-	this->posY = this->entity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2;
+	this->posX = this->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2;
+	this->posY = this->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2;
 
 	this->degradationCount++;
 

@@ -11,10 +11,12 @@
 
 class AnimationEntity : public Animation
 {
-private:
-	Entity* entity;
 public:
-	AnimationEntity(int in_posX, int in_posY, int in_animationNum, int in_degradationRate, Entity* in_entity);
+	Entity* ownerEntity;
+
+	AnimationEntity(int in_posX, int in_posY, int in_animationNum, int in_degradationRate, Entity* in_ownerEntity);
+
+	Entity* get_ownerEntity() { return this->ownerEntity; }
 
 	void degrade(); //if(thatObject.anticaptesDeath()) kill him ... should be checked by caller after caller calls degrade
 };

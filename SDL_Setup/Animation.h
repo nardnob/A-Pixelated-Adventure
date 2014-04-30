@@ -7,6 +7,7 @@
 #include "SDL_mixer.h"
 
 #include "constants.cpp"
+#include "Entity.h"
 
 /*
 ** Animation is an abstract base class for classes: AnimationEntity, AnimationStatic, etc..
@@ -20,6 +21,8 @@ public:
 	bool anticipatesDeath() { return commitSuicide; }
 
 	virtual void degrade() {}
+
+	Entity* get_ownerEntity() { return NULL; }
 protected:
 	int
 		degradationRate, //wait x frames before degrading to next animation state (think degradationRate / fps = seconds per animation frame)

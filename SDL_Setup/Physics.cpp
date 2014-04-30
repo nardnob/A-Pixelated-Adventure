@@ -441,6 +441,16 @@ void Physics::deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 	{
 		if(!gamestate.vector_entities.at(i)->currentStatus.hasLife())
 		{
+			//delete any relevant animations for this entitie's death
+			for(int i = gamestate.vector_animations.size() - 1; i >= 1; i--)
+			{
+				if(gamestate.vector_animations.at(i)->get_ownerEntity() == gamestate.vector_entities.at(i))
+				{
+					delete gamestate.vector_animations.at(i);
+					gamestate.vector_animations.erase(gamestate.vector_animations.begin() + i);
+				}
+			}
+
 			gamestate.vector_entities.erase(gamestate.vector_entities.begin() + i);
 		}
 	}
