@@ -183,6 +183,11 @@ void GUI::defineHUD()
 		hudPtr->HUD_rect.w = SCREEN_WIDTH;
 	}*/
 
+	hudPtr->HUD_rect_overlay.x = hudPtr->HUD_rect.x + 5;
+	hudPtr->HUD_rect_overlay.y = hudPtr->HUD_rect.y + 5;
+	hudPtr->HUD_rect_overlay.w = hudPtr->HUD_rect.w - 10;
+	hudPtr->HUD_rect_overlay.h = hudPtr->HUD_rect.h - 10;
+
 	hudPtr->healthBar_BG.w = HEALTHBAR_WIDTH;
 	hudPtr->healthBar_BG.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar_BG.x = hudPtr->HUD_rect.x + HEALTHBAR_OFFSET_X;
@@ -343,10 +348,15 @@ void GUI::display(int code_in)
 			}
 
 			//fill in the background of the HUD with gray (86, 86, 86 RGB)
-			SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+			//SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+			SDL_FillRect(surface_screen, &hudPtr->HUD_rect, SDL_MapRGB(surface_screen->format, 60, 52, 43));
+
+			//fill in the background of the HUD with gray (86, 86, 86 RGB)
+			SDL_FillRect(surface_screen, &hudPtr->HUD_rect_overlay, SDL_MapRGB(surface_screen->format, 72, 66, 56));
 
 			//fill in the health bar background with red
-			SDL_FillRect(surface_screen, &hudPtr->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
+			//SDL_FillRect(surface_screen, &hudPtr->healthBar_BG, SDL_MapRGB(surface_screen->format, 185, 0, 0));
+			SDL_FillRect(surface_screen, &hudPtr->healthBar_BG, SDL_MapRGB(surface_screen->format, 86, 86, 86));
 
 			//update the width of the health bars foreground (the green) and display it
 			hudPtr->healthBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.lifePercent();
@@ -358,9 +368,14 @@ void GUI::display(int code_in)
 			//fill in the mana bar background with _ color
 			SDL_FillRect(surface_screen, &hudPtr->manaBar_BG, SDL_MapRGB(surface_screen->format, 86, 86, 86));
 
-			//update the width of the mana bars foreground (the blue) and display it
-			hudPtr->manaBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.manaPercent();
-			SDL_FillRect(surface_screen, &hudPtr->manaBar, SDL_MapRGB(surface_screen->format, 51, 51, 255));
+			{
+				//update the width of the mana bars foreground (the blue) and display it
+				hudPtr->manaBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.manaPercent();
+				float dx = HEALTHBAR_WIDTH - hudPtr->manaBar.w;
+				hudPtr->manaBar.x += dx;
+				SDL_FillRect(surface_screen, &hudPtr->manaBar, SDL_MapRGB(surface_screen->format, 51, 51, 255));
+				hudPtr->manaBar.x -= dx;
+			}
 
 			//display the overlay of the manabar
 			apply_surface(hudPtr->manaBar.x - 75, hudPtr->manaBar.y - 12, surface_healthbar, surface_screen);

@@ -13,7 +13,8 @@ private:
 public:
 	HUD();
 
-	SDL_Rect HUD_rect; //the gray box that is the HUD area
+	SDL_Rect HUD_rect; //the brown box that is the HUD area
+	SDL_Rect HUD_rect_overlay; //the inside brown box of the HUD area (effectively creates a border)
 	SDL_Rect healthBar; //the green foreground of the health bar; should decrease with health
 	SDL_Rect healthBar_BG; //the red background of the health bar
 	SDL_Rect manaBar; //the blue foreground of the mana bar; should decrease with mana
