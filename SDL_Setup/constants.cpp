@@ -93,6 +93,9 @@ const double BASE_POSY = 41; //for the player
 const double BASE_W = 30; //for the player
 const double BASE_H = 23; //For the player
 
+//constants for status
+const float REGEN_LIFE_PERFRAME = .01;
+const float REGEN_MANA_PERFRAME = .2;
 
 //constants for keyboard shortcuts
 const int KEY_BUFFER_SIZE = 6;

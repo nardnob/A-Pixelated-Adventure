@@ -192,11 +192,30 @@ void GUI::defineHUD()
 	hudPtr->healthBar.h = HEALTHBAR_HEIGHT;
 	hudPtr->healthBar.x = hudPtr->HUD_rect.x + HEALTHBAR_OFFSET_X;
 	hudPtr->healthBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->healthBar.h / 2 + HEALTHBAR_OFFSET_Y; //center it (vertially) in the HUD_rect
+
+	hudPtr->manaBar_BG.w = HEALTHBAR_WIDTH;
+	hudPtr->manaBar_BG.h = HEALTHBAR_HEIGHT;
+	hudPtr->manaBar_BG.x = hudPtr->HUD_rect.x + hudPtr->HUD_rect.w - HEALTHBAR_WIDTH - HEALTHBAR_OFFSET_X;
+	hudPtr->manaBar_BG.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->manaBar_BG.h / 2 + HEALTHBAR_OFFSET_Y;
+
+	hudPtr->manaBar.w = HEALTHBAR_WIDTH;
+	hudPtr->manaBar.h = HEALTHBAR_HEIGHT;
+	hudPtr->manaBar.x = hudPtr->HUD_rect.x + hudPtr->HUD_rect.w - HEALTHBAR_WIDTH - HEALTHBAR_OFFSET_X;
+	hudPtr->manaBar.y = hudPtr->HUD_rect.y + hudPtr->HUD_rect.h / 2 - hudPtr->manaBar.h / 2 + HEALTHBAR_OFFSET_Y;
 	
-	//healthbar messagec
+	//healthbar message
 	hudPtr->hudMessages.push_back(Message(
 		hudPtr->healthBar.x + hudPtr->healthBar.w / 2 + HEALTHBAR_MESSAGE_OFFSET_X,
 		hudPtr->healthBar.y + hudPtr->healthBar.h / 2 + HEALTHBAR_MESSAGE_OFFSET_Y,
+		hudPtr->font_HUD_1,
+		"100 / 100",
+		true
+		));
+
+	//manabar message
+	hudPtr->hudMessages.push_back(Message(
+		hudPtr->manaBar.x + hudPtr->manaBar.w / 2 + HEALTHBAR_MESSAGE_OFFSET_X,
+		hudPtr->manaBar.y + hudPtr->manaBar.h / 2 + HEALTHBAR_MESSAGE_OFFSET_Y,
 		hudPtr->font_HUD_1,
 		"100 / 100",
 		true
@@ -335,6 +354,16 @@ void GUI::display(int code_in)
 
 			//display the overlay of the healthbar
 			apply_surface(hudPtr->healthBar.x - 75, hudPtr->healthBar.y - 12, surface_healthbar, surface_screen);
+
+			//fill in the mana bar background with _ color
+			SDL_FillRect(surface_screen, &hudPtr->manaBar_BG, SDL_MapRGB(surface_screen->format, 86, 86, 86));
+
+			//update the width of the mana bars foreground (the blue) and display it
+			hudPtr->manaBar.w = HEALTHBAR_WIDTH * gamestatePtr->vector_players.at(0).currentStatus.manaPercent();
+			SDL_FillRect(surface_screen, &hudPtr->manaBar, SDL_MapRGB(surface_screen->format, 51, 51, 255));
+
+			//display the overlay of the manabar
+			apply_surface(hudPtr->manaBar.x - 75, hudPtr->manaBar.y - 12, surface_healthbar, surface_screen);
 
 			//display the hud messages
 			for(int i = 0; i < hudPtr->hudMessages.size(); i++)
@@ -535,7 +564,7 @@ void GUI::handlePlayerInput(int in_key)
 		{
 		case KEY_SPACE:
 			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(gamestatePtr->vector_entities.at(0), &gamestatePtr->vector_entities, 50, 25,
-				ANIMATION_TYPE_ENTITY, 0, ANIMATION_DEGRADATION_RATE));
+				ANIMATION_TYPE_ENTITY, 0, ANIMATION_DEGRADATION_RATE, 25));
 			break;
 		}
 	}

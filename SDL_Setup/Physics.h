@@ -30,6 +30,7 @@ private:
 	static void walkingAnimations(Gamestate& gamestate);
 	static void handleAbilities(Gamestate& gamestate);
 	static void degradeAnimations(Gamestate& gamestate);
+	static void regenStats(Gamestate& gamestate);
 };
 
 #endif

@@ -16,6 +16,8 @@ public:
 	SDL_Rect HUD_rect; //the gray box that is the HUD area
 	SDL_Rect healthBar; //the green foreground of the health bar; should decrease with health
 	SDL_Rect healthBar_BG; //the red background of the health bar
+	SDL_Rect manaBar; //the blue foreground of the mana bar; should decrease with mana
+	SDL_Rect manaBar_BG; //the background of the mana bar
 
 	TTF_Font* font_HUD_1;
 	vector<Message> advancedMessages; //all of the advanced messages of the HUD. only displayed if advanced (if f3)

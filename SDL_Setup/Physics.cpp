@@ -278,6 +278,7 @@ void Physics::updateHUD(Gamestate& gamestate, HUD& hud)
 	hud.advancedMessages.at(hud.MESSAGE_LIFE).set_message("Life:  " + to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())));
 
 	hud.hudMessages.at(0).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.lifeAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
+	hud.hudMessages.at(1).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.manaAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxMana)));
 }
 
 void Physics::updateHealthbarPos(Gamestate* gamestate, int i)
@@ -490,6 +491,12 @@ void Physics::walkingAnimations(Gamestate& gamestate)
 	}
 }
 
+void Physics::regenStats(Gamestate& gamestate)
+{
+	gamestate.vector_players.at(0).currentStatus.giveLife(REGEN_LIFE_PERFRAME);
+	gamestate.vector_players.at(0).currentStatus.giveMana(REGEN_MANA_PERFRAME);
+}
+
 void Physics::degradeAnimations(Gamestate& gamestate)
 {
 	for(int i = gamestate.vector_animations.size() - 1; i >= 0; i--)
@@ -508,30 +515,31 @@ void Physics::handleAbilities(Gamestate& gamestate)
 	for(int i = 0; i < gamestate.vector_abilities_player.size(); i++)
 	{ 
 		//use the ability from the abilities vector
-		gamestate.vector_abilities_player.at(i)->useAbility();
-
-		//add any animations associated with the ability to the animation vector
-		switch(gamestate.vector_abilities_player.at(i)->get_animationType())
+		if(gamestate.vector_abilities_player.at(i)->useAbility())
 		{
-		case ANIMATION_TYPE_NONE: //do not add an animation
-			break;
-		case ANIMATION_TYPE_STATIC:
-			gamestate.vector_animations.push_back(new AnimationStatic(
-				gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
-				gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
-				gamestate.vector_abilities_player.at(i)->get_animationNum(),
-				gamestate.vector_abilities_player.at(i)->get_animationDegradationRate()
-				));
-			break;
-		case ANIMATION_TYPE_ENTITY:
-			gamestate.vector_animations.push_back(new AnimationEntity(
-				gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
-				gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
-				gamestate.vector_abilities_player.at(i)->get_animationNum(),
-				gamestate.vector_abilities_player.at(i)->get_animationDegradationRate(),
-				gamestate.vector_abilities_player.at(i)->ownerEntity
-				));
-			break;
+			//add any animations associated with the ability to the animation vector
+			switch(gamestate.vector_abilities_player.at(i)->get_animationType())
+			{
+			case ANIMATION_TYPE_NONE: //do not add an animation
+				break;
+			case ANIMATION_TYPE_STATIC:
+				gamestate.vector_animations.push_back(new AnimationStatic(
+					gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
+					gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
+					gamestate.vector_abilities_player.at(i)->get_animationNum(),
+					gamestate.vector_abilities_player.at(i)->get_animationDegradationRate()
+					));
+				break;
+			case ANIMATION_TYPE_ENTITY:
+				gamestate.vector_animations.push_back(new AnimationEntity(
+					gamestate.vector_abilities_player.at(i)->ownerEntity->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
+					gamestate.vector_abilities_player.at(i)->ownerEntity->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
+					gamestate.vector_abilities_player.at(i)->get_animationNum(),
+					gamestate.vector_abilities_player.at(i)->get_animationDegradationRate(),
+					gamestate.vector_abilities_player.at(i)->ownerEntity
+					));
+				break;
+			}
 		}
 
 		//delete the ability and remove it from the ability vector
@@ -610,4 +618,7 @@ void Physics::doPhysics(Gamestate& gamestate, HUD& hud, GUI& gui)
 
 	//check for player death
 	deathCheck(gamestate);
+
+	//regenerate player stats (hp / mana / etc)
+	regenStats(gamestate);
 }
