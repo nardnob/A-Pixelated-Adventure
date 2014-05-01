@@ -277,8 +277,10 @@ void Physics::updateHUD(Gamestate& gamestate, HUD& hud)
 
 	hud.advancedMessages.at(hud.MESSAGE_LIFE).set_message("Life:  " + to_string(int(gamestate.vector_players.at(0).currentStatus.lifeAmount())));
 
-	hud.hudMessages.at(0).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.lifeAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxLife)));
-	hud.hudMessages.at(1).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.manaAmount()))) + " / " + to_string(int(gamestate.vector_players.at(0).currentStatus.maxMana)));
+	hud.hudMessages.at(0).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.lifeAmount()))) + " / " + 
+									  to_string(int(gamestate.vector_players.at(0).currentStatus.get_maxLife())));
+	hud.hudMessages.at(1).set_message(to_string(int(ceil(gamestate.vector_players.at(0).currentStatus.manaAmount()))) + " / " + 
+									  to_string(int(gamestate.vector_players.at(0).currentStatus.get_maxMana())));
 }
 
 void Physics::updateHealthbarPos(Gamestate* gamestate, int i)
@@ -442,13 +444,20 @@ void Physics::deathCheck(Gamestate& gamestate/*, HUD& hud, GUI& gui*/)
 	{
 		if(!gamestate.vector_entities.at(i)->currentStatus.hasLife())
 		{
+			gamestate.vector_animations.push_back(new AnimationStatic(
+				gamestate.vector_entities.at(i)->posX + ENTITY_CLIP_W / 2 - ANIMATION_CLIP_W / 2,
+				gamestate.vector_entities.at(i)->posY + ENTITY_CLIP_H / 2 - ANIMATION_CLIP_H / 2,
+				ANIMATION_NUM_GRAVE,
+				ANIMATION_DEGRADATIONRATE_GRAVE
+				));
+
 			//delete any relevant animations for this entitie's death
-			for(int i = gamestate.vector_animations.size() - 1; i >= 1; i--)
+			for(int j = gamestate.vector_animations.size() - 1; j >= 1; j--)
 			{
-				if(gamestate.vector_animations.at(i)->get_ownerEntity() == gamestate.vector_entities.at(i))
+				if(gamestate.vector_animations.at(j)->get_ownerEntity() == gamestate.vector_entities.at(i))
 				{
-					delete gamestate.vector_animations.at(i);
-					gamestate.vector_animations.erase(gamestate.vector_animations.begin() + i);
+					delete gamestate.vector_animations.at(j);
+					gamestate.vector_animations.erase(gamestate.vector_animations.begin() + j);
 				}
 			}
 

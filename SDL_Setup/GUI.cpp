@@ -474,9 +474,9 @@ void GUI::displayAll()
 		case STATES_GAMEPLAY:
 			SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 0, 0, 0));
 			display(CODE_TERRAIN);
+			display(CODE_ANIMATIONS);
 			display(CODE_ENTITY);
 			display(CODE_HUD);
-			display(CODE_ANIMATIONS);
 			break;
 
 		case STATES_START_MENU:
@@ -578,8 +578,15 @@ void GUI::handlePlayerInput(int in_key)
 		switch(in_key)
 		{
 		case KEY_SPACE:
-			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(gamestatePtr->vector_entities.at(0), &gamestatePtr->vector_entities, 50, 25,
-				ANIMATION_TYPE_ENTITY, 0, ANIMATION_DEGRADATION_RATE, 25));
+			gamestatePtr->vector_abilities_player.push_back(new RadiusAttackAbility(
+				gamestatePtr->vector_entities.at(0), 
+				&gamestatePtr->vector_entities, 
+				50, 
+				25,
+				ANIMATION_TYPE_ENTITY, 
+				0, 
+				ANIMATION_DEGRADATIONRATE_AOE, 
+				25));
 			break;
 		}
 	}
@@ -613,7 +620,7 @@ void GUI::eventHandler()
 						break;
 					case SDLK_SPACE:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_SPACE);
-							handlePlayerInput(KEY_SPACE);
+						handlePlayerInput(KEY_SPACE);
 						break;
 					case SDLK_ESCAPE:
 						gamestatePtr->vector_players.at(0).pressKey(KEY_ESC);

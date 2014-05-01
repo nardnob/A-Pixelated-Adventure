@@ -33,8 +33,14 @@ bool RadiusAttackAbility::useAbility()
 		for(int i = 1; i < vector_entities->size(); i++)
 		{
 			//had to - ENTITY_CLIP_H / 2 to compensate for the height of the entities.. can't just do point-source distance values
-			if(sqrt(pow(vector_entities->at(i)->posX + ENTITY_CLIP_W / 2 - playerX, 2) + pow(vector_entities->at(i)->posY + ENTITY_CLIP_H / 2 - playerY, 2)) - ENTITY_CLIP_H / 2 <= this->radius)
+			if(sqrt(
+					pow(vector_entities->at(i)->posX + ENTITY_CLIP_H / 2 - playerX, 2)
+					+ pow(vector_entities->at(i)->posY + ENTITY_CLIP_H / 2 - playerY, 2)
+				) - ENTITY_CLIP_H / 2 <= this->radius)
+			{
 				vector_entities->at(i)->currentStatus.takeLife(this->baseDamage);
+				//OutputDebugString(("\n\n" + to_string(i) + ", damage: " + to_string(this->baseDamage) + "\n\n").c_str());
+			}			
 		}
 
 		return true;
