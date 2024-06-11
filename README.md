@@ -1,3 +1,9 @@
+The configuration for this project has been lost to time, requiring Visual Studio 2010 and antiquated libraries.
+
+However, [here is a preview of the game](https://youtu.be/G1dLlImI9Jo). This was before we added combat, a menu system, health bars, and mana.
+
+Also, [here is another game, utilizing 3D graphics](https://youtu.be/5un9vFPHsqE) that I created. I later added procedurally generated buildings and the ability to shoot a web (a string), or a web blast (basically a cone).
+
 Senior Project — A Pixelated Adventure
 
 Students:
